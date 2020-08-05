@@ -271,6 +271,7 @@ function validateCompleteHouseInfo(houseInfo) {
   }
 
   if (errorArray.length > 0) {
+    //console.log(errorArray); 
     throw `Errors : ${errorArray.toString()}`;
   }
 
