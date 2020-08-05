@@ -23,21 +23,23 @@ router.get("/house/:id", async (req, res) => {
     console.log(house);
     //res.json(house);
     //renderds the individual house page with the house info
-    res.render('pages/individualHouse', {
-		title: "Individual House Page",
-		houseImage: house.profilePicture,
-		houseNumber: house.houseNumber,
-		street: house.street,
-		city: house.city,
-		state: house.state,
-		zip: house.pincode,
-		rent: house.rent,
-		startDate: house.startDate,
-		endDate: house.endDate,
-		description: house.description,
-		amenities: house.otherAmenities,
-		pet: house.petFriendly,
-		park: house.parkingAvailable
+    res.render("pages/individualHouse", {
+      latitude: house.latitude,
+      longitude: house.longitude,
+      title: "Individual House Page",
+      houseImage: house.profilePicture,
+      houseNumber: house.houseNumber,
+      street: house.street,
+      city: house.city,
+      state: house.state,
+      zip: house.pincode,
+      rent: house.rent,
+      startDate: house.startDate,
+      endDate: house.endDate,
+      description: house.description,
+      amenities: house.otherAmenities,
+      pet: house.petFriendly,
+      park: house.parkingAvailable,
     });
   } catch (error) {
     res.status(404).json({ error: "House not found" });

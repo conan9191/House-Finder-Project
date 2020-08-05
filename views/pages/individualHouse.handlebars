@@ -15,12 +15,38 @@
         Not to mention css will really help with the look
     -->
 
-    <img id="image" src={{houseImage}} alt="House Image">
+    <div id="map" style="height: 400px; width: 80%;"></div>
 
-    <div class="houseInfo">
-        <p id="address"> {{houseNumber}} {{street}} <br> {{city}}, {{state}}, {{zip}} </p>
-        <p id="priceInfo"> Rent: ${{rent}} <br> Lease duration: {{startDate}} - {{endDate}} </p>
-        <p id="houseDescription"> {{description}} </p>
-        <p id="houseMisc"> {{amenities}} <br> Pet Friendly: {{pet}} <br> Parking Available: {{park}}</p> 
-    </div>
+    <script>
+        function initMap() {
+            let latitude = document.getElementById('latitude').innerText
+            let longitude = document.getElementById('longitude').innerText
+            var test = { lat: parseInt(latitude), lng: parseInt(longitude) };
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 4,
+                center: test
+            });
+            var marker = new google.maps.Marker({
+                position: test,
+                map: map
+            });
+        }
+    </script>
+    <div id="latitude" hidden=true>{{latitude}}</div>
+    <div id="longitude" hidden=true>{{longitude}}</div>
+    <script defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5Y2OeJZ_gqoeUxehJ6BaKdONCF0g1JRU&callback=initMap">
+        </script>
+
+    <br>
+    <br>
+    <img id="image" src={{houseImage}} alt="House Image" style="width:80%;height:400px;>
+
+        <div class=" houseInfo">
+    <p id="address"> {{houseNumber}} {{street}} <br> {{city}}, {{state}}, {{zip}} </p>
+    <p id="priceInfo"> Rent: ${{rent}} <br> Lease duration: {{startDate}} - {{endDate}} </p>
+    <p id="houseDescription"> {{description}} </p>
+    <p id="houseMisc"> {{amenities}} <br> Pet Friendly: {{pet}} <br> Parking Available: {{park}}</p>
+</div>
+
 </div>
