@@ -1,2 +1,4 @@
 const houseDataObj = require("./house");
-module.exports = { houseData: houseDataObj };
+const favHouseDataObj = require("./favourite");
+
+module.exports = { houseData: houseDataObj, favHouseData: favHouseDataObj };

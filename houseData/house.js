@@ -351,7 +351,7 @@ function createHouseSchema(houseData, isUpdate, houseId) {
   }
 
   let houseTypeId = houseId;
-  if (houseTypeId === null) {
+  if (!houseTypeId) {
     houseTypeId = houseSchema._id;
   }
 
@@ -364,10 +364,9 @@ function createHouseSchema(houseData, isUpdate, houseId) {
 }
 
 /**
- * /**
- * Create schema dictionary for house data.
  *
- * @param {*} houseTypeData :  house type object with information.
+ * Create schema dictionary for house data.
+ *@param {*} houseTypeData :  house type object with information.
  * @param {*} houseID  : house id for which housetype is subdocument
  * Return house type schema dictionary.
  */
@@ -389,11 +388,11 @@ function createHouseTypeSchema(houseTypeData, houseID) {
  */
 function getValidId(id) {
   if (!id) {
-    throw "Given recipe id is invalid";
+    throw "Given  id is invalid";
   }
 
   if (typeof id != "object" && typeof id != "string") {
-    throw "Provide recipe id of type object or string ";
+    throw "Provide  id of type object or string ";
   }
 
   return id;

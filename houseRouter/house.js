@@ -3,7 +3,7 @@ const router = express.Router();
 const house = require("../houseData");
 const houseData = house.houseData;
 
-router.get("/house", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     let allHouse = await houseData.getAllHouse();
     res.json(allHouse);
@@ -12,7 +12,7 @@ router.get("/house", async (req, res) => {
   }
 });
 
-router.get("/house/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   if (!req.params.id) {
     res.status(404).json({ error: "House Id missing" });
     return;
@@ -46,7 +46,7 @@ router.get("/house/:id", async (req, res) => {
   }
 });
 
-router.post("/house", async (req, res) => {
+router.post("/", async (req, res) => {
   if (!req.body) {
     res.status(404).json({ error: "Must supply all fields." });
     return;
@@ -61,7 +61,7 @@ router.post("/house", async (req, res) => {
   }
 });
 
-router.put("/house/:id", async (req, res) => {
+router.put("/:id", async (req, res) => {
   if (!req.params.id || !req.body) {
     res.status(404).json({ error: "Must supply all fields." });
     return;
@@ -84,7 +84,7 @@ router.put("/house/:id", async (req, res) => {
   }
 });
 
-router.delete("/house/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   if (!req.params.id) {
     res.status(404).json({ error: "Must supply House Id." });
     return;
@@ -105,7 +105,7 @@ router.delete("/house/:id", async (req, res) => {
   }
 });
 
-router.patch("/house/:id", async (req, res) => {
+router.patch("/:id", async (req, res) => {
   if (!req.params.id || !req.body || Object.keys(req.body).length === 0) {
     res.status(404).json({
       error: "Must provide atleast one field in request body.",

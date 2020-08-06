@@ -1,7 +1,9 @@
 const houseRoutes = require("./house");
+const favRoutes = require("./favourite");
 
 const constructorMethod = (app) => {
-  app.use("/", houseRoutes);
+  app.use("/favourite", favRoutes);
+  app.use("/house", houseRoutes);
 
   app.use("*", (req, res) => {
     res.sendStatus(404);

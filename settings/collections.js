@@ -15,4 +15,5 @@ const getCollectionFn = (collection) => {
 
 module.exports = {
   house: getCollectionFn("House"),
+  favourite: getCollectionFn("Favourite"),
 };
