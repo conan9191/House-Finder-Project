@@ -5,13 +5,12 @@ const houseData = house.houseData;
 
 router.get("/", async (req, res) => {
   try {
-	let houseList = await houseData.getAllHouse();
-	console.log(houseList);
-	res.render('pages/houseList', {
-		title: "House List Page",
-		list: houseList
-	});
-	
+    let houseList = await houseData.getAllHouse();
+    console.log(houseList);
+    res.render("pages/houseList", {
+      title: "House List Page",
+      list: houseList,
+    });
   } catch (error) {
     res.status(404).json({ error: "Houses not found" });
   }
@@ -29,6 +28,7 @@ router.get("/:id", async (req, res) => {
     //res.json(house);
     //renderds the individual house page with the house info
     res.render("pages/individualHouse", {
+      houseId: house.houseId,
       latitude: house.latitude,
       longitude: house.longitude,
       title: "Individual House Page",

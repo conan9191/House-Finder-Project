@@ -1,7 +1,7 @@
 <div class="houseListPage">
     <h1 id="title"> House List Page </h1>
 
-     <!--
+    <!--
         Content on page:
             Displays a grid view of houses that match user criteria
             Each grid square will contain:
@@ -18,9 +18,9 @@
 
     <div class="houseList">
         {{#each list}}
-            <img id="image" src={{this.houseImage}} alt="House Image">
-            <a id="link" src="individualHouse.handlebars"> More Details </a>
-            <p id="houseDescription"> {{this.description}} </p>  
+        <img id="image" src={{this.profilePicture}} alt="House Image" style="width:80%;height:400px;">
+        <a href="{{this._id}}">More Details</a>
+        <p id="houseDescription"> {{this.description}} </p>
         {{/each}}
     </div>
 </div>
