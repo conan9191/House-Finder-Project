@@ -5,8 +5,13 @@ const houseData = house.houseData;
 
 router.get("/", async (req, res) => {
   try {
-    let allHouse = await houseData.getAllHouse();
-    res.json(allHouse);
+	let houseList = await houseData.getAllHouse();
+	console.log(houseList);
+	res.render('pages/houseList', {
+		title: "House List Page",
+		list: houseList
+	});
+	
   } catch (error) {
     res.status(404).json({ error: "Houses not found" });
   }

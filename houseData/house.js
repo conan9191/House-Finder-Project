@@ -177,7 +177,7 @@ function validateCompleteHouseInfo(houseInfo) {
       houseData.longitude = houseInfo["longitude"];
       houseData.latitude = houseInfo["latitude"];
     } else {
-      errorArray.push("Missing House longitude/longitude or missing value.");
+      errorArray.push("Missing House longitude/latitude or missing value.");
     }
 
     //street
@@ -313,7 +313,7 @@ function validateCompleteHouseInfo(houseInfo) {
   }
 
   if (errorArray.length > 0) {
-    //console.log(errorArray);
+    //212 3console.log(errorArray);
     throw `Errors : ${errorArray.toString()}`;
   }
 

@@ -15,6 +15,12 @@
         Not to mention css will really help with the look
     -->
 
+    <!-- 
+        Eventually, we will want to keep our styling in a seperate css file
+        We will want to put our scripts in seperate javascript files as well
+        But this will suffice for now, temporarily
+    -->
+
     <div id="map" style="height: 400px; width: 80%;"></div>
 
     <script>
@@ -41,13 +47,13 @@
 
     <br>
     <br>
-    <img id="image" src={{houseImage}} alt="House Image" style="width:80%;height:400px;>
+    <img id="image" src={{houseImage}} alt="House Image" style="width:80%;height:400px;">
 
-        <div class=" houseInfo">
-    <p id="address"> {{houseNumber}} {{street}} <br> {{city}}, {{state}}, {{zip}} </p>
-    <p id="priceInfo"> Rent: ${{rent}} <br> Lease duration: {{startDate}} - {{endDate}} </p>
-    <p id="houseDescription"> {{description}} </p>
-    <p id="houseMisc"> {{amenities}} <br> Pet Friendly: {{pet}} <br> Parking Available: {{park}}</p>
-</div>
+    <div class=" houseInfo">
+        <p id="address"> {{houseNumber}} {{street}} <br> {{city}}, {{state}}, {{zip}} </p>
+        <p id="priceInfo"> Rent: ${{rent}} <br> Lease duration: {{startDate}} - {{endDate}} </p>
+        <p id="houseDescription"> {{description}} </p>
+        <p id="houseMisc"> {{amenities}} <br> Pet Friendly: {{pet}} <br> Parking Available: {{park}}</p>
+    </div>
 
 </div>
