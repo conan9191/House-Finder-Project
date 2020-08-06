@@ -1,13 +1,13 @@
 /*
  * @Descripttion: 
- * @version: 1.0
+ * @version: 1.1
  * @Author: Yiqun Peng
  * @Date: 2020-08-05 14:20:09
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-06 00:55:18
+ * @LastEditTime: 2020-08-06 02:59:27
  */
 const mongoCollections = require('../config/mongoCollections');
-const bands = mongoCollections.users;
+const users = mongoCollections.users;
 const { ObjectId } = require('mongodb');
 
 let exportedMethods = {
@@ -31,7 +31,7 @@ let exportedMethods = {
         if(!id) throw "You must provide an id";
         if (typeof id !== "string") throw "ID needs to be a string";
         const objId = ObjectId.createFromHexString(id);
-        const userCollection = await recipes();
+        const userCollection = await users();
         const user = await userCollection.findOne({ _id: objId });
         if (!user) throw 'Recipe not found';
         return user;
@@ -55,7 +55,7 @@ let exportedMethods = {
         checkIsProperString(pincode, "pincode");
         checkIsProperString(age, "age");
         checkIsProperString(hashedPassword, "hashedPassword");
-        const recipeCollection = await recipes();
+        const userCollection = await users();
         let newUser = {
             firstName: firstName,
             lastName: lastName,
@@ -132,24 +132,28 @@ let exportedMethods = {
         }
         if (updatedUser.reviewIds) {
             if (!Array.isArray(updatedUser.reviewIds)) throw "ReviewIds need to be array";
-            if (updatedUser.reviewIds.length <= 0)throw "Length of reviewIds need to be greater than zero";
-            for(let r of updatedUser.reviewIds){
-                if (typeof r !== "string") throw "Each reviewId needs to be a string";
-                if (r.length <= 0)throw "Length of reviewId need to be greater than zero";
+            //if (updatedUser.reviewIds.length <= 0)throw "Length of reviewIds need to be greater than zero";
+            if (updatedUser.reviewIds.length > 0){
+                for(let r of updatedUser.reviewIds){
+                    if (typeof r !== "string") throw "Each reviewId needs to be a string";
+                    if (r.length <= 0)throw "Length of reviewId need to be greater than zero";
+                }
             }
             updatedUserData.reviewIds = updatedUser.reviewIds;
         }
         if (updatedUser.favourites) {
             if (!Array.isArray(updatedUser.favourites)) throw "Favourites need to be array";
-            if (updatedUser.favourites.length <= 0)throw "Length of favourites need to be greater than zero";
-            for(let i of updatedUser.favourites){
-                if (typeof i !== "object" || Array.isArray(i)) throw "Each favourites needs to be a object";
-                if (Object.keys(i).length !== 2)throw "Length of favourites need to be 2 (favouriteId and houseId)";
-                if (i.hasOwnProperty("favouriteId") === false || i.hasOwnProperty("houseId") === false)throw "The favourite need to have favouriteId and houseId)";
-                if (typeof i["favouriteId"] !== "string") throw "favouriteId of favourite needs to be a string";
-                if (typeof i["houseId"] !== "string") throw "houseId of favourite needs to be a string";
-                if (i["favouriteId"].length <= 0)throw "Length of favouriteId of favourite need to be greater than zero";
-                if (i["houseId"].length <= 0)throw "Length of houseId of favourite need to be greater than zero";
+            //if (updatedUser.favourites.length <= 0)throw "Length of favourites need to be greater than zero";
+            if (updatedUser.favourites.length > 0){    
+                for(let i of updatedUser.favourites){
+                    if (typeof i !== "object" || Array.isArray(i)) throw "Each favourites needs to be a object";
+                    if (Object.keys(i).length !== 2)throw "Length of favourites need to be 2 (favouriteId and houseId)";
+                    if (i.hasOwnProperty("_id") === false || i.hasOwnProperty("houseId") === false)throw "The favourite need to have _id and houseId)";
+                    if (typeof i["_id"] !== "string") throw "_id of favourite needs to be a string";
+                    if (typeof i["houseId"] !== "string") throw "houseId of favourite needs to be a string";
+                    if (i["_id"].length <= 0)throw "Length of _id of favourite need to be greater than zero";
+                    if (i["houseId"].length <= 0)throw "Length of houseId of favourite need to be greater than zero";
+                }
             }
             updatedUserData.favourites = updatedUser.favourites;
         }
