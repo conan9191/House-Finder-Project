@@ -194,6 +194,30 @@ function checkAndUpdate(newHouse, oldHouse) {
     oldHouse.parkingAvailable = newHouse.parkingAvailable;
   }
 
+  if (newHouse.houseType && oldHouse.houseType) {
+    let newhouseType = newHouse.houseType;
+    let oldhouseType = oldHouse.houseType;
+
+    if (newhouseType.type && newhouseType.type != oldhouseType.type) {
+      oldHouse.houseType.type = newhouseType.type;
+    }
+    if (newhouseType.bedroom && newhouseType.bedroom != oldhouseType.bedroom) {
+      oldHouse.houseType.bedroom = newhouseType.bedroom;
+    }
+    if (newhouseType.hall && newhouseType.hall != oldhouseType.hall) {
+      oldHouse.houseType.hall = newhouseType.hall;
+    }
+    if (newhouseType.kitchen && newhouseType.kitchen != oldhouseType.kitchen) {
+      oldHouse.houseType.kitchen = newhouseType.kitchen;
+    }
+    if (
+      newhouseType.bathroom &&
+      newhouseType.bathroom != oldhouseType.bathroom
+    ) {
+      oldHouse.houseType.bathroom = newhouseType.bathroom;
+    }
+  }
+
   return oldHouse;
 }
 

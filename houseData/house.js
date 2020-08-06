@@ -6,7 +6,6 @@ const is_image_url = require("is-image-url");
 
 const dbCollections = require("../settings/collections");
 const houseCollectionObj = dbCollections.house;
-const houseTypeCollectionObj = dbCollections.houseType;
 const { v1: uuidv4 } = require("uuid");
 
 /**
@@ -25,7 +24,14 @@ let houseData = {
   rent: "",
   startDate: "",
   endDate: "",
-  houseTypes: {},
+  houseType: {
+    _id: "",
+    type: "",
+    bedroom: "",
+    hall: "",
+    kitchen: "",
+    bathroom: "",
+  },
   petFriendly: "",
   otherAmenities: "",
   description: "",
@@ -106,7 +112,7 @@ async function updateHouse(houseId, updateHouseInfo) {
   let data = validateCompleteHouseInfo(updateHouseInfo);
 
   if (data != null) {
-    let houseSchema = createHouseSchema(data, true);
+    let houseSchema = createHouseSchema(data, true, houseId);
     let houseObj = await houseCollectionObj();
     let updateHouse = await houseObj.updateOne(
       { _id: houseId },
@@ -270,8 +276,44 @@ function validateCompleteHouseInfo(houseInfo) {
     errorArray.push("Please provide all house information.");
   }
 
+  //house type
+  if (houseInfo["houseType"] && typeof houseInfo["houseType"] == "object") {
+    let houseTypeInfo = houseInfo["houseType"];
+    if (houseTypeInfo["type"] && typeof houseTypeInfo["type"] == "string") {
+      houseData.houseType.type = houseTypeInfo["type"];
+    } else {
+      errorArray.push("Invalid House type  or missing value.");
+    }
+
+    //number of bedroom
+    if (houseTypeInfo["bedroom"] && !isNaN(houseTypeInfo["bedroom"])) {
+      houseData.houseType.bedroom = houseTypeInfo["bedroom"];
+    } else {
+      errorArray.push("Invalid number of bedroom in house or missing value.");
+    }
+    //number of hall
+    if (houseTypeInfo["hall"] && !isNaN(houseTypeInfo["hall"])) {
+      houseData.houseType.hall = houseTypeInfo["hall"];
+    } else {
+      errorArray.push("Invalid number of hall in house or missing value.");
+    }
+
+    //number of bathroom
+    if (houseTypeInfo["bathroom"] && !isNaN(houseTypeInfo["bathroom"])) {
+      houseData.houseType.bathroom = houseTypeInfo["bathroom"];
+    } else {
+      errorArray.push("Invalid number of bathroom in house or missing value.");
+    }
+    //number of kitchen
+    if (houseTypeInfo["kitchen"] && !isNaN(houseTypeInfo["kitchen"])) {
+      houseData.houseType.kitchen = houseTypeInfo["kitchen"];
+    } else {
+      errorArray.push("Invalid number of kitchen in house or missing value.");
+    }
+  }
+
   if (errorArray.length > 0) {
-    //console.log(errorArray); 
+    //console.log(errorArray);
     throw `Errors : ${errorArray.toString()}`;
   }
 
@@ -285,7 +327,7 @@ function validateCompleteHouseInfo(houseInfo) {
  * If set false, _id will be set using uuid().
  * Return house schema dictionary.
  */
-function createHouseSchema(houseData, isUpdate) {
+function createHouseSchema(houseData, isUpdate, houseId) {
   let houseSchema = {
     profilePicture: houseData.profilePicture,
     longitude: houseData.longitude,
@@ -308,9 +350,39 @@ function createHouseSchema(houseData, isUpdate) {
     houseSchema._id = uuidv4();
   }
 
+  let houseTypeId = houseId;
+  if (houseTypeId === null) {
+    houseTypeId = houseSchema._id;
+  }
+
+  houseSchema.houseType = createHouseTypeSchema(
+    houseData.houseType,
+    houseTypeId
+  );
+
   return houseSchema;
 }
 
+/**
+ * /**
+ * Create schema dictionary for house data.
+ *
+ * @param {*} houseTypeData :  house type object with information.
+ * @param {*} houseID  : house id for which housetype is subdocument
+ * Return house type schema dictionary.
+ */
+function createHouseTypeSchema(houseTypeData, houseID) {
+  let houseTypeSchema = {
+    type: houseTypeData.type,
+    bedroom: houseTypeData.bedroom,
+    hall: houseTypeData.hall,
+    kitchen: houseTypeData.kitchen,
+    bathroom: houseTypeData.bathroom,
+    _id: houseID,
+  };
+
+  return houseTypeSchema;
+}
 /**
  * Check and validate ID .
  * @param {} id : ID to be validate

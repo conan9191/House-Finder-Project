@@ -15,5 +15,4 @@ const getCollectionFn = (collection) => {
 
 module.exports = {
   house: getCollectionFn("House"),
-  houseType: getCollectionFn("HouseType"),
 };
