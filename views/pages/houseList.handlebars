@@ -19,7 +19,7 @@
     <div class="houseList">
         {{#each list}}
         <img id="image" src={{this.profilePicture}} alt="House Image" style="width:80%;height:400px;">
-        <a href="{{this._id}}">More Details</a>
+        <a href="house/{{this._id}}">More Details</a>
         <p id="houseDescription"> {{this.description}} </p>
         {{/each}}
     </div>
