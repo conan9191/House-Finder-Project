@@ -1,0 +1,29 @@
+{
+  "name": "final-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@khanacademy/tota11y": "^0.2.0",
+    "bcryptjs": "^2.4.3",
+    "bootstrap": "^4.4.1",
+    "chart.js": "^2.9.3",
+    "cookie-parser": "^1.4.5",
+    "debug": "~2.6.9",
+    "express": "~4.17.1",
+    "express-handlebars": "^5.1.0",
+    "express-session": "^1.17.1",
+    "http-errors": "^1.6.3",
+    "mongodb": "^3.6.0",
+    "handlebars": "4.7.6",
+    "morgan": "~1.9.1",
+    "xss": "^1.0.6",
+    "uuid": "8.3.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
