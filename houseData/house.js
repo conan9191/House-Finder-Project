@@ -13,7 +13,7 @@ const { v1: uuidv4 } = require("uuid");
  */
 let houseData = {
   _id: "",
-  profilePicture: "",
+  profilePicture: [],
   street: "",
   houseNumber: "",
   city: "",
@@ -158,12 +158,13 @@ function validateCompleteHouseInfo(houseInfo) {
 
   if (houseInfo) {
     //profile picture
-    if (
-      houseInfo["profilePicture"] &&
-      typeof houseInfo["profilePicture"] == "string" &&
-      is_image_url(houseInfo["profilePicture"])
-    ) {
-      houseData.profilePicture = houseInfo["profilePicture"];
+    if (houseInfo["profilePicture"]) {
+      let array = isvalidProfilePicture(houseInfo["profilePicture"]);
+      if (!array) {
+        errorArray.push("Invalid House profile picture url or array.");
+      }
+
+      houseData.profilePicture = array;
     } else {
       errorArray.push("Invalid House profile picture url.");
     }
@@ -361,6 +362,21 @@ function createHouseSchema(houseData, isUpdate, houseId) {
   );
 
   return houseSchema;
+}
+
+function isvalidProfilePicture(profilePicArray) {
+  if (!Array.isArray(profilePicArray)) {
+    throw `house profile picture : not an Array`;
+  }
+
+  let array = [];
+  profilePicArray.forEach((element) => {
+    if (is_image_url(element)) {
+      array.push(element);
+    }
+  });
+
+  return array;
 }
 
 /**

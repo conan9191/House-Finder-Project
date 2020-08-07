@@ -47,7 +47,37 @@
 
     <br>
     <br>
-    <img id="image" src={{houseImage}} alt="House Image" style="width:80%;height:400px;">
+
+    <style>
+        .cover-container {
+            height: 200px;
+            width: 100%;
+            white-space: nowrap;
+            overflow-x: scroll;
+            overflow-y: hidden;
+        }
+
+        .cover-item {
+            position: relative;
+            display: inline-block;
+            margin: 8px 8px;
+            box-shadow: 2px 2px 4px #bbb;
+            border-top-right-radius: 4px;
+            width: 116px;
+            height: 158px;
+            vertical-align: bottom;
+            background-position: top left;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+
+
+    <div class="cover-container">
+        {{#each houseImage}}
+        <img class="cover-item" src="{{this}}" alt="house" style="width:40%">
+        {{/each}}
+    </div>
 
     <div class=" houseInfo">
         <p id="address"> {{houseNumber}} {{street}} <br> {{city}}, {{state}}, {{zip}} </p>
