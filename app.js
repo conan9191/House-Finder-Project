@@ -1,6 +1,14 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: sueRimn
+ * @Date: 2020-08-05 14:07:28
+ * @LastEditors: Yiqun Peng
+ * @LastEditTime: 2020-08-07 19:28:59
+ */
 const express = require('express');
 const app = express();
-const configRoutes = require('./routes');
+const configRoutes = require('./userRouter');
 const exphbs = require('express-handlebars');
 const static = express.static(__dirname + '/public');
 const path = require('path');

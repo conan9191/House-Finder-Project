@@ -4,10 +4,11 @@
  * @Author: Yiqun Peng
  * @Date: 2020-08-05 14:20:09
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-06 02:59:27
+ * @LastEditTime: 2020-08-07 19:24:49
  */
-const mongoCollections = require('../config/mongoCollections');
-const users = mongoCollections.users;
+
+const dbCollections = require("../settings/collections");
+const users = dbCollections.users;
 const { ObjectId } = require('mongodb');
 
 let exportedMethods = {
