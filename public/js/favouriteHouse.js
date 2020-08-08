@@ -24,8 +24,10 @@ function addFavouriteHouse() {
 
   if (favButtonObject.innerText === "Add Favourite") {
     favButtonObject.innerText = "Favourite";
+    favButtonObject.className = "fav";
   } else {
     favButtonObject.innerText = "Add Favourite";
+    favButtonObject.className = "notfav";
     isDeleted = true;
   }
 
