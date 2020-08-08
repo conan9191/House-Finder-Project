@@ -34,10 +34,18 @@ const constructorMethod = (app) => {
 
   app.use("*", (req, res) => {
     const authenticated = req.session.user || false;
-    res.render("pages/erroraccess", {
-      title: "Access Error",
-      authenticated: authenticated,
-    });
+    if(req.session.user){
+      res.render("pages/success", {
+        title: "log in succeed",
+        hasLogin:true
+      });
+    }else{
+        res.render("pages/erroraccess", {
+        title: "Access Error",
+        authenticated: authenticated,
+      });
+    }
+   
   });
 };
 
