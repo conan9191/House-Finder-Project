@@ -9,7 +9,7 @@ const session = require('express-session');
 
 // let indexRouter = require('./routes/index');
 // let usersRouter = require('./routes/users');
-const configRoutes = require('./routes');
+const configRoutes = require('./userRouter');
 
 
 // view engine setup

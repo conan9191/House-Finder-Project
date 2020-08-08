@@ -1,3 +1,11 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: sueRimn
+ * @Date: 2020-08-07 19:48:04
+ * @LastEditors: Yiqun Peng
+ * @LastEditTime: 2020-08-07 19:48:07
+ */
 $('.clientsideLoginErrors').hide();
 $('#loginForm').submit((event) => {
     event.preventDefault();
