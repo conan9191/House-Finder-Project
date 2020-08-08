@@ -91,6 +91,20 @@ async function deleteFavouriteHouse(id) {
   return true;
 }
 
+async function getFavHouseByHouseId(houseId) {
+  houseId = getValidId(houseId);
+
+  let favouriteObj = await favouriteCollectionObj();
+
+  let favData = await favouriteObj.findOne({ houseId: houseId });
+
+  if (favData === null) {
+    throw `Error :Cannot find fav house with given id : ${id} into database`;
+  }
+
+  return favData;
+}
+
 /**
  * Check and validate ID .
  * @param {} id : ID to be validate
@@ -112,4 +126,5 @@ module.exports = {
   getFavouriteHouseById,
   addFavouriteHouse,
   deleteFavouriteHouse,
+  getFavHouseByHouseId,
 };
