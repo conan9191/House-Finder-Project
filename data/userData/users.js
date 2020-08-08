@@ -38,17 +38,17 @@ let exportedMethods = {
     return user;
   },
 
-  async addUser(firstName, lastName, email, hashedPassword) {
+  async addUser(firstName, lastName, email, hashedPassword,street,profilepicture,house_number,city,state,pincode,age) {
     checkIsProperString(firstName, "firstName");
     checkIsProperString(lastName, "lastName");
     checkIsProperString(email, "email");
-    // checkIsProperString(profilePicture, "profilePicture");
-    // checkIsProperString(street, "street");
-    // checkIsProperString(house_number, "house number");
-    // checkIsProperString(city, "city");
-    // checkIsProperString(state, "state");
-    // checkIsProperString(pincode, "pincode");
-    // checkIsProperString(age, "age");
+    checkIsProperString(street, "street");
+    checkIsProperString(profilepicture, "profilepicture");
+    checkIsProperString(house_number, "house_number");
+    checkIsProperString(city, "city");
+    checkIsProperString(state, "state");
+    checkIsProperString(pincode, "pincode");
+    checkIsProperString(age, "age");
     checkIsProperString(hashedPassword, "hashedPassword");
     const userCollection = await users();
     let newUser = {
@@ -56,19 +56,19 @@ let exportedMethods = {
       lastName: lastName,
       email: email,
       hashedPassword: hashedPassword,
-      // profilePicture: profilePicture,
-      // street: street,
-      // house_number: house_number,
-      // city: city,
-      // state: state,
-      // pincode: pincode,
-      // age: age,
+      street: street,
+      profilePicture: profilepicture,
+      house_number: house_number,
+      city: city,
+      state: state,
+      pincode: pincode,
+      age: age
 
       // reviewIds: [],
       // favourites: []
     };
     const newInsertInformation = await userCollection.insertOne(newUser);
-    if (newInsertInformation.insertedCount === 0) throw "Insert failed!";
+    if (newInsertInformation.insertedCount === 0) throw 'Insert failed!';
     const newId = newInsertInformation.insertedId;
     return await this.getUserById(newId.toString());
   },
