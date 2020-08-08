@@ -1,12 +1,4 @@
 let favButtonObject = document.getElementById("favButton");
-//var myScript = document.createElement("script"); // Create new script element
-// let data = require("../../data/houseData");
-// let favData = data.favHouseData;
-// //myScript.type = "text/javascript"; // Set appropriate type
-// ////myScript.src = "../../data/houseData";
-
-// //let data = require("../../data/houseData");
-// let favData = myScript.src.favHouseData;
 
 favButtonObject.addEventListener("click", addFavouriteHouse);
 
@@ -32,7 +24,7 @@ function addFavouriteHouse() {
 
   if (isDeleted) {
     method = "DELETE";
-    url = url + "/" + favData.getFavHouseByHouseId(houseId);
+    url = url + "/" + houseId;
   }
 
   xhttp.open(method, url, true);
