@@ -1,9 +1,18 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: sueRimn
+ * @Date: 2020-08-08 14:15:11
+ * @LastEditors: Yiqun Peng
+ * @LastEditTime: 2020-08-08 14:17:36
+ */
 let createError = require("http-errors");
 const express = require("express");
 let path = require("path");
 let cookieParser = require("cookie-parser");
 let logger = require("morgan");
 const app = express();
+const static = express.static(__dirname + '/public');
 const exphbs = require("express-handlebars");
 const session = require("express-session");
 
@@ -17,6 +26,7 @@ const configRoutes = require("./router/index");
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
+app.use('/public', static);
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
