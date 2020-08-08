@@ -1,0 +1,89 @@
+<div class="individualHousePage">
+    <h1 id="title"> It's an individual house</h1>
+
+    <!-- 
+        Order of content on page:
+            Picture of house or location on map maybe
+            Address
+            rent with the lease duration in one row
+            Description
+            Other amenities
+            Pet friendly and parking available in one row
+
+        This list of content will change as we figure stuff out,
+        this is just a starter for now
+        Not to mention css will really help with the look
+    -->
+
+    <!-- 
+        Eventually, we will want to keep our styling in a seperate css file
+        We will want to put our scripts in seperate javascript files as well
+        But this will suffice for now, temporarily
+    -->
+
+    <div id="map" style="height: 400px; width: 80%;"></div>
+
+    <script>
+        function initMap() {
+            let latitude = document.getElementById('latitude').innerText
+            let longitude = document.getElementById('longitude').innerText
+            var test = { lat: parseInt(latitude), lng: parseInt(longitude) };
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 10,
+                center: test
+            });
+            var marker = new google.maps.Marker({
+                position: test,
+                map: map,
+                mapTypeId: google.maps.MapTypeId.HYBRID
+            });
+        }
+    </script>
+    <div id="latitude" hidden=true>{{latitude}}</div>
+    <div id="longitude" hidden=true>{{longitude}}</div>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5Y2OeJZ_gqoeUxehJ6BaKdONCF0g1JRU&callback=initMap">
+        </script>
+
+    <br>
+    <br>
+
+    <style>
+        .cover-container {
+            height: 200px;
+            width: 100%;
+            white-space: nowrap;
+            overflow-x: scroll;
+            overflow-y: hidden;
+        }
+
+        .cover-item {
+            position: relative;
+            display: inline-block;
+            margin: 8px 8px;
+            box-shadow: 2px 2px 4px #bbb;
+            border-top-right-radius: 4px;
+            width: 116px;
+            height: 158px;
+            vertical-align: bottom;
+            background-position: top left;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+
+
+    <div class="cover-container">
+        {{#each houseImage}}
+        <img class="cover-item" src="{{this}}" alt="house" style="width:40%">
+        {{/each}}
+    </div>
+
+    <div class=" houseInfo">
+        <p id="address"> {{houseNumber}} {{street}} <br> {{city}}, {{state}}, {{zip}} </p>
+        <p id="priceInfo"> Rent: ${{rent}} <br> Lease duration: {{startDate}} - {{endDate}} </p>
+        <p id="houseDescription"> {{description}} </p>
+        <p id="houseMisc"> {{amenities}} <br> Pet Friendly: {{pet}} <br> Parking Available: {{park}}</p>
+    </div>
+
+</div>
