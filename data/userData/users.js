@@ -4,7 +4,7 @@
  * @Author: Yiqun Peng
  * @Date: 2020-08-05 14:20:09
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-07 20:08:23
+ * @LastEditTime: 2020-08-08 10:36:19
  */
 
 const dbCollections = require("../../settings/collections");
@@ -34,7 +34,7 @@ let exportedMethods = {
     const objId = ObjectId.createFromHexString(id);
     const userCollection = await users();
     const user = await userCollection.findOne({ _id: objId });
-    if (!user) throw "Recipe not found";
+    if (!user) throw "User not found";
     return user;
   },
 

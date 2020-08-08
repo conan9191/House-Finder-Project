@@ -43,12 +43,18 @@
                     <li><a href="#">System Management</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    {{#if hasLogin}}
                     <li>
-                        <a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a>
+                        <a href="http://localhost:3000/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a>
                     </li>
-                    <li>
-                        <a href="http://localhost:3000/login"><span class="glyphicon glyphicon-log-in"></span> Login</a>
-                    </li>
+                    {{else}}
+                    <li>	                    
+                        <a href="/registration"><span class="glyphicon glyphicon-user"></span> Sign Up</a>	                        
+                    </li>	                    
+                    <li>	                   
+                        <a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a>	                        
+                    </li>	                   
+                    {{/if}}
                 </ul>
             </div>
         </nav>
