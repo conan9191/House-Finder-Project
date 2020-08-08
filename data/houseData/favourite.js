@@ -91,6 +91,10 @@ async function deleteFavouriteHouse(id) {
   return true;
 }
 
+/**
+ * Return favourite house id for given house id.
+ * @param {*} houseId : for which want to obtain favhouse id.
+ */
 async function getFavHouseByHouseId(houseId) {
   houseId = getValidId(houseId);
 

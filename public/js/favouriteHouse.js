@@ -2,6 +2,17 @@ let favButtonObject = document.getElementById("favButton");
 
 favButtonObject.addEventListener("click", addFavouriteHouse);
 
+/**
+ * When tap on favourite button check if house is mark as "Favourite",
+ * if so, when tap again will remove from favourite list and changed to "Add Favourite"
+ * and vice versa.
+ *
+ * When house is marked as "Favourite", POST method is call and favourite house added in favourite collection
+ * with houseid and favhouse id.
+ *
+ * when house is marked as "Add Favourite", DELETE method is call and favourite house removed from favourite collection
+ * for given houseid.
+ */
 function addFavouriteHouse() {
   let isDeleted = false;
 
