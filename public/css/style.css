@@ -29,3 +29,26 @@
   background-color: red;
   color: aliceblue;
 }
+
+#commentLabel {
+  color: blue;
+  font-family: "Times New Roman", Times, serif;
+  font-size: medium;
+  font-style: normal;
+}
+
+#commentButton {
+  color: cadetblue;
+  background-color: black;
+  font-size: medium;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bolder;
+}
+
+#commentDoneButton {
+  color: whitesmoke;
+  background-color: green;
+  font-size: medium;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bolder;
+}
