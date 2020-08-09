@@ -92,7 +92,14 @@ router.post('/', async (req, res) => {
             pincode,
             age
         );
-        res.render('pages/success', {title: "Account created"});
+        try {
+          userInfo = await userData.getUserByEmail(email);
+        } catch (e) {
+          return res.json({ error: "cannot find user info." });
+        }
+        console.log(userData._id);
+        req.session.user = userInfo._id;
+        res.render('pages/success', {title: "Account created", hasLogin: true});
       } catch (e) {
         console.log(e);
         error_msgs.push("There was an error registering your account. Please try again later.")
