@@ -19,3 +19,13 @@
   background-repeat: no-repeat;
   background-size: cover;
 }
+
+.fav {
+  background-color: green;
+  color: aliceblue;
+}
+
+.notfav {
+  background-color: red;
+  color: aliceblue;
+}
