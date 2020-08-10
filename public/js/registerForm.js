@@ -1,4 +1,3 @@
-
 let errorContainer = document.getElementById('errorContainerReg');
 let regForm = document.getElementById('regForm');
 let firstName = document.getElementById('firstName');
@@ -25,27 +24,11 @@ let cityError = document.getElementById('cityError');
 let stateError = document.getElementById('stateError');
 let pincodeError = document.getElementById('pincodeError');
 
+
 let error = false;
 
-if (errorContainer) {
-  errorContainer.style.display = "none";
-  FirstNameError.style.display = "none";
-  LastNameError.style.display = "none";
-  EmailError.style.display = "none";
-  PasswordError.style.display = "none";
-  // AgeError.style.display = "none";
-  // profilepicError.style.display="none";
-  // streetError.style.display="none";
-  // housenumberError.style.display="none";
-  // cityError.style.display="none";
-  // stateError.style.display="none";
-  // pincodeError.style.display ="none"
-}
-
-if (regForm) {
-  regForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    error = false;
+if(errorContainer)
+{
     errorContainer.style.display = "none";
     FirstNameError.style.display = "none";
     LastNameError.style.display = "none";
@@ -146,9 +129,10 @@ if (regForm) {
         }
 
     });
+
 }
 
-function validateEmail(elementValue) {
-  let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-  return emailPattern.test(elementValue);
+function validateEmail(elementValue){
+    let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return emailPattern.test(elementValue);
 }

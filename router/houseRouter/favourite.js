@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const house = require("../../data/houseData");
 const favHouseData = house.favHouseData;
+const user = require("../../data/userData");
+const userData = user.users;
 
 router.get("/", async (req, res) => {
   try {
@@ -37,12 +39,29 @@ router.post("/", async (req, res) => {
     return;
   }
 
+  let newfavHouse = {};
   try {
-    let newfavHouse = await favHouseData.addFavouriteHouse(req.body["houseId"]);
+    newfavHouse = await favHouseData.addFavouriteHouse(req.body["houseId"]);
     res.json(newfavHouse);
   } catch (error) {
     res.status(404).json({ error: "Cannot add new fav House" });
   }
+
+  // Add favouriteId in user
+  let loginUser = {};
+  try {
+    let userId = req.session.user;
+    try {
+      loginUser = await userData.getUserById(userId);
+    } catch (error) {
+      console.log(error);
+    }
+    loginUser["favourites"].push(newfavHouse);
+    await userData.updateUser(userId, loginUser);
+  } catch (error) {
+    console.log(error);
+  }
+
 });
 
 //pass house id to delete favourite house for given houseid
@@ -75,6 +94,28 @@ router.delete("/:id", async (req, res) => {
     res.sendStatus(200);
   } catch (error) {
     res.status(404).json({ error: "Cannot delete  fav House." });
+  }
+
+  //delet favouriteId in user
+  let loginUser = {};
+  try {
+    let userId = req.session.user;
+    try {
+      loginUser = await userData.getUserById(userId);
+    } catch (error) {
+      console.log(error);
+    }
+    for(let i of loginUser["favourites"]){
+      let index = loginUser["favourites"].indexOf(i);
+      if(i["_id"] === favHouseId){
+        console.log(true);
+        loginUser["favourites"].splice(index,1);
+        break;
+      }
+    }
+    await userData.updateUser(userId, loginUser);
+  } catch (error) {
+    console.log(error);
   }
 });
 
