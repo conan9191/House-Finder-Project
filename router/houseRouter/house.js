@@ -28,7 +28,7 @@ router.get("/:id", async (req, res) => {
     //res.json(house);
     //renderds the individual house page with the house info
     res.render("pages/individualHouse", {
-      houseId: house.houseId,
+      houseId: house._id,
       latitude: house.latitude,
       longitude: house.longitude,
       title: "Individual House Page",
