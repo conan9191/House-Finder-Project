@@ -1,4 +1,3 @@
-
 let errorContainer = document.getElementById('errorContainerReg');
 let regForm = document.getElementById('regForm');
 let firstName = document.getElementById('firstName');

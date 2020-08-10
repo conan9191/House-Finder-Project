@@ -30,11 +30,18 @@
   color: aliceblue;
 }
 
-#commentLabel {
-  color: blue;
+.commentField {
+  color: rgb(59, 59, 65);
   font-family: "Times New Roman", Times, serif;
   font-size: medium;
   font-style: normal;
+}
+
+.commentUsername {
+  color: blue;
+  font-family: "Times New Roman", Times, serif;
+  font-size: small;
+  font-style: initial;
 }
 
 #commentButton {
@@ -48,6 +55,13 @@
 #commentDoneButton {
   color: whitesmoke;
   background-color: green;
+  font-size: medium;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bolder;
+}
+
+#error {
+  color: red;
   font-size: medium;
   font-family: "Times New Roman", Times, serif;
   font-weight: bolder;

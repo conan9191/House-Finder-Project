@@ -1,3 +1,13 @@
+/*
+ * @Descripttion:
+   defines collection method to get, add, delete and update comments.
+   Collection name : Comments 
+   Stores data : _id : commentid , text : comment text , userId : userid who posted comment.
+ * @Author: Syed Mahvish
+ *
+ *
+ */
+
 const dbCollections = require("../../settings/collections");
 
 const commentCollectionObj = dbCollections.comments;
@@ -168,9 +178,9 @@ function getValidComment(commentText) {
   if (
     !commentText ||
     typeof commentText != "string" ||
-    commentText.length < 3
+    commentText.trim().length === 0
   ) {
-    throw `Comment must be of atleast 3 character.`;
+    throw `Please enter valid comment.`;
   }
   return commentText;
 }
