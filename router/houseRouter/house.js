@@ -10,8 +10,8 @@ router.get("/", async (req, res) => {
     let houseList = await houseData.getAllHouse();
     res.render('pages/mainPage', {
 		title: 'Main Page',
-		list: houseList
-    hasLogin: req.session.user
+		list: houseList,
+    		hasLogin: req.session.user
     });
   } catch (error) {
     res.status(404).json({ error: "Houses not found" });
