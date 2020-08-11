@@ -16,23 +16,28 @@ const houseData = house.houseData;
 router.get("/", async (req, res) => {
   let userId = req.session.user;
   let user = {};
-  try{
+  try {
     user = await userData.getUserById(userId);
-  }catch(error){
+  } catch (error) {
     console.log(error);
   }
   let allUserFavourites = user["favourites"];
   let favHouseList = [];
-  try{
-    for(let i of allUserFavourites){
+  try {
+    for (let i of allUserFavourites) {
       let houseId = i["houseId"];
       let favhouse = await houseData.getHouseById(houseId);
       favHouseList.push(favhouse);
     }
-  }catch(error){
+  } catch (error) {
     console.log(error);
   }
-  res.render("pages/account", { title: "User Account", user: user,hasLogin: true, list: favHouseList });
+  res.render("pages/account", {
+    title: "User Account",
+    user: user,
+    hasLogin: true,
+    list: favHouseList,
+  });
 });
 
 module.exports = router;

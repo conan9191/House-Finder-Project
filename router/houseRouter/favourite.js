@@ -56,12 +56,16 @@ router.post("/", async (req, res) => {
     } catch (error) {
       console.log(error);
     }
-    loginUser["favourites"].push(newfavHouse);
+    let userFavHouse = [];
+    if (loginUser["favourites"]) {
+      userFavHouse = loginUser["favourites"];
+    }
+    userFavHouse.push(newfavHouse);
     await userData.updateUser(userId, loginUser);
   } catch (error) {
+    console.log("update failure");
     console.log(error);
   }
-
 });
 
 //pass house id to delete favourite house for given houseid
@@ -105,11 +109,11 @@ router.delete("/:id", async (req, res) => {
     } catch (error) {
       console.log(error);
     }
-    for(let i of loginUser["favourites"]){
+    for (let i of loginUser["favourites"]) {
       let index = loginUser["favourites"].indexOf(i);
-      if(i["_id"] === favHouseId){
+      if (i["_id"] === favHouseId) {
         console.log(true);
-        loginUser["favourites"].splice(index,1);
+        loginUser["favourites"].splice(index, 1);
         break;
       }
     }
