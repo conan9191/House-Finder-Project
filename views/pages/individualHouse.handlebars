@@ -42,11 +42,13 @@
         <p id="houseDescription"> {{description}} </p>
         <p id="houseMisc"> {{amenities}} <br> Pet Friendly: {{pet}} <br> Parking Available: {{park}}</p>
     </div>
-    {{#if hasFav}}
-        <button id="favButton" value="{{houseId}}" class="fav"> Favourite</button>
+
+    {{#if isFavHouse}}
+    <button id="favButton" value="{{houseId}}" class="fav">Favourite</button>
     {{else}}
-        <button id="favButton" value="{{houseId}}" class="notfav"> Add Favourite</button>  
+    <button id="favButton" value="{{houseId}}" class="fav"> Add Favourite</button>
     {{/if}}
+    
     <br>
     <br>
 </div>
