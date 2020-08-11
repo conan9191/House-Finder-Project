@@ -1,0 +1,90 @@
+<div class="mainPage">
+    <h1 id="title"> The Main Page </h1>
+
+    <!--
+        Content on page:
+            Has a search bar where the user can search for houses based on certain criteria
+                When the user submits, should redirect to the /search page
+            Displays a grid view of all the houses
+
+            Also will allow the user to login, but we'll add this later
+            And we'll add the CSS later as well
+
+        Search bar specifications:
+            - A range of rent values
+            - Start date and end date range
+            - Address
+                - House number
+                - Street
+                - State
+                - Zip
+            - Pet friendly (checkbox)
+            - Parking available (checkbox)
+
+        More specifications could be added
+        The user needs to put at least one filter in
+     -->
+
+     <div id="houseSearch">
+         <form action="/house/search" method="POST">
+            <div id="rent">
+                <label for="rent-min"> Rent Min. </label>
+                <input type="text" name="rent-min" id="rent-min" placeholder="0">
+                <label for="rent-max"> Rent Max. </label>
+                <input type="text" name="rent-max" id="rent-max" placeholder="2000">
+            </div>
+
+            <div id="date">
+                <label for="date-start"> Start Date </label>
+                <input type="text" name="date-start" id="date-start" placeholder="MM/DD/YYYY">
+                <label for="date-end"> End Date </label>
+                <input type="text" name="date-end" id="date-end" placeholder="MM/DD/YYYY">
+            </div>
+
+            <div id="address">
+                <!-- There probably is a better way to do this -->
+                <label for="house-number"> House Number </label>
+                <input type="text" name="house-number" id="house-number" placeholder="123">
+                <label for="house-street"> Street </label>
+                <input type="text" name="house-street" id="house-street" placeholder="Washington Street">
+                <label for="house-city"> City </label>
+                <input type="text" name="house-city" id="house-city" placeholder="Hoboken">
+                <label for="house-state"> State (Abbreviation Only) </label>
+                <input type="text" name="house-state" id="house-state" placeholder="NJ">
+                <label for="house-zipcode"> Zip Code </label>
+                <input type="text" name="house-zipcode" id="house-zipcode" placeholder="07030"> 
+            </div>
+
+            <div id="radio">
+                <fieldset id="pet">
+                    <legend id="pet-name"> Pet Friendly? </legend>
+                    <label for="pet-yes"> Yes </label>
+                    <input type="radio" name="pet" id="pet-yes" value="pet-yes">
+                    <label for="pet-no"> No </label>
+                    <input type="radio" name="pet" id="pet-no" value="pet-no">
+                </fieldset>
+                <fieldset id="park">
+                    <legend id="park-name"> Parking available? </legend>
+                    <label for="park-yes"> Yes </label>
+                    <input type="radio" name="park" id="park-yes" value="park-yes">
+                    <label for="park-no"> No </label>
+                    <input type="radio" name="park" id="park-no" value="park-no">
+                </fieldset>
+            </div>
+            <button type="submit"> Submit </button>
+         </form>
+     </div>
+
+     <div class="houseList">
+         {{#each list}}
+         <div class="cover-container">
+             {{#each this.profilePicture}}
+             <img class="cover-item" src="{{this}}" alt="house">
+             {{/each}}
+         </div>
+
+         <a href="{{this._id}}"> More Details</a>
+         <p id="houseDescription"> {{this.description}} </p>
+         {{/each}}
+     </div>
+</div>
