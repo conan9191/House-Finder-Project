@@ -16,6 +16,7 @@ const accountRoutes = require("./userRouter/account");
 const parser = require("body-parser");
 const houseRoutes = require("./houseRouter/house");
 const favRoutes = require("./houseRouter/favourite");
+const commentRoutes = require("./commentsAndReviewRouter/comments");
 
 const constructorMethod = (app) => {
   //for user
@@ -32,20 +33,22 @@ const constructorMethod = (app) => {
   app.use("/favourite", favRoutes);
   app.use("/house", houseRoutes);
 
+  //comment
+  app.use("/comment", commentRoutes);
+
   app.use("*", (req, res) => {
     const authenticated = req.session.user || false;
-    if(req.session.user){
+    if (req.session.user) {
       res.render("pages/success", {
         title: "log in succeed",
-        hasLogin:true
+        hasLogin: true,
       });
-    }else{
-        res.render("pages/erroraccess", {
+    } else {
+      res.render("pages/erroraccess", {
         title: "Access Error",
         authenticated: authenticated,
       });
     }
-   
   });
 };
 
