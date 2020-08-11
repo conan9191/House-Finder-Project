@@ -42,7 +42,14 @@
         <p id="houseDescription"> {{description}} </p>
         <p id="houseMisc"> {{amenities}} <br> Pet Friendly: {{pet}} <br> Parking Available: {{park}}</p>
     </div>
-    <button id="favButton" value="{{houseId}}" class="fav"> Add Favourite</button>
+    {{#if hasFav}}
+        <button id="favButton" value="{{houseId}}" class="fav"> Favourite</button>
+    {{else}}
+        <button id="favButton" value="{{houseId}}" class="notfav"> Add Favourite</button>  
+    {{/if}}
     <br>
     <br>
 </div>
+
+<script type="text/javascript" src="/public/js/favouriteHouse.js"></script>
+<script type="text/javascript" src="/public/js/house.js"></script>

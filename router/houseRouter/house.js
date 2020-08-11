@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const house = require("../../data/houseData");
 const houseData = house.houseData;
+const user = require("../../data/userData");
+const userData = user.users;
 
 router.get("/", async (req, res) => {
   try {
@@ -10,6 +12,7 @@ router.get("/", async (req, res) => {
     res.render("pages/houseList", {
       title: "House List Page",
       list: houseList,
+      hasLogin: req.session.user
     });
   } catch (error) {
     res.status(404).json({ error: "Houses not found" });
@@ -25,6 +28,25 @@ router.get("/:id", async (req, res) => {
   try {
     let house = await houseData.getHouseById(req.params.id);
     console.log(house);
+
+    //Determine if a user is logged in and favorited
+    let hasFav = false;
+    let user = {};
+    if(req.session.user){
+      hasLogin = true;
+      try{
+        user = await userData.getUserById(req.session.user);
+      }catch(error){
+        res.status(404).json({ error: "User not found" });
+        return; 
+      }
+      for(let i of user.favourites){
+        if(i["houseId"] === req.params.id)
+        hasFav = true;
+        break;
+      }
+    }
+    
     //res.json(house);
     //renderds the individual house page with the house info
     res.render("pages/individualHouse", {
@@ -45,6 +67,8 @@ router.get("/:id", async (req, res) => {
       amenities: house.otherAmenities,
       pet: house.petFriendly,
       park: house.parkingAvailable,
+      hasFav: hasFav,
+      hasLogin: req.session.user
     });
   } catch (error) {
     res.status(404).json({ error: "House not found" });
