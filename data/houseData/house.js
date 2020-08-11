@@ -7,6 +7,7 @@ const is_image_url = require("is-image-url");
 const dbCollections = require("../../settings/collections");
 const houseCollectionObj = dbCollections.house;
 const { v1: uuidv4 } = require("uuid");
+const { GridFSBucketReadStream } = require("mongodb");
 
 /**
  * houseData : house object to store and validate house data.
@@ -38,6 +39,156 @@ let houseData = {
   parkingAvailable: "",
   reviewIds: [],
 };
+
+/**
+ * Checks if the info supplied in the form is valid
+ * @param {*} info : Contains the form information
+ * Return: True if the info is valid and has no errors
+ */
+async function infoValid(info) {
+	if (arguments.length != 1)
+		throw "Usage: info";
+	if (!info)
+		throw "The form information was expected";
+
+	//rent checking
+	let rMin = await info["rent-min"];
+	let rMax = await info["rent-max"];
+
+	if (rMin && (isNaN(rMin) || rMin < 0)) 
+		throw "Rent minimum is not a positive number";
+	if (rMax && (isNaN(rMax) || rMax < 0))
+		throw "Rent maximum is not a positive number";
+	if (rMin && rMax && (rMin >= rMax))
+		throw "Rent maximum must be greater than rent minimum";
+	
+	//date checking
+	let dStart = await info["date-start"];
+	let dEnd = await info["date-end"];
+	let dStartValid = moment(dStart, "MM/DD/YYYY", true).isValid();
+	let dEndValid = moment(dEnd, "MM/DD/YYYY", true).isValid();
+	let after = moment(dEnd).isAfter(dStart);
+
+	if (dStart && !dStartValid)
+		throw "Start date is invalid";
+	if (dEnd && !dEndValid)
+		throw "End date is invalid";
+	if (dStart && dEnd && !after)
+		throw "End date does not come after start date";
+
+	//Address checking 
+	let hNumber = await info["house-number"];
+	let hStreet = await info["house-street"];
+	let hCity = await info["house-city"];
+	let hState = await info["house-state"];
+	let hZip = await info["house-zipcode"];
+
+	if (hNumber && isNaN(hNumber))
+		throw "House Number must be a number";
+	if (hStreet && (typeof hStreet != 'string'))
+		throw "House street must be a string";
+	if (hCity && (typeof hCity != 'string'))
+		throw "House city must be a string";
+	if (hState && (typeof hState != 'string'))
+		throw "House State must be a string";
+	if (hZip && isNaN(hZip))
+		throw "House zipcode must be a number";
+
+	return true;
+}
+
+/**
+ * Checks if a house matches the user criteria, returns true it it does
+ * @param {*} info : The form information
+ * @param {*} house : A house 
+ */
+async function houseMatch(info, house) {
+	if (arguments.length != 2)
+		throw "Usage: info, house";
+	if (!info)
+		throw "The form information was expected";
+	if (!house)
+		throw "A house was expected";
+
+	let rMin = await info["rent-min"];
+	let rMax = await info["rent-max"];
+
+	let dStart = await info["date-start"];
+	let dEnd = await info["date-end"];
+
+	let hNumber = await info["house-number"];
+	let hStreet = await info["house-street"];
+	let hCity = await info["house-city"];
+	let hState = await info["house-state"];
+	let hZip = await info["house-zipcode"];
+
+	let petY = await info["pet-yes"];
+	let petN = await info["pet-no"];
+	let parkY = await info["park-yes"];
+	let parkN = await info["park-no"];
+
+	if (rMin && (house.rent < rMin))
+		return false;
+	if (rMax && (house.rent > rMax))
+		return false;
+	
+	if (dStart && !moment(house.startDate).isAfter(dStart))
+		return false;
+	if (dEnd && !moment(house.endDate).isBefore(dEnd))
+		return false;
+
+	if (hNumber && (hNumber !== house.houseNumber))
+		return false;
+	if (hStreet && (hStreet !== house.street))
+		return false;
+	if (hCity && (hCity !== house.city))
+		return false;
+	if (hState && (hState !== house.state))
+		return false;
+	if (hZip && (hZip !== house.pincode))
+		return false;
+	
+	if (parkY && !house.parkingAvailable)
+		return false;
+	if (parkN && house.parkingAvailable)
+		return false;
+	if (petY && !house.petFriendly)
+		return false;
+	if (petN && house.petFriendly)
+		return false;
+	
+	return true;
+}
+
+/**
+ * Filters a list of houses based on the user criteria
+ * @param {*} info : Contains the form information 
+ * Return: A filtered list of houses that match the user criteria
+ * Note that an empty house list should not return an error
+ */ 
+
+async function filterList(info) {
+	//the checker method could return an array of all the entered data
+	//maybe use another method to check if each house matches the criteria
+	try {
+		if (await infoValid(info)) {
+			let houseList = await getAllHouse();
+			let filtered = [];
+
+			for (let i=0; i<houseList.length; i++) {
+				//if house matches the filters
+				//push it into filtered
+				if (await houseMatch(info, houseList[i])) {
+					filtered.push(houseList[i]);
+				}
+			}
+
+			return filtered;
+		}
+	} catch (e) {
+		throw e;
+	}
+}
 
 /**
  * Find house into house database for given id
@@ -444,6 +595,7 @@ module.exports = {
   addHouse,
   updateHouse,
   deleteHouse,
+  filterList
 };
 
 /**
