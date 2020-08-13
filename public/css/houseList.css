@@ -1,0 +1,43 @@
+.houseList .cover-container {
+    height: 200px;
+    width: 100%;
+    white-space: nowrap;
+    overflow-y: hidden;
+  }
+  
+.houseList .cover-item {
+    position: relative;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100%;
+    width: 100%;
+    box-shadow: 2px 2px 4px #bbb;
+    border-top-right-radius: 4px;
+    background-position: top left;
+    background-repeat: no-repeat;
+    background-size: cover;
+    object-fit: contain;
+  }
+
+.houseList .house {
+    border: thin solid gray;
+} 
+
+.houseList .overlay {
+    text-align: center;
+    opacity: 0;
+    background-color: white;
+    color: black;
+    height: 100%;
+    width: 100%;
+    transition: 0.4s;
+}
+
+.houseList .cover-container:hover .overlay {
+    opacity: 0.5;
+}
+
+.houseListPage #title {
+    text-align: center;
+}

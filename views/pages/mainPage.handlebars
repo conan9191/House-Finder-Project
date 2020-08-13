@@ -22,69 +22,79 @@
             - Parking available (checkbox)
 
         More specifications could be added
-        The user needs to put at least one filter in
      -->
 
-     <div id="houseSearch">
+    <!-- CSS for ths form is in houseForm.css -->
+     <div id="houseSearchForm">
          <form action="/house/search" method="POST">
-            <div id="rent">
-                <label for="rent-min"> Rent Min. </label>
-                <input type="text" name="rent-min" id="rent-min" placeholder="0">
-                <label for="rent-max"> Rent Max. </label>
-                <input type="text" name="rent-max" id="rent-max" placeholder="2000">
+            <div id="rent" class="form-horizontal col-md-3">
+                <label for="rent-min" class="control-label"> Rent Min. </label>
+                <input type="text" name="rent-min" id="rent-min" placeholder="0" class="form-control">
+                <label for="rent-max" class="control-label"> Rent Max. </label>
+                <input type="text" name="rent-max" id="rent-max" placeholder="2000" class="form-control">
             </div>
 
-            <div id="date">
-                <label for="date-start"> Start Date </label>
-                <input type="text" name="date-start" id="date-start" placeholder="MM/DD/YYYY">
-                <label for="date-end"> End Date </label>
-                <input type="text" name="date-end" id="date-end" placeholder="MM/DD/YYYY">
+            <div id="date" class="form-horizontal col-md-3">
+                <label for="date-start" class="control-label"> Start Date </label>
+                <input type="text" name="date-start" id="date-start" placeholder="MM/DD/YYYY" class="form-control">
+                <label for="date-end" class="control-label"> End Date </label>
+                <input type="text" name="date-end" id="date-end" placeholder="MM/DD/YYYY" class="form-control">
             </div>
 
             <div id="address">
                 <!-- There probably is a better way to do this -->
-                <label for="house-number"> House Number </label>
-                <input type="text" name="house-number" id="house-number" placeholder="123">
-                <label for="house-street"> Street </label>
-                <input type="text" name="house-street" id="house-street" placeholder="Washington Street">
-                <label for="house-city"> City </label>
-                <input type="text" name="house-city" id="house-city" placeholder="Hoboken">
-                <label for="house-state"> State (Abbreviation Only) </label>
-                <input type="text" name="house-state" id="house-state" placeholder="NJ">
-                <label for="house-zipcode"> Zip Code </label>
-                <input type="text" name="house-zipcode" id="house-zipcode" placeholder="07030"> 
-            </div>
+                <div class="form-horizontal col-md-3">
+                    <label for="house-number" class="control-label"> House Number </label>
+                    <input type="text" name="house-number" id="house-number" placeholder="123" class="form-control">
+                    <label for="house-street" class="control-label"> Street </label>
+                    <input type="text" name="house-street" id="house-street" placeholder="Washington Street" class="form-control">
+                </div>
+                <div class="form-horizontal col-md-2">
+                    <label for="house-city" class="control-label"> City </label>
+                    <input type="text" name="house-city" id="house-city" placeholder="Hoboken" class="form-control">
 
-            <div id="radio">
-                <fieldset id="pet">
+                    <label for="house-state" class="control-label"> State </label>
+                    <input type="text" name="house-state" id="house-state" placeholder="NJ" class="form-control">
+                </div>
+                <div class="form-horizontal col-md-1">
+                    <label for="house-zipcode" class="control-label"> Zip Code </label>
+                    <input type="text" name="house-zipcode" id="house-zipcode" placeholder="07030" class="form-control"> 
+                </div>
+            </div>
+             
+            <div id="radio" class="form-inline">
+                <fieldset id="pet" class="col-md-3">
                     <legend id="pet-name"> Pet Friendly? </legend>
-                    <label for="pet-yes"> Yes </label>
-                    <input type="radio" name="pet" id="pet-yes" value="pet-yes">
-                    <label for="pet-no"> No </label>
-                    <input type="radio" name="pet" id="pet-no" value="pet-no">
+                    <label for="pet-yes" class="radio-inline"> Yes </label>
+                    <input type="radio" name="pet" id="pet-yes" value="pet-yes" class="form-control">
+                    <label for="pet-no" class="radio-inline"> No </label>
+                    <input type="radio" name="pet" id="pet-no" value="pet-no" class="form-control">
                 </fieldset>
-                <fieldset id="park">
+                <fieldset id="park" class="col-md-3">
                     <legend id="park-name"> Parking available? </legend>
-                    <label for="park-yes"> Yes </label>
-                    <input type="radio" name="park" id="park-yes" value="park-yes">
-                    <label for="park-no"> No </label>
-                    <input type="radio" name="park" id="park-no" value="park-no">
+                    <label for="park-yes" class="radio-inline"> Yes </label>
+                    <input type="radio" name="park" id="park-yes" value="park-yes" class="form-control">
+                    <label for="park-no" class="radio-inline"> No </label>
+                    <input type="radio" name="park" id="park-no" value="park-no" class="form-control">
                 </fieldset>
             </div>
-            <button type="submit"> Submit </button>
+            <button class="col-md-1" type="submit" id="button"> Submit </button>
          </form>
      </div>
 
-     <div class="houseList">
+    <!-- CSS for this part is in houseList.css -->
+     <div class="form-inline houseList col-md-12">
          {{#each list}}
-         <div class="cover-container">
-             {{#each this.profilePicture}}
-             <img class="cover-item" src="{{this}}" alt="house">
-             {{/each}}
-         </div>
+            <div class="col-md-4 house">
+                <div class="cover-container">
+                    <a href="house/{{this._id}}">
+                        <img class="cover-item" src="{{this.houseImage}}" alt="house">
+                        <div class="overlay"> More Information </div>
+                    </a>
+                </div>
 
-         <a href="{{this._id}}"> More Details</a>
-         <p id="houseDescription"> {{this.description}} </p>
+                <p id="houseDescription"> {{this.description}} </p>
+            </div>
          {{/each}}
      </div>
 </div>
