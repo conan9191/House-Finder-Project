@@ -21,6 +21,16 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/add", async (req, res) => {
+  try {
+    res.render("pages/houseManage", {
+      title: "Add new house",
+    });
+  } catch (error) {
+    res.status(404).json({ error: "Houses not found" });
+  }
+});
+
 router.get("/search", async (req, res) => {
   //the user shouldn't be able to manually enter this page
   res.redirect("/");
