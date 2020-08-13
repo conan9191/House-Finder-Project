@@ -15,13 +15,13 @@
         Not to mention css will really help with the look
     -->
 
-    <!-- 
-        Eventually, we will want to keep our styling in a seperate css file
-        We will want to put our scripts in seperate javascript files as well
-        But this will suffice for now, temporarily
-    -->
+    <!-- CSS in housePage.css -->
 
-    <div id="map" style="height: 400px; width: 80%;"></div>
+    <div class="cover-container">
+        <img class="cover-item" src="{{this.houseImage}}" alt="house">
+    </div>
+
+    <div id="map"></div>
     <div id="latitude" hidden=true>{{latitude}}</div>
     <div id="longitude" hidden=true>{{longitude}}</div>
     <script async defer
@@ -30,13 +30,8 @@
     <br>
     <br>
 
-    <div class="cover-container">
-        {{#each houseImage}}
-        <img class="cover-item" src="{{this}}" alt="house" style="width:40%">
-        {{/each}}
-    </div>
 
-    <div class="houseInfo">
+    <div class=" houseInfo">
         <p id="address"> {{houseNumber}} {{street}} <br> {{city}}, {{state}}, {{zip}} </p>
         <p id="priceInfo"> Rent: ${{rent}} <br> Lease duration: {{startDate}} - {{endDate}} </p>
         <p id="houseDescription"> {{description}} </p>

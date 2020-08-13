@@ -16,40 +16,19 @@
         We will change this to houses that match the user criteria only of course
       -->
 
-    <style>
-        .cover-container {
-            height: 200px;
-            width: 100%;
-            white-space: nowrap;
-            overflow-x: scroll;
-            overflow-y: hidden;
-        }
-
-        .cover-item {
-            position: relative;
-            display: inline-block;
-            margin: 8px 8px;
-            box-shadow: 2px 2px 4px #bbb;
-            border-top-right-radius: 4px;
-            width: 116px;
-            height: 158px;
-            vertical-align: bottom;
-            background-position: top left;
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
-    </style>
-
-    <div class="houseList">
+    <!-- CSS in houseList.css -->
+    <div class="form-inline houseList col-md-12">
         {{#each list}}
-        <div class="cover-container">
-            {{#each this.profilePicture}}
-            <img class="cover-item" src="{{this}}" alt="house" style="width:40%">
-            {{/each}}
-        </div>
+            <div class="col-md-4 house">
+                <div class="cover-container">
+                <a href="{{this._id}}">
+                    <img class="cover-item" src="{{this.houseImage}}" alt="house">
+                    <div class="overlay"> More Information </div> 
+                </a>
+                </div>
 
-        <a href="http://localhost:3000/house/{{this._id}}">More Details</a>
-        <p id="houseDescription"> {{this.description}} </p>
+                <p id="houseDescription"> {{this.description}} </p>
+            </div>
         {{/each}}
     </div>
 </div>
