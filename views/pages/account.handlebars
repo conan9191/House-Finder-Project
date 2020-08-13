@@ -12,7 +12,7 @@
 				</a>
 			</li>
 			<li><a href="#review" data-toggle="tab">Reviews</a></li>
-			<li><a href="#favourite" data-toggle="tab">Favourite</a></li>
+			<li><a href="#favourite" data-toggle="tab">Favourites</a></li>
 		</ul>
 		<div id="myTabContent" class="tab-content">
 			<div class="tab-pane fade in active" id="info">
@@ -26,15 +26,15 @@
 							<span class="input-group-addon">Last Name:</span>
 							<input type="text" class="form-control" disabled="true" value="{{user.lastName}}">
 						</div>
-						{{!-- <div class="input-group">
+						<div class="input-group">
 							<span class="input-group-addon">Age:</span>
 							<input type="text" class="form-control" disabled="true" value="{{user.age}}">
-						</div> --}}
+						</div>
 						<div class="input-group">
 							<span class="input-group-addon">Email:</span>
 							<input type="text" class="form-control" disabled="true" value="{{user.email}}">
 						</div>
-						{{!-- <div class="input-group">
+						<div class="input-group">
 							<span class="input-group-addon">Street:</span>
 							<input type="text" class="form-control" disabled="true" value="{{user.street}}">
 						</div>
@@ -53,7 +53,7 @@
 						<div class="input-group">
 							<span class="input-group-addon">Pin Code:</span>
 							<input type="text" class="form-control" disabled="true" value="{{user.pincode}}">
-						</div> --}}
+						</div>
 					</form>
 				</div>
 			</div>
@@ -61,9 +61,17 @@
 				<p>All the reviews</p>
 			</div>
 			<div class="tab-pane fade" id="favourite">
-				<p>Favourite houses</p>
+						{{#each list}}
+						<div class="cover-container">
+							{{#each this.profilePicture}}
+							<img class="cover-item" src="{{this}}" alt="house" style="width:40%">
+							{{/each}}
+						</div>
+
+						<a href="house/{{this._id}}">More Details</a>
+						<p id="houseDescription"> {{this.description}} </p>
+						{{/each}}
 			</div>
 		</div>
-		
 	</div>
 </div>

@@ -6,14 +6,40 @@ const houseData = house.houseData;
 router.get("/", async (req, res) => {
   try {
     let houseList = await houseData.getAllHouse();
-    console.log(houseList);
-    res.render("pages/houseList", {
-      title: "House List Page",
-      list: houseList,
+    //console.log(houseList);
+
+    res.render('pages/mainPage', {
+		title: 'Main Page',
+		list: houseList
     });
   } catch (error) {
     res.status(404).json({ error: "Houses not found" });
   }
+});
+
+router.get('/search', async(req, res) => {
+	//the user shouldn't be able to manually enter this page
+	res.redirect('/');
+}); 
+
+router.post('/search', async (req, res) => {
+	//this route will display the houses that match the search criteria
+	try {
+		let info = await req.body; 
+		let searchList = await houseData.filterList(info);
+
+		res.render('pages/houseList', {
+			title: 'Matched Houses',
+			list: searchList
+		});
+
+	} catch (e) {
+		res.status(500);
+		res.render('pages/error', {
+			message: e
+		});
+	}
+
 });
 
 router.get("/:id", async (req, res) => {
@@ -28,7 +54,7 @@ router.get("/:id", async (req, res) => {
     //res.json(house);
     //renderds the individual house page with the house info
     res.render("pages/individualHouse", {
-      houseId: house.houseId,
+      houseId: house._id,
       latitude: house.latitude,
       longitude: house.longitude,
       title: "Individual House Page",
@@ -47,9 +73,10 @@ router.get("/:id", async (req, res) => {
       park: house.parkingAvailable,
     });
   } catch (error) {
-    res.status(404).json({ error: "House not found" });
+    res.status(404).json({ error: "Could not find house" });
   }
 });
+
 
 router.post("/", async (req, res) => {
   if (!req.body) {

@@ -13,7 +13,12 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="/public/css/style.css" />
+    
+    <!-- Regular CSS -->
+    <link rel="stylesheet" href="/public/css/style.css" /> 
+    <link rel="stylesheet" href="/public/css/houseForm.css"> <!-- For the form on the main page -->
+    <link rel="stylesheet" href="/public/css/houseList.css"> <!-- The grid that shows a list of houses -->
+    <link rel="stylesheet" href="/public/css/housePage.css"> <!-- The individual house page that shows all the house information -->
 
 </head>
 
@@ -43,12 +48,19 @@
                     <li><a href="#">System Management</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    {{#if hasLogin}}
                     <li>
-                        <a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a>
+                        <a href="http://localhost:3000/logout"><span class="glyphicon glyphicon-log-in"></span>
+                            Logout</a>
+                    </li>
+                    {{else}}
+                    <li>
+                        <a href="/registration"><span class="glyphicon glyphicon-user"></span> Sign Up</a>
                     </li>
                     <li>
-                        <a href="http://localhost:3000/login"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+                        <a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a>
                     </li>
+                    {{/if}}
                 </ul>
             </div>
         </nav>
@@ -60,8 +72,13 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
         crossorigin="anonymous"></script>
+
     <script src="public/js/login.js"></script>
     <script src="public/js/registerForm.js"></script>
+    <script type="text/javascript" src="/public/js/favouriteHouse.js"></script>
+    <script type="text/javascript" src="/public/js/house.js"></script>
+    <script type="text/javascript" src="/public/js/comment.js"></script>
+
 </body>
 
 </html>

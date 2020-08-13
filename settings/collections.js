@@ -1,6 +1,6 @@
 /*
- * @Descripttion: 
- * @version: 
+ * @Descripttion:
+ * @version:
  * @Author: sueRimn
  * @Date: 2020-08-07 18:53:59
  * @LastEditors: Yiqun Peng
@@ -24,5 +24,6 @@ const getCollectionFn = (collection) => {
 module.exports = {
   house: getCollectionFn("House"),
   favourite: getCollectionFn("Favourite"),
-  users: getCollectionFn("users")
+  users: getCollectionFn("users"),
+  comments: getCollectionFn("Comments"),
 };

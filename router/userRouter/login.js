@@ -4,7 +4,7 @@
  * @Author: sueRimn
  * @Date: 2020-08-07 19:44:48
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-07 21:02:16
+ * @LastEditTime: 2020-08-08 10:46:30
  */
 const express = require("express");
 const router = express.Router();
@@ -52,7 +52,7 @@ router.post("/result", async (req, res) => {
     return res.json({ error: "password is wrong." });
   } else {
     req.session.user = userInfo._id;
-    res.render("pages/success", { title: "log in succeed" });
+    res.render("pages/success", { title: "log in succeed" ,hasLogin:true});
   }
 });
 

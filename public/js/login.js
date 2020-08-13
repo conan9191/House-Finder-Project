@@ -4,7 +4,7 @@
  * @Author: sueRimn
  * @Date: 2020-08-07 19:48:04
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-07 19:48:07
+ * @LastEditTime: 2020-08-10 10:08:59
  */
 $('.clientsideLoginErrors').hide();
 $('#loginForm').submit((event) => {
@@ -43,7 +43,7 @@ $('#loginForm').submit((event) => {
                 }
                 if (!$('.responseError').length){
                     $('.clientsideLoginErrors').append(`<p class="responseError">${responseMessage.error}</p>`)
-                    $('.clientsideLoginErrors').show();
+                    $('.clientsideLoginErrors').show();    
                 }
             } else {
                 window.location.replace("http://localhost:3000");

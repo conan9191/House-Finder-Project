@@ -1,0 +1,19 @@
+.individualHousePage #title {
+    text-align: center;
+}
+
+.individualHousePage .cover-container {
+    width: 100%;
+    height: 400px;
+}
+
+.individualHousePage .cover-item {
+    position: relative;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+
+}
