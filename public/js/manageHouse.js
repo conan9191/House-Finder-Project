@@ -1,3 +1,5 @@
+//Select and load image
+
 const input = document.querySelector("input");
 const preview = document.querySelector(".preview");
 
@@ -7,6 +9,7 @@ input.style.opacity = 0;
 input.addEventListener("change", updateImageDisplay);
 
 function updateImageDisplay() {
+  profilePictureArray = [];
   while (preview.firstChild) {
     preview.removeChild(preview.firstChild);
   }
@@ -72,6 +75,7 @@ function returnFileSize(number) {
   }
 }
 
+//handling other house details
 /**
  * houseData : house object to store and validate house data.
  */
@@ -131,176 +135,41 @@ let parkingAvailableNo = document.getElementById("parkingAvailableNo");
 let otherAmenities = document.getElementById("otherAmenities");
 let description = document.getElementById("description");
 
+//handle error
+
+let pictureError = document.getElementById("pictureError");
+let latitudeError = document.getElementById("latitudeError");
+let longitudeError = document.getElementById("longitudeError");
+let streetError = document.getElementById("streetError");
+let housenumberError = document.getElementById("housenumberError");
+let cityError = document.getElementById("cityError");
+let stateError = document.getElementById("stateError");
+let pincodeError = document.getElementById("pincodeError");
+let rentError = document.getElementById("rentError");
+let leasestartError = document.getElementById("leasestartError");
+let leaseendError = document.getElementById("leaseendError");
+let leaseendlessthanstartdateError = document.getElementById(
+  "leaseendlessthanstartdateError"
+);
+let amenitiesError = document.getElementById("amenitiesError");
+let descriptionError = document.getElementById("descriptionError");
+let petError = document.getElementById("petError");
+let parkingError = document.getElementById("parkingError");
+let bedroomError = document.getElementById("bedroomError");
+let hallError = document.getElementById("hallError");
+let kitchenError = document.getElementById("kitchenError");
+let displayErrorBar = document.getElementById("displayError");
+
+let errorArray = [];
+
 function addHouse() {
+  errorArray = [];
+  setdefaultErrorStyle();
   validateCompleteHouseInfo();
-}
-
-async function validateCompleteHouseInfo() {
-  let errorArray = [];
-
-  //profile picture
-  if (profilePictureArray) {
-    await isvalidProfilePicture(profilePictureArray);
-  } else {
-    errorArray.push("Invalid House profile picture url.");
-  }
-
-  //longitude and latitude
-  if (lat && long && isValidLatitudeandLongitude(long.value, lat.value)) {
-    houseData.longitude = long.value;
-    houseData.latitude = lat.value;
-  } else {
-    errorArray.push("Missing House longitude/latitude or missing value.");
-  }
-
-  //street
-  if (Street && Street.value && typeof Street.value === "string") {
-    houseData.street = Street.value;
-  } else {
-    errorArray.push("Invalid House street or missing value.");
-  }
-
-  //house number
-  if (
-    houseNumber &&
-    houseNumber.value &&
-    typeof houseNumber.value === "string"
-  ) {
-    houseData.houseNumber = houseNumber.value;
-  } else {
-    errorArray.push("Invalid House Number or missing value.");
-  }
-
-  //city
-  if (City && City.value && typeof City.value === "string") {
-    houseData.city = City.value;
-  } else {
-    errorArray.push("Invalid House city or missing value.");
-  }
-
-  //state
-  if (State && State.value && typeof State.value === "string") {
-    houseData.state = State.value;
-  } else {
-    errorArray.push("Invalid House state or missing value.");
-  }
-
-  //pincode
-  if (Pincode && Pincode.value && !isNaN(Pincode.value)) {
-    houseData.pincode = Pincode.value;
-  } else {
-    errorArray.push("Invalid House pincode or missing value.");
-  }
-
-  //rent
-  if (Rent && Rent.value && !isNaN(Rent.value)) {
-    houseData.rent = Rent.value;
-  } else {
-    errorArray.push("Invalid House rent or missing value.");
-  }
-
-  //startDate;
-  let validDate = false;
-  if (startDate) {
-    let date = isValidDate(startDate);
-    if (date) {
-      houseData.startDate = date;
-      validDate = true;
-    }
-  }
-
-  if (!validDate) {
-    errorArray.push("Invalid House lease startDate or missing value.");
-  }
-
-  validDate = false;
-  if (endDate) {
-    let date = isValidDate(endDate);
-    if (date) {
-      houseData.endDate = date;
-      validDate = true;
-    }
-  }
-
-  if (!validDate) {
-    errorArray.push("Invalid House lease endDate or missing value.");
-  }
-
-  if (startDate && endDate && startDate.value > endDate.value) {
-    errorArray.push(
-      "Lease end date should be greater than start end. Select valid lease end date"
-    );
-  }
-
-  //otherAmenities
-  if (
-    otherAmenities &&
-    otherAmenities.value &&
-    typeof otherAmenities.value === "string"
-  ) {
-    houseData.otherAmenities = otherAmenities.value;
-  } else {
-    errorArray.push("Invalid House otherAmenities or missing value.");
-  }
-
-  //description
-  if (
-    description &&
-    description.value &&
-    typeof description.value === "string"
-  ) {
-    houseData.description = description.value;
-  } else {
-    errorArray.push("Invalid House description or missing value.");
-  }
-
-  //petFriendly
-  houseData.petFriendly = false;
-  if (!petFriendlyNo.checked && !petFriendlyYes.checked) {
-    errorArray.push("Invalid House petFriendly info or missing value.");
-  }
-  if (petFriendlyYes.checked) {
-    houseData.petFriendly = true;
-  }
-
-  //parkingAvailable
-  houseData.parkingAvailable = false;
-  if (!parkingAvailableYes.checked && !parkingAvailableNo.checked) {
-    errorArray.push("Invalid House parkingAvailable info or missing value.");
-  }
-  if (parkingAvailableYes.checked === true) {
-    houseData.parkingAvailable = true;
-  }
-
-  //house type
-
-  if (houseType && houseType.value && typeof houseType.value === "string") {
-    houseData.houseType.type = houseType.value;
-  } else {
-    errorArray.push("Invalid House type  or missing value.");
-  }
-
-  //number of bedroom
-  if (bedroom && bedroom.value && !isNaN(bedroom.value)) {
-    houseData.houseType.bedroom = bedroom.value;
-  } else {
-    errorArray.push("Invalid number of bedroom in house or missing value.");
-  }
-  //number of hall
-  if (hall && hall.value && !isNaN(hall.value)) {
-    houseData.houseType.hall = hall.value;
-  } else {
-    errorArray.push("Invalid number of hall in house or missing value.");
-  }
-
-  //number of kitchen
-  if (kitchen && kitchen.value && !isNaN(kitchen.value)) {
-    houseData.houseType.kitchen = kitchen.value;
-  } else {
-    errorArray.push("Invalid number of kitchen in house or missing value.");
-  }
 
   if (errorArray.length > 0) {
+    displayError(errorArray);
+    console.log("Error in add house");
     // throw `Errors : ${errorArray.toString()}`;
   } else {
     let xhttp = new XMLHttpRequest();
@@ -314,10 +183,220 @@ async function validateCompleteHouseInfo() {
     if (xhttp.responseText) {
       console.log(xhttp.responseText);
     }
+    console.log("Succesfully added house");
   }
 }
 
-async function isvalidProfilePicture(profilePicArray) {
+function validateCompleteHouseInfo() {
+  validateHouseProfilePicture();
+  validateOtherHouseInfo();
+}
+
+function validateHouseProfilePicture() {
+  //profile picture
+  if (profilePictureArray) {
+    let array = isvalidProfilePicture(profilePictureArray);
+    if (!array) {
+      errorArray.push(pictureError);
+    }
+    houseData.profilePicture = array;
+  } else {
+    errorArray.push(pictureError);
+  }
+}
+
+function validateOtherHouseInfo() {
+  //longitude and latitude
+  if (lat && long && isValidLatitudeandLongitude(long.value, lat.value)) {
+    houseData.longitude = long.value;
+    houseData.latitude = lat.value;
+  } else {
+    if (!lat) {
+      errorArray.push(latitudeError);
+    }
+
+    if (!long) {
+      errorArray.push(longitudeError);
+    }
+  }
+
+  //street
+  if (Street && Street.value && typeof Street.value === "string") {
+    houseData.street = Street.value;
+  } else {
+    errorArray.push(streetError);
+  }
+
+  //house number
+  if (
+    houseNumber &&
+    houseNumber.value &&
+    typeof houseNumber.value === "string"
+  ) {
+    houseData.houseNumber = houseNumber.value;
+  } else {
+    errorArray.push(housenumberError);
+  }
+
+  //city
+  if (City && City.value && typeof City.value === "string") {
+    houseData.city = City.value;
+  } else {
+    errorArray.push(cityError);
+  }
+
+  //state
+  if (State && State.value && typeof State.value === "string") {
+    houseData.state = State.value;
+  } else {
+    errorArray.push(stateError);
+  }
+
+  //pincode
+  if (Pincode && Pincode.value && !isNaN(Pincode.value)) {
+    houseData.pincode = Pincode.value;
+  } else {
+    errorArray.push(pincodeError);
+  }
+
+  //rent
+  if (Rent && Rent.value && !isNaN(Rent.value)) {
+    houseData.rent = Rent.value;
+  } else {
+    errorArray.push(rentError);
+  }
+
+  //startDate;
+  let validDate = false;
+  if (startDate) {
+    let date = isValidDate(startDate);
+    if (date) {
+      houseData.startDate = date;
+      validDate = true;
+    }
+  }
+
+  if (!validDate) {
+    errorArray.push(leasestartError);
+  }
+
+  validDate = false;
+  if (endDate) {
+    let date = isValidDate(endDate);
+    if (date) {
+      houseData.endDate = date;
+      validDate = true;
+    }
+  }
+
+  if (!validDate) {
+    errorArray.push(leaseendError);
+  }
+
+  if (startDate && endDate && startDate.value > endDate.value) {
+    errorArray.push(leaseendlessthanstartdateError);
+  }
+
+  //otherAmenities
+  if (
+    otherAmenities &&
+    otherAmenities.value &&
+    typeof otherAmenities.value === "string" &&
+    otherAmenities.value.length >= 10
+  ) {
+    houseData.otherAmenities = otherAmenities.value;
+  } else {
+    errorArray.push(amenitiesError);
+  }
+
+  //description
+  if (
+    description &&
+    description.value &&
+    typeof description.value === "string" &&
+    description.value.length >= 10
+  ) {
+    houseData.description = description.value;
+  } else {
+    errorArray.push(descriptionError);
+  }
+
+  //petFriendly
+  houseData.petFriendly = false;
+  if (!petFriendlyNo.checked && !petFriendlyYes.checked) {
+    errorArray.push(petError);
+  }
+  if (petFriendlyYes.checked) {
+    houseData.petFriendly = true;
+  }
+
+  //parkingAvailable
+  houseData.parkingAvailable = false;
+  if (!parkingAvailableYes.checked && !parkingAvailableNo.checked) {
+    errorArray.push(parkingError);
+  }
+  if (parkingAvailableYes.checked === true) {
+    houseData.parkingAvailable = true;
+  }
+
+  //house type
+
+  if (houseType && houseType.value && typeof houseType.value === "string") {
+    houseData.houseType.type = houseType.value;
+  }
+
+  //number of bedroom
+  if (bedroom && bedroom.value && !isNaN(bedroom.value)) {
+    houseData.houseType.bedroom = bedroom.value;
+  } else {
+    errorArray.push(bedroomError);
+  }
+  //number of hall
+  if (hall && hall.value && !isNaN(hall.value)) {
+    houseData.houseType.hall = hall.value;
+  } else {
+    errorArray.push(hallError);
+  }
+
+  //number of kitchen
+  if (kitchen && kitchen.value && !isNaN(kitchen.value)) {
+    houseData.houseType.kitchen = kitchen.value;
+  } else {
+    errorArray.push(kitchenError);
+  }
+}
+
+function displayError(erorArray) {
+  erorArray.forEach((element) => {
+    element.style.display = "block";
+  });
+  displayErrorBar.style.display = "block";
+}
+
+function setdefaultErrorStyle() {
+  pictureError.style.display = "none";
+  latitudeError.style.display = "none";
+  longitudeError.style.display = "none";
+  streetError.style.display = "none";
+  housenumberError.style.display = "none";
+  cityError.style.display = "none";
+  stateError.style.display = "none";
+  pincodeError.style.display = "none";
+  rentError.style.display = "none";
+  leasestartError.style.display = "none";
+  leaseendError.style.display = "none";
+  leaseendlessthanstartdateError.style.display = "none";
+  amenitiesError.style.display = "none";
+  descriptionError.style.display = "none";
+  petError.style.display = "none";
+  parkingError.style.display = "none";
+  bedroomError.style.display = "none";
+  hallError.style.display = "none";
+  kitchenError.style.display = "none";
+  displayErrorBar.style.display = "none";
+}
+
+function isvalidProfilePicture(profilePicArray) {
   if (
     !profilePicArray ||
     !Array.isArray(profilePicArray) ||
@@ -326,16 +405,18 @@ async function isvalidProfilePicture(profilePicArray) {
     throw `Upload atleast one House  pictures.`;
   }
 
-  for (const element of profilePicArray) {
-    await checkImageExists(element, function (existsImage) {
-      if (existsImage === true) {
-        houseData.profilePicture.push(element);
-      }
-    });
-  }
+  //   let picArray = [];
+  //   for (const element of profilePicArray) {
+  //     checkImageExists(element, function (existsImage) {
+  //       if (existsImage === true) {
+  //         picArray.push(element);
+  //       }
+  //     });
+  //   }
+  return profilePicArray;
 }
 
-async function checkImageExists(imageUrl, callBack) {
+function checkImageExists(imageUrl, callBack) {
   var imageData = new Image();
   imageData.onload = function () {
     callBack(true);

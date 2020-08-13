@@ -28,41 +28,46 @@
 </div>
 {{/if}}
 
-<div id="errorContainerReg" style="display: none;">
+<div id="errorContainerReg">
     <div class="container text-center">
         <div class="row justify-content-center">
-            <div class="col-4">
-                <div class="alert alert-danger text-left" role="alert">
-                    <div class="alert-heading errorHeading">Error</div>
-                    <div id="pictureError">You must enter a profile picture</div>
-                    <div id="streetError">You must enter a street</div>
-                    <div id="housenumberError">You must enter a house number</div>
-                    <div id="cityError">You must enter a city</div>
-                    <div id="stateError">You must enter a state</div>
-                    <div id="pincodeError">You must enter a pincode</div>
+            {{!-- <div class="col-4"> --}}
+            <div id="displayError" class="alert alert-danger text-left" role="alert" style="display: none;">
 
-                    <div id="latitudeError">You must enter a latitude for map location</div>
-                    <div id="longitudeError">You must enter a longitude for map location</div>
+                <div id="pictureError" style="display: none;">Upload atleast 1 house picture</div>
+                <div id="streetError" style="display: none;">You must enter a street</div>
+                <div id="housenumberError" style="display: none;">You must enter a house number</div>
+                <div id="cityError" style="display: none;">You must enter a city</div>
+                <div id="stateError" style="display: none;">You must enter a state</div>
+                <div id="pincodeError" style="display: none;">You must enter a pincode</div>
 
-                    <div id="rentError">You must enter a House rent</div>
+                <div id="latitudeError" style="display: none;">You must enter a latitude for map location</div>
+                <div id="longitudeError" style="display: none;">You must enter a longitude for map location</div>
 
-                    <div id="leasestartError">You must enter a lease start date</div>
-                    <div id="leaseendError">You must enter a lease end date</div>
+                <div id="rentError" style="display: none;">You must enter a House rent</div>
 
-                    <div id="bedroomError">You must enter a number of bedroom</div>
-                    <div id="hallError">You must enter a number of hall</div>
-                    <div id="kitchenError">You must enter a number of kitchen</div>
+                <div id="leasestartError" style="display: none;">You must enter a lease start date</div>
+                <div id="leaseendError" style="display: none;">You must enter a lease end date</div>
+                <div id="leaseendlessthanstartdateError" style="display: none;">"Lease end date should be greater
+                    than start end. Select
+                    valid lease end date"</div>
 
-                    <div id="petError">You must select a pet friendly option</div>
-                    <div id="parkingError">You must select a parking available option</div>
+                <div id="bedroomError" style="display: none;">You must enter a number of bedroom</div>
+                <div id="hallError" style="display: none;">You must enter a number of hall</div>
+                <div id="kitchenError" style="display: none;">You must enter a number of kitchen</div>
 
-                    <div id="amenitiesError">You must enter atleast 10 character aminities details or enter "No
-                        Amenities information".</div>
-                    <div id="descriptionError">You must enter atleast 10 character other description or enter "No
-                        description".</div>
+                <div id="petError" style="display: none;">You must select a pet friendly option</div>
+                <div id="parkingError" style="display: none;">You must select a parking available option</div>
 
-                </div>
+                <div id="amenitiesError" style="display: none;">You must enter atleast 10 character aminities
+                    details or enter "No
+                    Amenities information".</div>
+                <div id="descriptionError" style="display: none;">You must enter atleast 10 character other
+                    description or enter "No
+                    description".</div>
+
             </div>
+            {{!-- </div> --}}
         </div>
     </div>
 </div>
