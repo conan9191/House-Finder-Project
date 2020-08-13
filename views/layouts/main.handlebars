@@ -31,21 +31,28 @@
                 </div>
                 <ul class="nav navbar-nav">
                     <li class="dropdown" class="active">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">User <span class="caret"></span></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="">User <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Add</a></li>
-                            <li><a href="#">Manage</a></li>
+                            <li><a href="/users">Add</a></li>
+                            <li><a href="/users">Manage</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Home <span class="caret"></span></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="">Home <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Add</a></li>
-                            <li><a href="#">Search</a></li>
-                            <li><a href="#">Manage</a></li>
+                            <li><a href="/house/add">Add</a></li>
+                            <li><a href="/house/">Search</a></li>
+                            <li><a href="/house/">Manage</a></li>
                         </ul>
                     </li>
-                    <li><a href="#">System Management</a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="">System Management <span
+                                class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/account">Account</a></li>
+                        </ul>
+
+                    </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {{#if hasLogin}}
@@ -73,11 +80,14 @@
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
         crossorigin="anonymous"></script>
 
+
     <script src="public/js/login.js"></script>
     <script src="public/js/registerForm.js"></script>
     <script type="text/javascript" src="/public/js/favouriteHouse.js"></script>
     <script type="text/javascript" src="/public/js/house.js"></script>
     <script type="text/javascript" src="/public/js/comment.js"></script>
+    <script type="text/javascript" src="/public/js/manageHouse.js"></script>
+
 
 </body>
 
