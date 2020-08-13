@@ -4,7 +4,7 @@
  * @Author: Yiqun Peng
  * @Date: 2020-08-05 14:20:09
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-10 12:14:00
+ * @LastEditTime: 2020-08-13 01:04:32
  */
 
 const dbCollections = require("../../settings/collections");
@@ -63,7 +63,7 @@ let exportedMethods = {
       state: state,
       pincode: pincode,
       age: age,
-      //reviewIds: [],
+      reviewIds: [],
       favourites: []
     };
     const newInsertInformation = await userCollection.insertOne(newUser);

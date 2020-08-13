@@ -12,6 +12,7 @@
 				</a>
 			</li>
 			<li><a href="#review" data-toggle="tab">Reviews</a></li>
+			<li><a href="#comment" data-toggle="tab">Comments</a></li>
 			<li><a href="#favourite" data-toggle="tab">Favourites</a></li>
 		</ul>
 		<div id="myTabContent" class="tab-content">
@@ -58,8 +59,21 @@
 				</div>
 			</div>
 			<div class="tab-pane fade" id="review">
-				<p>All the reviews</p>
+					{{#each reviews}}
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<p id="rating">Rating: {{this.rating}} </p>
+							<p id="reviewText">Review:{{this.reviewText}} </p>
+							<a href="house/{{this.houseId}}">View the House.</a>
+						</div>
+					</div>
+					{{/each}}
 			</div>
+
+			<div class="tab-pane fade" id="comment">
+
+			</div>
+
 			<div class="tab-pane fade" id="favourite">
 						{{#each list}}
 						<div class="cover-container">
