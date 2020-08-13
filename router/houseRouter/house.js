@@ -4,6 +4,8 @@ const house = require("../../data/houseData");
 const houseData = house.houseData;
 const user = require("../../data/userData");
 const userData = user.users;
+const review = require("../../data/commentAndReviewData");
+const reviewData = review.reviewsDate;
 
 router.get("/", async (req, res) => {
   try {
@@ -66,6 +68,38 @@ router.get("/:id", async (req, res) => {
     }
   }
 
+  //Get reviews by houseId
+  let reviewsList = [];
+  let reviews = [];
+  let totalRate = 0;
+  let aveRate = 0;
+  try{
+    reviews = await reviewData.getReviewByHouseId(req.params.id);
+  }catch(error){
+    console.log(error);
+  }
+  for(r of reviews){
+    let review = {
+      username: '',
+      reviewData: {},
+      currentUser: false
+    };
+    let user = {};
+    try{
+      user = await userData.getUserById(r.userId);
+    }catch(error){
+      console.log(error);
+    }
+    review['username'] = user.firstName + " " + user.lastName;
+    review['reviewData'] = r;
+    if(req.session.user === r.userId){
+      review['currentUser'] = true;
+    }
+    reviewsList.push(review);
+    totalRate = totalRate + r.rating;
+  }
+  aveRate = (totalRate / reviews.length).toFixed(1);
+
   try {
     let house = await houseData.getHouseById(req.params.id);
     console.log(house);
@@ -90,6 +124,8 @@ router.get("/:id", async (req, res) => {
       amenities: house.otherAmenities,
       pet: house.petFriendly,
       park: house.parkingAvailable,
+      reviewsList: reviewsList,
+      aveRate: aveRate,
     });
   } catch (error) {
     res.status(404).json({ error: "Could not find house" });

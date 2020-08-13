@@ -4,7 +4,7 @@
  * @Author: sueRimn
  * @Date: 2020-08-07 18:53:59
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-07 19:33:09
+ * @LastEditTime: 2020-08-12 09:58:28
  */
 const dbConnection = require("./connections.js");
 
@@ -26,4 +26,5 @@ module.exports = {
   favourite: getCollectionFn("Favourite"),
   users: getCollectionFn("users"),
   comments: getCollectionFn("Comments"),
+  reviews: getCollectionFn("reviews"),
 };
