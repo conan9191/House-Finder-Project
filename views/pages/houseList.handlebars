@@ -17,22 +17,21 @@
       -->
 
     <!-- CSS in houseList.css -->
-    <div class="form-inline houseList col-md-12">
-        {{#each list}}
-        <div class="col-md-4 house">
+    <div class="grid-container">
+        <div class="grid-item">
+            {{#each list}}
             <div class="cover-container">
-
-                <img class="cover-item" src="{{this.houseImage}}" alt="house" style="width:40%">
-
-
-
-
+                {{#each this.profilePicture}}
+                <img class="cover-item" src="{{this}}" alt="house">
+                {{/each}}
+            </div>
+            <div>
+                <p class="paraClass" id="address"> {{houseNumber}} {{street}} <br> {{city}}, {{state}}, {{zip}} </p>
             </div>
 
+            <a href="{{this._id}}">More Details</a>
             <p id="houseDescription"> {{this.description}} </p>
-            <p class="overlay"> More Information </p>
-            <a href="{{this._id}}"></a>
+            {{/each}}
         </div>
-        {{/each}}
     </div>
 </div>
