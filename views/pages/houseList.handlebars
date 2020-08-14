@@ -19,16 +19,20 @@
     <!-- CSS in houseList.css -->
     <div class="form-inline houseList col-md-12">
         {{#each list}}
-            <div class="col-md-4 house">
-                <div class="cover-container">
-                <a href="{{this._id}}">
-                    <img class="cover-item" src="{{this.houseImage}}" alt="house">
-                    <div class="overlay"> More Information </div> 
-                </a>
-                </div>
+        <div class="col-md-4 house">
+            <div class="cover-container">
 
-                <p id="houseDescription"> {{this.description}} </p>
+                <img class="cover-item" src="{{this.houseImage}}" alt="house" style="width:40%">
+
+
+
+
             </div>
+
+            <p id="houseDescription"> {{this.description}} </p>
+            <p class="overlay"> More Information </p>
+            <a href="{{this._id}}"></a>
+        </div>
         {{/each}}
     </div>
 </div>
