@@ -76,7 +76,7 @@
             <div id = "optReview">
                 <a href="http://localhost:3000/comment">Leave a comment.</a>
                 {{#if this.currentUser}}
-                <button type="button" id="deleteBtn" class="btn btn-default"  value={{this.reviewData._id}}> Delete</button>
+                <button type="button" id={{this.reviewData._id}} onclick="deletereview()" class="btn btn-default"  value={{this.reviewData._id}}> Delete</button>
                 {{/if}}
             </div>
         </div>
