@@ -1,0 +1,42 @@
+<!-- 
+        This page allows user to add comment.
+        When user is login, "Add Comment" allows to add comment.
+        commentTextarea : to add comment
+        commentDoneButton : submit comment
+        commentUsername : label to display name of user who added comment
+        commentField : label to display comment
+         edit   : button to allow user to edit comment. If login user is same as one who added comment then 
+         only edit button will be visible else not.
+         delete   : button to allow user to delete comment. If login user is same as one who added comment then 
+         only delete button will be visible else not.
+    -->
+
+
+<div>
+
+    <button id="commentButton" class="comment"> Add Comment</button>
+    <br>
+    <br>
+
+    {{#each commentsList}}
+    <label class="commentUsername">{{this.userName}}</label>
+    <br>
+    <label class="commentField" id={{this._id}}>{{this.text}}</label>
+    <button id="edit" + {{this._id}} class="editComment" onclick="editcomment()" value={{this._id}}
+        style="display: {{this.canUpdate}}">Edit</button>
+    <button type="button" id="delete" + {{this._id}} class="deleteComment" onClick="deletecomment()" value={{this._id}}
+        style="display: {{this.canUpdate}}">Delete</button>
+    <br>
+    <br>
+    {{/each}}
+
+
+    <br>
+    <br>
+    <div id="error" hidden=true>Please enter valid comment.</div>
+    <textarea id="commentTextarea" rows="4" cols="50" value="" hidden=true></textarea>
+    <button id="commentDoneButton" class="commentDone" hidden=true>Done</button>
+
+</div>
+
+ <script type="text/javascript" src="/public/js/comment.js"></script>

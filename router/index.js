@@ -1,3 +1,11 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: sueRimn
+ * @Date: 2020-08-11 19:54:39
+ * @LastEditors: Yiqun Peng
+ * @LastEditTime: 2020-08-12 23:41:44
+ */
 // const houseconstructorMethod = require("./userRouter/index");
 // const userconstructorMethod = require("./houseRouter/index");
 
@@ -16,6 +24,8 @@ const accountRoutes = require("./userRouter/account");
 const parser = require("body-parser");
 const houseRoutes = require("./houseRouter/house");
 const favRoutes = require("./houseRouter/favourite");
+const commentRoutes = require("./commentsAndReviewRouter/comments");
+const reviewRoutes = require("./commentsAndReviewRouter/reviews");
 
 const constructorMethod = (app) => {
   //for user
@@ -32,20 +42,25 @@ const constructorMethod = (app) => {
   app.use("/favourite", favRoutes);
   app.use("/house", houseRoutes);
 
+  //comment
+  app.use("/comment", commentRoutes);
+
+  //review
+  app.use("/review", reviewRoutes);
+
   app.use("*", (req, res) => {
     const authenticated = req.session.user || false;
-    if(req.session.user){
+    if (req.session.user) {
       res.render("pages/success", {
         title: "log in succeed",
-        hasLogin:true
+        hasLogin: true,
       });
-    }else{
-        res.render("pages/erroraccess", {
+    } else {
+      res.render("pages/erroraccess", {
         title: "Access Error",
         authenticated: authenticated,
       });
     }
-   
   });
 };
 

@@ -1,24 +1,3 @@
-.cover-container {
-  height: 200px;
-  width: 100%;
-  white-space: nowrap;
-  overflow-x: scroll;
-  overflow-y: hidden;
-}
-
-.cover-item {
-  position: relative;
-  display: inline-block;
-  margin: 8px 8px;
-  box-shadow: 2px 2px 4px #bbb;
-  border-top-right-radius: 4px;
-  width: 116px;
-  height: 158px;
-  vertical-align: bottom;
-  background-position: top left;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
 
 .fav {
   background-color: green;
@@ -28,4 +7,41 @@
 .notfav {
   background-color: red;
   color: aliceblue;
+}
+
+.commentField {
+  color: rgb(59, 59, 65);
+  font-family: "Times New Roman", Times, serif;
+  font-size: medium;
+  font-style: normal;
+}
+
+.commentUsername {
+  color: blue;
+  font-family: "Times New Roman", Times, serif;
+  font-size: small;
+  font-style: initial;
+}
+
+#commentButton {
+  color: cadetblue;
+  background-color: black;
+  font-size: medium;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bolder;
+}
+
+#commentDoneButton {
+  color: whitesmoke;
+  background-color: green;
+  font-size: medium;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bolder;
+}
+
+#error {
+  color: red;
+  font-size: medium;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bolder;
 }

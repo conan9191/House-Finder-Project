@@ -1,10 +1,10 @@
 /*
- * @Descripttion: 
- * @version: 
+ * @Descripttion:
+ * @version:
  * @Author: sueRimn
  * @Date: 2020-08-08 14:15:11
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-08 14:17:36
+ * @LastEditTime: 2020-08-11 08:50:40
  */
 let createError = require("http-errors");
 const express = require("express");
@@ -12,7 +12,7 @@ let path = require("path");
 let cookieParser = require("cookie-parser");
 let logger = require("morgan");
 const app = express();
-const static = express.static(__dirname + '/public');
+const static = express.static(__dirname + "/public");
 const exphbs = require("express-handlebars");
 const session = require("express-session");
 
@@ -22,7 +22,7 @@ const configRoutes = require("./router/index");
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-app.use('/public', static);
+app.use("/public", static);
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -47,7 +47,7 @@ app.use(async (req, res, next) => {
     userAuth = "(Authenticated User)";
   }
   console.log(
-    `[${currTimeStamp}]: ${req.method} ${req.originalUrl} ${userAuth}`
+    `[${currTimeStamp}]: ${req.method} ${req.originalUrl} ${userAuth} ${req.session.user}`
   );
   next();
 });

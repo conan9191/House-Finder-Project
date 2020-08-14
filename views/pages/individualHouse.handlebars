@@ -15,13 +15,13 @@
         Not to mention css will really help with the look
     -->
 
-    <!-- 
-        Eventually, we will want to keep our styling in a seperate css file
-        We will want to put our scripts in seperate javascript files as well
-        But this will suffice for now, temporarily
-    -->
+    <!-- CSS in housePage.css -->
 
-    <div id="map" style="height: 400px; width: 80%;"></div>
+    <div class="cover-container">
+        <img class="cover-item" src="{{this.houseImage}}" alt="house">
+    </div>
+
+    <div id="map"></div>
     <div id="latitude" hidden=true>{{latitude}}</div>
     <div id="longitude" hidden=true>{{longitude}}</div>
     <script async defer
@@ -30,11 +30,6 @@
     <br>
     <br>
 
-    <div class="cover-container">
-        {{#each houseImage}}
-        <img class="cover-item" src="{{this}}" alt="house" style="width:40%">
-        {{/each}}
-    </div>
 
     <div class=" houseInfo">
         <p id="address"> {{houseNumber}} {{street}} <br> {{city}}, {{state}}, {{zip}} </p>
@@ -42,8 +37,78 @@
         <p id="houseDescription"> {{description}} </p>
         <p id="houseMisc"> {{amenities}} <br> Pet Friendly: {{pet}} <br> Parking Available: {{park}}</p>
     </div>
-    <button id="favButton" value="{{houseId}}" class="fav"> Add Favourite</button>
-    <br>
-    <br>
 
+    {{#if isFavHouse}}
+    <button id="favButton" value="{{houseId}}" class="fav">Favourite</button>
+    {{else}}
+    <button id="favButton" value="{{houseId}}" class="fav"> Add Favourite</button>
+    {{/if}}
+    
+    <br>
+    <br>
 </div>
+
+<!--Reviews-->
+<div class = "reviews">
+    <h2>{{aveRate}} out of 5</h2>
+    {{#each reviewsList}}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {{this.username}}
+            </h3>
+        </div>
+        <div class="panel-body">
+            <h3>{{this.reviewData.rating}} points</h3>
+            <p>{{this.reviewData.reviewText}}</p>
+            {{#each this.reviewData.comments}}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <p>{{this.userId}}</p>
+                    </h4>
+                </div>
+                <div class="panel-body">
+                    <p>{{this.text}}</p>
+                </div>
+            </div>
+            {{/each}}
+            <div id = "optReview">
+                <a href="http://localhost:3000/comment">Leave a comment.</a>
+                {{#if this.currentUser}}
+                <button type="button" id="deleteBtn" class="btn btn-default"  value={{this.reviewData._id}}> Delete</button>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+    <br/>
+    {{/each}}
+    <br/>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Leave Your Review</h3>
+        </div>
+        <div class="panel-body">
+            <form id = "reviewForm" role="form" action="/review" method="POST">
+                <div class="form-group">
+                    <label for="rating">Rating this house：</label>
+                    <select class="form-control" name="rating">
+                        <option>5</option>
+                        <option>4</option>
+                        <option>3</option>
+                        <option>2</option>
+                        <option>1</option>
+                    </select>
+                    <label for="review">Review:</label>
+                    <textarea class="form-control" rows="5" name = "reviewText"></textarea>
+                    <input type="hidden" name="houseId" value="{{houseId}}"> 　
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/public/js/favouriteHouse.js"></script>
+<script type="text/javascript" src="/public/js/house.js"></script>
+<script type="text/javascript" src="/public/js/review.js"></script>

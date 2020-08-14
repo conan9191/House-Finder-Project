@@ -2,17 +2,55 @@ const express = require("express");
 const router = express.Router();
 const house = require("../../data/houseData");
 const houseData = house.houseData;
+const user = require("../../data/userData");
+const userData = user.users;
+const review = require("../../data/commentAndReviewData");
+const reviewData = review.reviewsDate;
 
 router.get("/", async (req, res) => {
   try {
     let houseList = await houseData.getAllHouse();
-    console.log(houseList);
-    res.render("pages/houseList", {
-      title: "House List Page",
+    
+    //console.log(houseList);
+    res.render("pages/mainPage", {
+      title: "Main Page",
       list: houseList,
     });
   } catch (error) {
     res.status(404).json({ error: "Houses not found" });
+  }
+});
+
+router.get("/add", async (req, res) => {
+  try {
+    res.render("pages/houseManage", {
+      title: "Add new house",
+    });
+  } catch (error) {
+    res.status(404).json({ error: "Houses not found" });
+  }
+});
+
+router.get("/search", async (req, res) => {
+  //the user shouldn't be able to manually enter this page
+  res.redirect("/");
+});
+
+router.post("/search", async (req, res) => {
+  //this route will display the houses that match the search criteria
+  try {
+    let info = await req.body;
+    let searchList = await houseData.filterList(info);
+
+    res.render("pages/houseList", {
+      title: "Matched Houses",
+      list: searchList,
+    });
+  } catch (e) {
+    res.status(500);
+    res.render("pages/error", {
+      message: e,
+    });
   }
 });
 
@@ -22,6 +60,56 @@ router.get("/:id", async (req, res) => {
     return;
   }
 
+  let isFavHouse = false;
+  let user = await userData.getUserById(req.session.user);
+  if (user) {
+    let userFavHouse = user["favourites"];
+    if (userFavHouse) {
+      let filterHouse = userFavHouse.filter(function (houseObj) {
+        return houseObj.houseId === req.params.id;
+      });
+      // console.log("filterHouse = " + filterHouse);
+      // console.log("filterHouse = " + filterHouse.length);
+
+      if (filterHouse.length > 0) {
+        isFavHouse = true;
+      }
+      // console.log("isFavHouse = " + isFavHouse);
+    }
+  }
+
+  //Get reviews by houseId
+  let reviewsList = [];
+  let reviews = [];
+  let totalRate = 0;
+  let aveRate = 0;
+  try{
+    reviews = await reviewData.getReviewByHouseId(req.params.id);
+  }catch(error){
+    console.log(error);
+  }
+  for(r of reviews){
+    let review = {
+      username: '',
+      reviewData: {},
+      currentUser: false
+    };
+    let user = {};
+    try{
+      user = await userData.getUserById(r.userId);
+    }catch(error){
+      console.log(error);
+    }
+    review['username'] = user.firstName + " " + user.lastName;
+    review['reviewData'] = r;
+    if(req.session.user === r.userId){
+      review['currentUser'] = true;
+    }
+    reviewsList.push(review);
+    totalRate = totalRate + r.rating;
+  }
+  aveRate = (totalRate / reviews.length).toFixed(1);
+
   try {
     let house = await houseData.getHouseById(req.params.id);
     console.log(house);
@@ -29,6 +117,7 @@ router.get("/:id", async (req, res) => {
     //renderds the individual house page with the house info
     res.render("pages/individualHouse", {
       houseId: house._id,
+      isFavHouse: isFavHouse,
       latitude: house.latitude,
       longitude: house.longitude,
       title: "Individual House Page",
@@ -45,9 +134,11 @@ router.get("/:id", async (req, res) => {
       amenities: house.otherAmenities,
       pet: house.petFriendly,
       park: house.parkingAvailable,
+      reviewsList: reviewsList,
+      aveRate: aveRate,
     });
   } catch (error) {
-    res.status(404).json({ error: "House not found" });
+    res.status(404).json({ error: "Could not find house" });
   }
 });
 
