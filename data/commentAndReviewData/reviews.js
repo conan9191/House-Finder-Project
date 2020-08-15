@@ -3,7 +3,7 @@
  * @version: 
  * @Date: 2020-08-12 09:54:42
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-13 03:15:29
+ * @LastEditTime: 2020-08-14 15:58:09
  */
 const dbCollections = require("../../settings/collections");
 const reviews = dbCollections.reviews;
@@ -33,6 +33,19 @@ let exportedMethods = {
         const objId = ObjectId.createFromHexString(id);
         const reviewCollection = await reviews();
         const review = await reviewCollection.findOne({ _id: objId });
+        if (!review) throw "reviews not found";
+        return review;
+    },
+
+    /**
+     * This method is used to get the review object by id of comment
+     * @param {string} id
+     * @return {object} review
+     */
+    async getReviewByCommentId(id) {
+        id = getValidId(id);
+        const reviewCollection = await reviews();
+        const review = await reviewCollection.findOne({ "comments._id":id });
         if (!review) throw "reviews not found";
         return review;
     },
@@ -91,7 +104,7 @@ let exportedMethods = {
             for(let i of updatedReview.comments){
                 if (typeof i !== "object" || Array.isArray(i)) throw "Each comments needs to be a object";
                 if (Object.keys(i).length !== 3)throw "Length of comments need to be e (_id, userId and text)";
-                if (i.hasOwnProperty("_id") === false || i.hasOwnProperty("userId") || i.hasOwnProperty("text") === false)throw "The review need to have _id, userId and text)";
+                if (i.hasOwnProperty("_id") === false || i.hasOwnProperty("userId")=== false || i.hasOwnProperty("text") === false)throw "The review need to have _id, userId and text)";
                 if (typeof i["_id"] !== "string") throw "_id of comment needs to be a string";
                 if (typeof i["userId"] !== "string") throw "userId of comment needs to be a string";
                 if (typeof i["text"] !== "string") throw "text of comment needs to be a string";

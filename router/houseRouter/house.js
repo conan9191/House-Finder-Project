@@ -6,6 +6,8 @@ const user = require("../../data/userData");
 const userData = user.users;
 const review = require("../../data/commentAndReviewData");
 const reviewData = review.reviewsDate;
+const comment = require("../../data/commentAndReviewData");
+const commentData = comment.commentsData;
 
 router.get("/", async (req, res) => {
   try {
@@ -88,18 +90,26 @@ router.get("/:id", async (req, res) => {
   }catch(error){
     console.log(error);
   }
+
   for(r of reviews){
     let review = {
       username: '',
       reviewData: {},
       currentUser: false
     };
+    let currentUser = req.session.user ? req.session.user : "";
     let user = {};
     try{
       user = await userData.getUserById(r.userId);
     }catch(error){
       console.log(error);
     }
+    try{
+      allcommentsList = await configureAllcommentList(currentUser, r.comments);
+    }catch(error){
+      console.log(error);
+    } 
+    r.comments = allcommentsList;
     review['username'] = user.firstName + " " + user.lastName;
     review['reviewData'] = r;
     if(req.session.user === r.userId){
@@ -108,8 +118,12 @@ router.get("/:id", async (req, res) => {
     reviewsList.push(review);
     totalRate = totalRate + r.rating;
   }
-  aveRate = (totalRate / reviews.length).toFixed(1);
-
+  if(reviews && reviews.length!==0){
+    if(reviews.length===0) throw "The denominator can not be 0"
+    aveRate = (totalRate / reviews.length).toFixed(1);
+  } 
+  else aveRate = 0;
+  
   try {
     let house = await houseData.getHouseById(req.params.id);
     console.log(house);
@@ -315,6 +329,62 @@ function checkAndUpdate(newHouse, oldHouse) {
   }
 
   return oldHouse;
+}
+
+async function configureAllcommentList(currentUser,allComments ) {
+  console.log("currentUser = " + currentUser);
+  let allcommentsList = [];
+  if (allComments) {
+    for (let i = 0; i < allComments.length; i++) {
+      try {
+        let comment = allComments[i];
+        let commentSchema = {
+          _id: "",
+          text: "",
+          userId: "",
+          userName: "",
+          canUpdate: "",
+        };
+
+        //comment id
+        commentSchema._id = comment["_id"];
+
+        //user id
+        let userId = comment["userId"];
+        if (userId) {
+          commentSchema.userId = userId;
+          //to hide edit and delete button. If current user is same as added comment user
+          //then show edit and delete button, else hide
+          if (userId === currentUser) {
+            commentSchema.canUpdate = "block";
+          } else {
+            commentSchema.canUpdate = "none";
+          }
+        }
+
+        //user name
+        let user = await userData.getUserById(userId);
+        if (user && (user["firstName"] || user["lastName"])) {
+          let name = "";
+          name += user["firstName"] ? user["firstName"] : "";
+          name += user["lastName"] ? user["lastName"] : "";
+          commentSchema.userName = name;
+        }
+
+        //comment text
+        if (comment["text"]) {
+          commentSchema.text = comment["text"];
+        }
+
+        allcommentsList.push(commentSchema);
+      } catch (error) {
+        console.log("error in configure list" + error);
+      }
+    }
+    return allcommentsList;
+  } else {
+    throw `Empty comment list`;
+  }
 }
 
 module.exports = router;

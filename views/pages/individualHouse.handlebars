@@ -60,23 +60,34 @@
         </div>
         <div class="panel-body">
             <h3>{{this.reviewData.rating}} points</h3>
-            <p>{{this.reviewData.reviewText}}</p>
-            {{#each this.reviewData.comments}}
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <p>{{this.userId}}</p>
-                    </h4>
+            <h2>{{this.reviewData.reviewText}}</h2>
+            <div class = "commentInRevievs">
+                <input type="hidden" name="reviewId" value="{{this.reviewData._id}}"> 
+                {{#each this.reviewData.comments}}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                             <label class="commentUsername">{{this.userName}}</label>
+                        </h4>
+                    </div>
+                    <div class="panel-body">
+                        <label class="commentField" id="{{this._id}}" value={{this._id}}>{{this.text}}</label>
+                        <button id="edit{{this._id}}" class="editComment" onclick="editcomment()" value={{this._id}}
+                            style="display: {{this.canUpdate}}">Edit</button>
+                        <button type="button" id="delete{{this._id}}" class="deleteComment" onclick="deletecomment()" value={{this._id}}
+                            style="display: {{this.canUpdate}}">Delete</button>
+                    </div>
                 </div>
-                <div class="panel-body">
-                    <p>{{this.text}}</p>
-                </div>
+                {{/each}}
+                <div class="error" id="error{{this.reviewData._id}}" hidden=true>Please enter valid comment.</div>
+                <textarea class="commentTextarea" id="commentTextarea{{this.reviewData._id}}" rows="4" cols="50" value="" hidden=true></textarea>
+                <button id="commentDoneButton{{this.reviewData._id}}" class="commentDone" onclick="submitComment()" value={{this.reviewData._id}} hidden=true>Done</button>
+
             </div>
-            {{/each}}
-            <div id = "optReview">
-                <a href="http://localhost:3000/comment">Leave a comment.</a>
+            <div class = "optReview">
+                <button id="commentButton{{this.reviewData._id}}" value="{{this.reviewData._id}}" onclick="addComment()" class="btn btn-default"> Leave a comment</button>       
                 {{#if this.currentUser}}
-                <button type="button" id={{this.reviewData._id}} onclick="deletereview()" class="btn btn-default"  value={{this.reviewData._id}}> Delete</button>
+                <button type="button" id="deleteButton{{this.reviewData._id}}" onclick="deletereview()" class="btn btn-default"  value={{this.reviewData._id}}> Delete</button>
                 {{/if}}
             </div>
         </div>
@@ -112,3 +123,4 @@
 <script type="text/javascript" src="/public/js/favouriteHouse.js"></script>
 <script type="text/javascript" src="/public/js/house.js"></script>
 <script type="text/javascript" src="/public/js/review.js"></script>
+ <script type="text/javascript" src="/public/js/comment.js"></script>

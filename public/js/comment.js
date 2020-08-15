@@ -5,14 +5,13 @@
  *
  *
  */
+//let commentButton = document.getElementById("commentButton");
+//let commentTextarea = document.getElementById("commentTextarea");
+//let commentDoneButton = document.getElementById("commentDoneButton");
+//let errorMessage = document.getElementById("error");
 
-let commentButton = document.getElementById("commentButton");
-let commentTextarea = document.getElementById("commentTextarea");
-let commentDoneButton = document.getElementById("commentDoneButton");
-let errorMessage = document.getElementById("error");
-
-commentButton.addEventListener("click", addComment);
-commentDoneButton.addEventListener("click", submitComment);
+//commentButton.addEventListener("click", addComment);
+//commentDoneButton.addEventListener("click", submitComment);
 
 let isEdit = false;
 let commentId = "";
@@ -22,9 +21,19 @@ let commentId = "";
  * allow user to add comment in textarea.
  */
 function addComment() {
-  errorMessage.hidden = true;
-  commentTextarea.hidden = false;
-  commentDoneButton.hidden = false;
+  let buttonId = event.srcElement.value;
+  let commentTextarea = document.getElementById("commentTextarea"+buttonId.toString());
+  let commentDoneButton = document.getElementById("commentDoneButton"+buttonId.toString());
+  let errorMessage = document.getElementById("error"+buttonId.toString());
+  if(commentTextarea.hidden == true){
+    errorMessage.hidden = true;
+    commentTextarea.hidden = false;
+    commentDoneButton.hidden = false;
+  }else{
+    errorMessage.hidden = true;
+    commentTextarea.hidden = true;
+    commentDoneButton.hidden = true;
+  }
 }
 
 /**
@@ -34,23 +43,26 @@ function addComment() {
  * Reloads all comments.
  */
 function submitComment() {
+  let id = event.srcElement.value;
+  let errorMessage = document.getElementById("error"+id.toString());
   errorMessage.hidden = true;
   let commentText = "";
-  commentText = validComment(commentTextarea.value);
+  let commentTextarea = document.getElementById("commentTextarea"+id.toString());
+  commentText = validComment(commentTextarea.value, id);
   if (commentText) {
-    hideCommentTextArea(true);
+    hideCommentTextArea(true,id);
   } else {
-    hideCommentTextArea(false);
+    hideCommentTextArea(false,id);
     return;
   }
 
   let xhttp = new XMLHttpRequest();
   let method = "POST";
-  let url = "/comment";
+  let url = "/comment/"+id;
 
   if (isEdit && commentId) {
     method = "PATCH";
-    url = url + "/" + commentId;
+    url =  "/comment/" + commentId;
   }
   isEdit = false;
 
@@ -65,19 +77,24 @@ function submitComment() {
   reloadComments();
 }
 
-function validComment(commentText) {
+function validComment(commentText, id) {
+  let commentTextarea = document.getElementById("commentTextarea"+id.toString());
+  let errorMessage = document.getElementById("error"+id.toString());
   if (
     !commentText ||
     typeof commentText != "string" ||
     commentText.trim().length === 0
   ) {
-    errorMessage.hidden = false;
+    if(!commentTextarea.hidden == true)
+      errorMessage.hidden = false;
     return;
   }
   return commentText;
 }
 
-function hideCommentTextArea(isHidden) {
+function hideCommentTextArea(isHidden,id) {
+  let commentTextarea = document.getElementById("commentTextarea"+id.toString());
+  let commentDoneButton = document.getElementById("commentDoneButton"+id.toString());
   commentTextarea.value = "";
   commentTextarea.hidden = isHidden;
   commentDoneButton.hidden = isHidden;
@@ -90,19 +107,23 @@ function hideCommentTextArea(isHidden) {
  *  reloads all comments
  */
 function editcomment() {
-  let buttonId = event.srcElement.value;
-  if (!buttonId) {
+  let id = event.srcElement.value;
+  let reviewId = $(event.srcElement).parent('div').parent('div').parent('div').children('input').val();
+  if (!reviewId) {
     throw `Cannot edit comment. Invalid comment Id`;
   }
+
+  let commentTextarea = document.getElementById("commentTextarea"+reviewId.toString());
+  let commentDoneButton = document.getElementById("commentDoneButton"+reviewId.toString());
 
   commentTextarea.hidden = false;
   commentDoneButton.hidden = false;
 
-  commentTextarea.value = document.getElementById(buttonId).innerHTML;
+  commentTextarea.value = document.getElementById(id.toString()).innerHTML;
 
   isEdit = true;
 
-  commentId = buttonId;
+  commentId = id;
 }
 
 /**
@@ -135,9 +156,10 @@ function deletecomment() {
  * and refresh window
  */
 function reloadComments() {
+  let houseId = $('input[name="houseId"]').val();
   let xhttpget = new XMLHttpRequest();
   method = "GET";
-  url = "/comment";
+  url = "/house/"+houseId;
 
   xhttpget.open(method, url, true);
   xhttpget.setRequestHeader("Content-type", "application/json");
