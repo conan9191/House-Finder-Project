@@ -2,17 +2,16 @@
 const input = document.querySelector("input");
 const preview = document.querySelector(".preview");
 
+const EL = (sel) => document.querySelector(sel);
 let profilePictureArray = [];
 
-input.style.opacity = 0;
-input.addEventListener("change", updateImageDisplay);
+function readImage() {
+  if (!this.files || !this.files[0]) return;
 
-function updateImageDisplay() {
-  profilePictureArray = [];
   while (preview.firstChild) {
     preview.removeChild(preview.firstChild);
   }
-  const curFiles = input.files;
+  const curFiles = this.files;
 
   if (curFiles.length === 0) {
     const para = document.createElement("p");
@@ -25,27 +24,29 @@ function updateImageDisplay() {
     for (const file of curFiles) {
       const listItem = document.createElement("li");
       const para = document.createElement("p");
-      if (validFileType(file)) {
-        para.textContent = `File name ${file.name}, file size ${returnFileSize(
-          file.size
-        )}.`;
-        const image = document.createElement("img");
-        image.src = URL.createObjectURL(file);
-        profilePictureArray.push(image.src);
-        image.height = "100";
-        image.width = "100";
 
-        listItem.appendChild(image);
-        listItem.appendChild(para);
-      } else {
-        para.textContent = `File name ${file.name}: Not a valid file type. Update your selection.`;
-        listItem.appendChild(para);
-      }
+      para.textContent = `File name ${file.name}, file size ${returnFileSize(
+        file.size
+      )}.`;
 
+      const FR = new FileReader();
+      FR.addEventListener("load", (evt) => {
+        const img = new Image();
+        img.height = "100";
+        img.width = "100";
+        img.src = evt.target.result;
+        console.log("image source =" + img.src);
+        profilePictureArray.push(img.src);
+        listItem.appendChild(img);
+      });
+      FR.readAsDataURL(file);
+      listItem.appendChild(para);
       list.appendChild(listItem);
     }
   }
 }
+
+EL("#image_uploads").addEventListener("change", readImage);
 
 function createImageFromImageSrcList(imageSrcList) {
   profilePictureArray = [];
@@ -537,26 +538,7 @@ function isvalidProfilePicture(profilePicArray) {
     return false;
   }
 
-  //   let picArray = [];
-  //   for (const element of profilePicArray) {
-  //     checkImageExists(element, function (existsImage) {
-  //       if (existsImage === true) {
-  //         picArray.push(element);
-  //       }
-  //     });
-  //   }
   return true;
-}
-
-function checkImageExists(imageUrl, callBack) {
-  var imageData = new Image();
-  imageData.onload = function () {
-    callBack(true);
-  };
-  imageData.onerror = function () {
-    callBack(false);
-  };
-  imageData.src = imageUrl;
 }
 
 function isValidDate(inputText) {
