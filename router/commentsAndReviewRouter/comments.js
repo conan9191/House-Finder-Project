@@ -3,6 +3,9 @@ const router = express.Router();
 const comment = require("../../data/commentAndReviewData");
 const commentData = comment.commentsData;
 
+const review = require("../../data/commentAndReviewData");
+const reviewData = review.reviewsDate;
+
 const user = require("../../data/userData");
 const userData = user.users;
 
@@ -41,12 +44,12 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
-  if (!req.body) {
+router.post("/:id", async (req, res) => {
+  if (!req.body || !req.params.id) {
     res.status(404).json({ error: "Must supply all fields." });
     return;
   }
-
+  let rid = req.params.id;
   if (!req.session || !req.session.user) {
     res
       .status(404)
@@ -54,16 +57,33 @@ router.post("/", async (req, res) => {
     return;
   }
 
+  //add comment in review
   let userID = req.session.user;
-
+  let newComment = {};
+  let updateComment = {}
+  let updateReview = {};
   try {
-    let newComment = await commentData.addNewComment(req.body["text"], userID);
+    newComment = await commentData.addNewComment(req.body["text"], userID);
     //res.json(newComment);
     // res.render("pages/comments", {
     //   commentsList: allcommentsList,
     // });
   } catch (error) {
-    res.status(404).json({ error: "Cannot add comment" });
+    console.log(error);
+  }
+  try {
+    updateReview = await reviewData.getReviewById(rid.toString());
+  } catch (error) {
+    console.log(error);
+  }
+  updateComment._id = newComment._id;
+  updateComment.userId = newComment.userId;
+  updateComment.text = newComment.text;
+  updateReview.comments.push(updateComment);
+  try {
+    await reviewData.updateReview(rid.toString(), updateReview);
+  } catch (error) {
+    console.log(error);
   }
 });
 
@@ -86,6 +106,28 @@ router.delete("/:id", async (req, res) => {
     res.sendStatus(200);
   } catch (error) {
     res.status(404).json({ error: "Cannot delete comment." });
+    return;
+  }
+  //delete comment in review
+  let review = {};
+  try {
+    review = await reviewData.getReviewByCommentId((req.params.id))
+  } catch (error) {
+    console.log(error);
+  }
+  let comments = review.comments;
+  for(let c of comments){
+    let index = comments.indexOf(c);
+    if (c._id === req.params.id){
+      let cc =comments.splice(index, 1); 
+      console.log(index+":"+cc);
+      break;
+    }
+  }
+  try {
+    await reviewData.updateReview((review._id).toString(), review);
+  } catch (error) {
+    console.log(error);
   }
 });
 
@@ -132,6 +174,7 @@ router.patch("/:id", async (req, res) => {
   }
   newComment["userId"] = req.session.user;
   newComment["text"] = req.body["text"];
+  console.log(newComment["text"]);
 
   let oldComment = "";
   try {
@@ -140,9 +183,9 @@ router.patch("/:id", async (req, res) => {
   } catch (error) {
     res.status(404).json({ error: "Cannot update comment." });
   }
-
+  let updatedComment = {};
   try {
-    let updatedComment = await commentData.updateComment(
+      updatedComment = await commentData.updateComment(
       req.params.id,
       oldComment
     );
@@ -150,6 +193,30 @@ router.patch("/:id", async (req, res) => {
   } catch (error) {
     res.status(404).json({ error: "Cannot update comment." });
   }
+  //update comment in review
+  let updateReview = {};
+  try {
+    updateReview = await reviewData.getReviewByCommentId(updatedComment._id);
+  } catch (error) {
+    console.log(error);
+  }
+  let index = -1;
+  for(let c of updateReview.comments){
+    if(c._id === updatedComment._id){
+      index = updateReview.comments.indexOf(c);
+      updateReview.comments[index].text = updatedComment.text;
+      console.log(updateReview.comments[index].text);
+      console.log(updatedComment.text);
+      break;
+    }
+  }
+  try {
+    await reviewData.updateReview((updateReview._id).toString(), updateReview);
+  } catch (error) {
+    console.log(error);
+  }
+
+
 });
 
 function checkAndUpdate(newComment, oldComment) {
