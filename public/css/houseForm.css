@@ -28,16 +28,16 @@
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
 
-.mainPage input[type=text] {
+.mainPage input, select, option {
     background-color: #3CBC8D;
     color: white;
 }
 
-.mainPage input[type=text]::placeholder {
+.mainPage input::placeholder {
     color: white;
 }
 
-.mainPage input[type=text]:focus {
+.mainPage input:focus, option:focus{
     background-color: lightblue;
     color: white;
 }

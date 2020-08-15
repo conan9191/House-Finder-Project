@@ -43,6 +43,7 @@ router.post("/search", async (req, res) => {
   try {
     let info = await req.body;
     let searchList = await houseData.filterList(info);
+    //console.log(searchList);
 
     res.render("pages/houseList", {
       title: "Matched Houses",

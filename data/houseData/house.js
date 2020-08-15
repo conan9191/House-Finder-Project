@@ -78,11 +78,17 @@ async function infoValid(info) {
   let hZip = await info["house-zipcode"];
 
   if (hNumber && isNaN(hNumber)) throw "House Number must be a number";
-  if (hStreet && typeof hStreet != "string")
-    throw "House street must be a string";
-  if (hCity && typeof hCity != "string") throw "House city must be a string";
-  if (hState && typeof hState != "string") throw "House State must be a string";
+  if (hStreet && !isNaN(hStreet)) throw "House street must be a string";
+  if (hCity && !isNaN(hCity)) throw "House city must be a string";
+  if (hState && !isNaN(hState)) throw "House State must be a string";
   if (hZip && isNaN(hZip)) throw "House zipcode must be a number";
+
+  //House type checking
+  let hType = await info["variant"];
+  let hBed = await info["house-bed"];
+
+  if (hType && !isNaN(hType)) throw "House type must be a string";
+  if (hBed && isNaN(hBed)) throw "Number of beds must be a number";
 
   return true;
 }
@@ -114,23 +120,29 @@ async function houseMatch(info, house) {
   let parkY = await info["park-yes"];
   let parkN = await info["park-no"];
 
+  let hType = await info["variant"];
+  let hBed = await info["house-bed"];
+
   if (rMin && house.rent < rMin) return false;
   if (rMax && house.rent > rMax) return false;
 
   if (dStart && !moment(house.startDate).isAfter(dStart)) return false;
   if (dEnd && !moment(house.endDate).isBefore(dEnd)) return false;
 
-  if (hNumber && hNumber !== house.houseNumber) return false;
-  if (hStreet && hStreet !== house.street) return false;
-  if (hCity && hCity !== house.city) return false;
-  if (hState && hState !== house.state) return false;
-  if (hZip && hZip !== house.pincode) return false;
+  if (hNumber && hNumber != house.houseNumber) return false;
+  if (hStreet && hStreet != house.street) return false;
+  if (hCity && hCity != house.city) return false;
+  if (hState && hState != house.state) return false;
+  if (hZip && hZip != house.pincode) return false;
 
   if (parkY && !house.parkingAvailable) return false;
   if (parkN && house.parkingAvailable) return false;
   if (petY && !house.petFriendly) return false;
   if (petN && house.petFriendly) return false;
 
+  if (house.houseType && hType && hType != house.houseType.type) return false;
+  if (house.houseType && hBed && hBed != house.houseType.bedroom) return false;
+  
   return true;
 }
 
