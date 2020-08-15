@@ -10,8 +10,10 @@
 //let commentDoneButton = document.getElementById("commentDoneButton");
 //let errorMessage = document.getElementById("error");
 
+
 //commentButton.addEventListener("click", addComment);
 //commentDoneButton.addEventListener("click", submitComment);
+
 
 let isEdit = false;
 let commentId = "";

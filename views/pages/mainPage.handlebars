@@ -25,8 +25,8 @@
      -->
 
     <!-- CSS for ths form is in houseForm.css -->
-     <div id="houseSearchForm">
-         <form action="/house/search" method="POST">
+    <div id="houseSearchForm">
+        <form action="/house/search" method="POST">
             <div id="rent" class="form-horizontal col-md-3">
                 <label for="rent-min" class="control-label"> Rent Min. </label>
                 <input type="text" name="rent-min" id="rent-min" placeholder="0" class="form-control">
@@ -47,7 +47,8 @@
                     <label for="house-number" class="control-label"> House Number </label>
                     <input type="text" name="house-number" id="house-number" placeholder="123" class="form-control">
                     <label for="house-street" class="control-label"> Street </label>
-                    <input type="text" name="house-street" id="house-street" placeholder="Washington Street" class="form-control">
+                    <input type="text" name="house-street" id="house-street" placeholder="Washington Street"
+                        class="form-control">
                 </div>
                 <div class="form-horizontal col-md-2">
                     <label for="house-city" class="control-label"> City </label>
@@ -58,10 +59,10 @@
                 </div>
                 <div class="form-horizontal col-md-1">
                     <label for="house-zipcode" class="control-label"> Zip Code </label>
-                    <input type="text" name="house-zipcode" id="house-zipcode" placeholder="07030" class="form-control"> 
+                    <input type="text" name="house-zipcode" id="house-zipcode" placeholder="07030" class="form-control">
                 </div>
             </div>
-             
+
             <div id="radio" class="form-inline">
                 <fieldset id="pet" class="col-md-3">
                     <legend id="pet-name"> Pet Friendly? </legend>
@@ -79,22 +80,46 @@
                 </fieldset>
             </div>
             <button class="col-md-1" type="submit" id="button"> Submit </button>
-         </form>
-     </div>
+        </form>
+    </div>
 
-    <!-- CSS for this part is in houseList.css -->
-     <div class="form-inline houseList col-md-12">
-         {{#each list}}
-            <div class="col-md-4 house">
-                <div class="cover-container">
-                    <a href="/house/{{this._id}}">
-                        <img class="cover-item" src="{{this.houseImage}}" alt="house">
-                        <div class="overlay"> More Information </div>
-                    </a>
-                </div>
 
-                <p id="houseDescription"> {{this.description}} </p>
+    <div class="form-inline houseList col-md-12">
+
+        {{#each list}}
+        <div class="col-md-4 house">
+            <div class="cover-container">
+
+                <img class="cover-item" src="{{this.profilePicture}}" alt="house">
+
             </div>
-         {{/each}}
-     </div>
+            <div>
+                <p class="paraClass" id="address"> {{houseNumber}} {{street}} <br> {{city}}, {{state}}, {{zip}} </p>
+            </div>
+            <div>
+                <p class="paraClass" id="priceInfo"> Rent: ${{rent}}/mo
+            </div>
+
+            <a href="house/{{this._id}}">View Details</a>
+        </div>
+        {{/each}}
+
+    </div>
+
+
+    {{!-- <!-- CSS for this part is in houseList.css -->
+    <div class="form-inline houseList col-md-12">
+        {{#each list}}
+        <div class="col-md-4 house">
+            <div class="cover-container">
+                <a href="house/{{this._id}}">
+                    <img class="cover-item" src="{{this.houseImage}}" alt="house">
+                    <div class="overlay"> More Information </div>
+                </a>
+            </div>
+
+            <p id="houseDescription"> {{this.description}} </p>
+        </div>
+        {{/each}}
+    </div> --}}
 </div>

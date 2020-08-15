@@ -17,39 +17,84 @@
 
     <!-- CSS in housePage.css -->
 
+
     <div class="cover-container">
-        <img class="cover-item" src="{{this.houseImage}}" alt="house">
+        {{#each houseImage}}
+        <img class="cover-item" src="{{this}}" alt="house" style="width:40%">
+        {{/each}}
     </div>
 
-    <div id="map"></div>
-    <div id="latitude" hidden=true>{{latitude}}</div>
-    <div id="longitude" hidden=true>{{longitude}}</div>
-    <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5Y2OeJZ_gqoeUxehJ6BaKdONCF0g1JRU&callback=initMap">
-        </script>
-    <br>
-    <br>
 
-
-    <div class=" houseInfo">
-        <p id="address"> {{houseNumber}} {{street}} <br> {{city}}, {{state}}, {{zip}} </p>
-        <p id="priceInfo"> Rent: ${{rent}} <br> Lease duration: {{startDate}} - {{endDate}} </p>
-        <p id="houseDescription"> {{description}} </p>
-        <p id="houseMisc"> {{amenities}} <br> Pet Friendly: {{pet}} <br> Parking Available: {{park}}</p>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <iframe id="map" width="600" height="450" frameborder="0" style="border:0"
+                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyC5Y2OeJZ_gqoeUxehJ6BaKdONCF0g1JRU&q={{latitude}},{{longitude}}&zoom=10"
+                allowfullscreen>
+            </iframe>
+        </div>
+        <div class="form-group col-md-6" style=" height: 100%;">
+            <h3 class="header">Address</h3>
+            <p class="paraClass" id="address"> {{houseNumber}} {{street}} <br> {{city}}, {{state}}, {{zip}} </p>
+        </div>
     </div>
 
-    {{#if isFavHouse}}
-    <button id="favButton" value="{{houseId}}" class="fav">Favourite</button>
-    {{else}}
-    <button id="favButton" value="{{houseId}}" class="fav"> Add Favourite</button>
-    {{/if}}
-    
-    <br>
-    <br>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <h3 class="header">Rent and Lease Information</h3>
+            <p class="paraClass" id="priceInfo"> Rent: ${{rent}} <br> Lease duration: {{startDate}} - {{endDate}} </p>
+        </div>
+
+        <div class="form-group col-md-6">
+            <h3 class="header">Pet Friendly </h3>
+            <p class="paraClass"> {{pet}} </p>
+        </div>
+
+        <div class="form-group col-md-6">
+            <h3 class="header">Parking Available </h3>
+            <p class="paraClass"> {{park}} </p>
+        </div>
+
+        <div class="form-group col-md-6">
+            {{#if isFavHouse}}
+            <button id="favButton" value="{{houseId}}" class="fav">Favourite</button>
+            {{else}}
+            <button id="favButton" value="{{houseId}}" class="fav"> Add Favourite</button>
+            {{/if}}
+        </div>
+    </div>
+
+
+    <div class="form-row">
+        <div class="form-group col-md-6" style=" width: 100%;">
+            <h3 class="header">Other Amenities </h3>
+            <p class="paraClass" id="houseMisc"> {{amenities}}
+        </div>
+        <div class="form-group col-md-6" style=" width: 100%;">
+            <h3 class="header">House Description </h3>
+            <p class="paraClass" id="houseDescription"> {{description}} </p>
+        </div>
+
+    </div>
 </div>
 
+
+
+
+<br>
+<br>
+</div>
+
+{{!-- Comments --}}
+<div class="form-row" style=" width: 100%;">
+    <div class="form-group col-md-6" style=" width: 100%;">
+        <a class="commentClass" href="http://localhost:3000/comment">Leave a comment.</a>
+    </div>
+</div>
+
+
 <!--Reviews-->
-<div class = "reviews">
+<div class="reviews">
     <h2>{{aveRate}} out of 5</h2>
     {{#each reviewsList}}
     <div class="panel panel-default">
@@ -82,8 +127,8 @@
                 <div class="error" id="error{{this.reviewData._id}}" hidden=true>Please enter valid comment.</div>
                 <textarea class="commentTextarea" id="commentTextarea{{this.reviewData._id}}" rows="4" cols="50" value="" hidden=true></textarea>
                 <button id="commentDoneButton{{this.reviewData._id}}" class="commentDone" onclick="submitComment()" value={{this.reviewData._id}} hidden=true>Done</button>
-
             </div>
+            
             <div class = "optReview">
                 <button id="commentButton{{this.reviewData._id}}" value="{{this.reviewData._id}}" onclick="addComment()" class="btn btn-default"> Leave a comment</button>       
                 {{#if this.currentUser}}
@@ -92,15 +137,15 @@
             </div>
         </div>
     </div>
-    <br/>
+    <br />
     {{/each}}
-    <br/>
+    <br />
     <div class="panel panel-info">
         <div class="panel-heading">
             <h3 class="panel-title">Leave Your Review</h3>
         </div>
         <div class="panel-body">
-            <form id = "reviewForm" role="form" action="/review" method="POST">
+            <form id="reviewForm" role="form" action="/review" method="POST">
                 <div class="form-group">
                     <label for="rating">Rating this house：</label>
                     <select class="form-control" name="rating">
@@ -111,7 +156,7 @@
                         <option>1</option>
                     </select>
                     <label for="review">Review:</label>
-                    <textarea class="form-control" rows="5" name = "reviewText"></textarea>
+                    <textarea class="form-control" rows="5" name="reviewText"></textarea>
                     <input type="hidden" name="houseId" value="{{houseId}}"> 　
                     <button type="submit" class="btn btn-default">Submit</button>
                 </div>
