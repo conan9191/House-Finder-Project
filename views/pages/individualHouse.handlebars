@@ -121,6 +121,11 @@
                             style="display: {{this.canUpdate}}">Edit</button>
                         <button type="button" id="delete{{this._id}}" class="deleteComment" onclick="deletecomment()" value={{this._id}}
                             style="display: {{this.canUpdate}}">Delete</button>
+
+                        <div class="error" id="error{{this._id}}" hidden=true>Please enter valid comment.</div>
+                        <textarea class="commentTextarea" id="commentTextarea{{this._id}}" rows="4" cols="50" value="" hidden=true></textarea>
+                        <button id="commentDoneButton{{this._id}}" class="commentDone" onclick="submitComment()" value={{this._id}} hidden=true>Done</button>
+
                     </div>
                 </div>
                 {{/each}}

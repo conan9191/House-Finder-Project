@@ -110,16 +110,25 @@ function hideCommentTextArea(isHidden,id) {
  */
 function editcomment() {
   let id = event.srcElement.value;
-  let reviewId = $(event.srcElement).parent('div').parent('div').parent('div').children('input').val();
-  if (!reviewId) {
+  //let reviewId = $(event.srcElement).parent('div').parent('div').parent('div').children('input').val();
+  if (!id) {
     throw `Cannot edit comment. Invalid comment Id`;
   }
 
-  let commentTextarea = document.getElementById("commentTextarea"+reviewId.toString());
-  let commentDoneButton = document.getElementById("commentDoneButton"+reviewId.toString());
-
-  commentTextarea.hidden = false;
-  commentDoneButton.hidden = false;
+  let commentTextarea = document.getElementById("commentTextarea"+id.toString());
+  let commentDoneButton = document.getElementById("commentDoneButton"+id.toString());
+  let errorMessage = document.getElementById("error"+id.toString());
+  // commentTextarea.hidden = false;
+  // commentDoneButton.hidden = false;
+  if(commentTextarea.hidden == true){
+    errorMessage.hidden = true;
+    commentTextarea.hidden = false;
+    commentDoneButton.hidden = false;
+  }else{
+    errorMessage.hidden = true;
+    commentTextarea.hidden = true;
+    commentDoneButton.hidden = true;
+  }
 
   commentTextarea.value = document.getElementById(id.toString()).innerHTML;
 
