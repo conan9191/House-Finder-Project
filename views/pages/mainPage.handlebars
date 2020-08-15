@@ -58,7 +58,8 @@
                 </div>
                 <div class="form-horizontal col-md-1 form-group">
                     <label for="house-zipcode" class="control-label"> Zip Code </label>
-                    <input type="number" name="house-zipcode" id="house-zipcode" placeholder="07030" class="form-control">
+                    <input type="number" name="house-zipcode" id="house-zipcode" placeholder="07030"
+                        class="form-control">
                 </div>
             </div>
 
@@ -103,15 +104,15 @@
         <div class="col-md-4 house">
             <div class="cover-container">
 
-                <img class="cover-item" src="{{this.profilePicture}}" alt="house">
+                <img class="cover-item" src="{{this.profilePicture.[0]}}" alt="house">
 
             </div>
             <div>
                 <p class="paraClass" id="address"> {{houseNumber}} {{street}} <br> {{city}}, {{state}}, {{pincode}} </p>
             </div>
             <div>
-                <p class="paraClass" id="priceInfo"> 
-                    Rent: ${{rent}}/mo <br> 
+                <p class="paraClass" id="priceInfo">
+                    Rent: ${{rent}}/mo <br>
                     {{houseType.type}} | {{houseType.bedroom}} Bedroom(s)
                 </p>
             </div>

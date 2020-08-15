@@ -46,8 +46,8 @@ router.get("/updateHouse", async (req, res) => {
     console.log("update house=" + JSON.stringify(houseList));
     res.render("pages/houseList", {
       title: "Main Page",
-      list: houseList,
       canUpdate: "inline-block",
+      list: houseList,
     });
   } catch (error) {
     res.status(404).json({ error: "Houses not found" });
@@ -96,8 +96,8 @@ router.post("/search", async (req, res) => {
 
     res.render("pages/houseList", {
       title: "Matched Houses",
-      list: searchList,
       canUpdate: "none", //to hide edit and delete button
+      list: searchList,
     });
   } catch (e) {
     res.status(500);

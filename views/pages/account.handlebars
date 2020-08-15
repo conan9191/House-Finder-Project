@@ -59,15 +59,15 @@
 				</div>
 			</div>
 			<div class="tab-pane fade" id="review">
-					{{#each reviews}}
-					<div class="panel panel-default">
-						<div class="panel-body">
-							<p id="rating">Rating: {{this.rating}} </p>
-							<p id="reviewText">Review:{{this.reviewText}} </p>
-							<a href="house/{{this.houseId}}">View the House.</a>
-						</div>
+				{{#each reviews}}
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<p id="rating">Rating: {{this.rating}} </p>
+						<p id="reviewText">Review:{{this.reviewText}} </p>
+						<a href="house/{{this.houseId}}">View the House.</a>
 					</div>
-					{{/each}}
+				</div>
+				{{/each}}
 			</div>
 
 			<div class="tab-pane fade" id="comment">
@@ -75,16 +75,30 @@
 			</div>
 
 			<div class="tab-pane fade" id="favourite">
-						{{#each list}}
-						<div class="cover-container">
-							{{#each this.profilePicture}}
-							<img class="cover-item" src="{{this}}" alt="house" style="width:40%">
-							{{/each}}
-						</div>
+				{{#each list}}
 
-						<a href="house/{{this._id}}">More Details</a>
-						<p id="houseDescription"> {{this.description}} </p>
-						{{/each}}
+				<div class="col-md-4 house">
+					<div class="cover-container">
+
+						<img class="cover-item" src="{{this.profilePicture.[0]}}" alt="house">
+
+					</div>
+					<div>
+						<p class="paraClass" id="address"> {{houseNumber}} {{street}} <br> {{city}}, {{state}},
+							{{pincode}} </p>
+					</div>
+					<div>
+						<p class="paraClass" id="priceInfo">
+							Rent: ${{rent}}/mo <br>
+							{{houseType.type}} | {{houseType.bedroom}} Bedroom(s)
+						</p>
+					</div>
+
+					<a href="house/{{this._id}}">View Details</a>
+				</div>
+
+
+				{{/each}}
 			</div>
 		</div>
 	</div>
