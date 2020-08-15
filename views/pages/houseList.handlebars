@@ -17,21 +17,28 @@
       -->
 
     <!-- CSS in houseList.css -->
-    <div class="grid-container">
-        <div class="grid-item">
-            {{#each list}}
+     <div class="form-inline houseList col-md-12">
+
+        {{#each list}}
+        <div class="col-md-4 house">
             <div class="cover-container">
-                {{#each this.profilePicture}}
-                <img class="cover-item" src="{{this}}" alt="house">
-                {{/each}}
+
+                <img class="cover-item" src="{{this.profilePicture}}" alt="house">
+
             </div>
             <div>
-                <p class="paraClass" id="address"> {{houseNumber}} {{street}} <br> {{city}}, {{state}}, {{zip}} </p>
+                <p class="paraClass" id="address"> {{houseNumber}} {{street}} <br> {{city}}, {{state}}, {{pincode}} </p>
+            </div>
+            <div>
+                <p class="paraClass" id="priceInfo"> 
+                    Rent: ${{rent}}/mo <br> 
+                    {{houseType.type}} | {{houseType.bedroom}} Bedroom(s)
+                </p>
             </div>
 
-            <a href="{{this._id}}">More Details</a>
-            <p id="houseDescription"> {{this.description}} </p>
-            {{/each}}
+            <a href="{{this._id}}">View Details</a>
         </div>
+        {{/each}}
+
     </div>
 </div>
