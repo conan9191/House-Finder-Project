@@ -14,6 +14,7 @@ const { GridFSBucketReadStream } = require("mongodb");
  */
 let houseData = {
   _id: "",
+  userId: "",
   profilePicture: [],
   street: "",
   houseNumber: "",
@@ -196,6 +197,18 @@ async function getAllHouse() {
 }
 
 /**
+ * Return all houses stored in database House.
+ */
+async function getAllHouseforCurrentUser(currentUserId) {
+  const houseObj = await houseCollectionObj();
+  const allHouseData = await houseObj.find({ userId: currentUserId }).toArray();
+
+  if (allHouseData === null) {
+    throw `No house found in database`;
+  }
+  return allHouseData;
+}
+/**
  * Add new house into database.
  * firstly, Validate house information pass from post router.
  * If invalid info is found an array of error is thrown.
@@ -282,6 +295,8 @@ function validateCompleteHouseInfo(houseInfo) {
   let errorArray = [];
 
   if (houseInfo) {
+    houseData.userId = houseInfo["userId"];
+
     //profile picture
     if (houseInfo["profilePicture"]) {
       let array = isvalidProfilePicture(houseInfo["profilePicture"]);
@@ -450,6 +465,7 @@ function validateCompleteHouseInfo(houseInfo) {
  */
 function createHouseSchema(houseData, isUpdate, houseId) {
   let houseSchema = {
+    userId: houseData.userId,
     profilePicture: houseData.profilePicture,
     longitude: houseData.longitude,
     latitude: houseData.latitude,
@@ -560,6 +576,7 @@ module.exports = {
   updateHouse,
   deleteHouse,
   filterList,
+  getAllHouseforCurrentUser,
 };
 
 /**

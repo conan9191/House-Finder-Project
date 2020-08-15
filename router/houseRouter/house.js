@@ -10,7 +10,6 @@ const reviewData = review.reviewsDate;
 router.get("/", async (req, res) => {
   try {
     let houseList = await houseData.getAllHouse();
-    
     //console.log(houseList);
     res.render("pages/mainPage", {
       title: "Main Page",
@@ -31,6 +30,56 @@ router.get("/add", async (req, res) => {
   }
 });
 
+router.get("/updateHouse", async (req, res) => {
+  try {
+    if (!req.session || !req.session.user) {
+      res.status(404).json({
+        error: "To edit or delete house, must login with valid user.",
+      });
+      return;
+    }
+
+    let houseList = await houseData.getAllHouseforCurrentUser(req.session.user);
+
+    console.log("update house=" + JSON.stringify(houseList));
+    res.render("pages/houseList", {
+      title: "Main Page",
+      list: houseList,
+      canUpdate: "inline-block",
+    });
+  } catch (error) {
+    res.status(404).json({ error: "Houses not found" });
+  }
+});
+
+router.get("/add/:id", async (req, res) => {
+  console.log("most outside Edit house");
+  try {
+    if (!req.session || !req.session.user) {
+      res.status(404).json({
+        error: "To edit or delete house, must login with valid user.",
+      });
+      return;
+    }
+
+    let houseId = "";
+    if (req.params.id) {
+      houseId = req.params.id;
+    }
+
+    let house = await houseData.getHouseById(houseId);
+
+    console.log("Edit house=" + JSON.stringify(house));
+    let houseType = house["houseType"];
+    res.render("pages/houseManage", {
+      title: "Edit house",
+      houseDetail: JSON.stringify(house),
+    });
+  } catch (error) {
+    res.status(404).json({ error: " edit Houses not found" });
+  }
+});
+
 router.get("/search", async (req, res) => {
   //the user shouldn't be able to manually enter this page
   res.redirect("/");
@@ -45,6 +94,7 @@ router.post("/search", async (req, res) => {
     res.render("pages/houseList", {
       title: "Matched Houses",
       list: searchList,
+      canUpdate: "none", //to hide edit and delete button
     });
   } catch (e) {
     res.status(500);
@@ -68,13 +118,10 @@ router.get("/:id", async (req, res) => {
       let filterHouse = userFavHouse.filter(function (houseObj) {
         return houseObj.houseId === req.params.id;
       });
-      // console.log("filterHouse = " + filterHouse);
-      // console.log("filterHouse = " + filterHouse.length);
 
       if (filterHouse.length > 0) {
         isFavHouse = true;
       }
-      // console.log("isFavHouse = " + isFavHouse);
     }
   }
 
@@ -83,27 +130,27 @@ router.get("/:id", async (req, res) => {
   let reviews = [];
   let totalRate = 0;
   let aveRate = 0;
-  try{
+  try {
     reviews = await reviewData.getReviewByHouseId(req.params.id);
-  }catch(error){
+  } catch (error) {
     console.log(error);
   }
-  for(r of reviews){
+  for (r of reviews) {
     let review = {
-      username: '',
+      username: "",
       reviewData: {},
-      currentUser: false
+      currentUser: false,
     };
     let user = {};
-    try{
+    try {
       user = await userData.getUserById(r.userId);
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
-    review['username'] = user.firstName + " " + user.lastName;
-    review['reviewData'] = r;
-    if(req.session.user === r.userId){
-      review['currentUser'] = true;
+    review["username"] = user.firstName + " " + user.lastName;
+    review["reviewData"] = r;
+    if (req.session.user === r.userId) {
+      review["currentUser"] = true;
     }
     reviewsList.push(review);
     totalRate = totalRate + r.rating;
@@ -147,9 +194,16 @@ router.post("/", async (req, res) => {
     res.status(404).json({ error: "Must supply all fields." });
     return;
   }
+  if (!req.session || !req.session.user) {
+    res
+      .status(404)
+      .json({ error: "To add new house, must login with valid user." });
+    return;
+  }
 
   let houseParamBody = req.body;
   try {
+    houseParamBody["userId"] = req.session.user;
     let newHouse = await houseData.addHouse(houseParamBody);
     res.json(newHouse);
   } catch (error) {
