@@ -31,7 +31,7 @@
 <div id="errorContainerReg">
     <div class="container text-center">
         <div class="row justify-content-center">
-            {{!-- <div class="col-4"> --}}
+
             <div id="displayError" class="alert alert-danger text-left" role="alert" style="display: none;">
 
                 <div id="pictureError" style="display: none;">Upload atleast 1 house picture</div>
@@ -67,22 +67,18 @@
                     description".</div>
 
             </div>
-            {{!-- </div> --}}
+
         </div>
     </div>
 </div>
-{{!-- <div class="container-fluid"> --}}
-{{!-- <div class="row justify-content-center">
-        <div class="col-6 text-left"> --}}
+
 <div class="form-row">
     <div class="form-group col-md-6">
         <h1 class="display-4">{{title}}</h1>
     </div>
 
     <div class="form-group col-md-6">
-        <button type="submit" class="btn btn-primary" id="addhouse" onclick="addHouse()">Add</button>
-        <button type="submit" class="btn btn-primary" id="edithouse" onclick="editHouse()">Edit</button>
-        <button type="submit" class="btn btn-primary" id="deletehouse" onclick="deleteHouse()">Delete</button>
+        <button type="submit" class="btn btn-primary" id="addhouse" onclick="addHouse()">Done</button>
     </div>
 
 </div>
@@ -92,12 +88,13 @@
 <br>
 <br>
 <form id="regForm" action="add" method="post">
+    <div id="house" title="{{houseDetail}}" hidden=true></div>
 
     <div class="form-row">
         <h3> House Images</h3>
         <div>
-            <label for="image_uploads" style="color: blue;">Choose images to upload (PNG, JPG)</label>
-            <input type="file" id="image_uploads" name="image_uploads" accept=".jpg, .jpeg, .png" multiple>
+            <input type='file' id="image_uploads" name="image_uploads" accept=".jpg, .jpeg, .png" multiple />
+            {{!-- <canvas id="canvas" width="300" height="200"></canvas> --}}
         </div>
         <div class="preview">
             <p>No files currently selected for upload</p>
@@ -111,30 +108,29 @@
             <div class="form-group col-md-6">
                 <label for="houseNumber">House Number </label>
                 <input maxlength="50" type="text" name="houseNumber" class="form-control" id="houseNumber"
-                    placeholder="Enter house number" value="">
+                    placeholder="Enter house number">
             </div>
             <div class="form-group col-md-6">
                 <label for="Street">Street </label>
                 <input maxlength="50" type="text" name="Street" class="form-control" id="Street"
-                    placeholder="Enter Street" value="">
+                    placeholder="Enter Street">
             </div>
         </div>
 
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="City">City </label>
-                <input maxlength="50" type="text" name="City" class="form-control" id="City" placeholder="Enter City"
-                    value="{{houseData.city}}">
+                <input maxlength="50" type="text" name="City" class="form-control" id="City" placeholder="Enter City">
             </div>
             <div class="form-group col-md-6">
                 <label for="State">State </label>
-                <input maxlength="50" type="text" name="State" class="form-control" id="State" placeholder="Enter State"
-                    value="">
+                <input maxlength="50" type="text" name="State" class="form-control" id="State"
+                    placeholder="Enter State">
             </div>
             <div class="form-group col-md-6" style=" width: 100%;">
                 <label for="Pincode">Pincode </label>
                 <input maxlength="50" type="text" name="Pincode" class="form-control" id="Pincode"
-                    placeholder="Enter Pincode" style=" width: 40%;" value="">
+                    placeholder="Enter Pincode" style=" width: 40%;">
             </div>
         </div>
 
@@ -250,13 +246,7 @@
                 placeholder="Enter detail information of nearby transportation, facilities and any miscellaneous information"></textarea>
         </div>
     </div>
-
-
-
-
 </form>
-{{!-- </div>
-    </div> --}}
-{{!-- </div> --}}
+
 <br>
 <br>

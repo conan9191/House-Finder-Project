@@ -1,20 +1,18 @@
 //Select and load image
-
 const input = document.querySelector("input");
 const preview = document.querySelector(".preview");
 
+const EL = (sel) => document.querySelector(sel);
 let profilePictureArray = [];
 
-input.style.opacity = 0;
-input.addEventListener("change", updateImageDisplay);
+function readImage() {
+  if (!this.files || !this.files[0]) return;
 
-function updateImageDisplay() {
-  profilePictureArray = [];
   while (preview.firstChild) {
     preview.removeChild(preview.firstChild);
   }
+  const curFiles = this.files;
 
-  const curFiles = input.files;
   if (curFiles.length === 0) {
     const para = document.createElement("p");
     para.textContent = "No files currently selected for upload";
@@ -26,22 +24,56 @@ function updateImageDisplay() {
     for (const file of curFiles) {
       const listItem = document.createElement("li");
       const para = document.createElement("p");
-      if (validFileType(file)) {
-        para.textContent = `File name ${file.name}, file size ${returnFileSize(
-          file.size
-        )}.`;
-        const image = document.createElement("img");
-        image.src = URL.createObjectURL(file);
-        profilePictureArray.push(image.src);
-        image.height = "100";
-        image.width = "100";
 
-        listItem.appendChild(image);
-        listItem.appendChild(para);
-      } else {
-        para.textContent = `File name ${file.name}: Not a valid file type. Update your selection.`;
-        listItem.appendChild(para);
-      }
+      para.textContent = `File name ${file.name}, file size ${returnFileSize(
+        file.size
+      )}.`;
+
+      const FR = new FileReader();
+      FR.addEventListener("load", (evt) => {
+        const img = new Image();
+        img.height = "100";
+        img.width = "100";
+        img.src = evt.target.result;
+        console.log("image source =" + img.src);
+        profilePictureArray.push(img.src);
+        listItem.appendChild(img);
+      });
+      FR.readAsDataURL(file);
+      listItem.appendChild(para);
+      list.appendChild(listItem);
+    }
+  }
+}
+
+EL("#image_uploads").addEventListener("change", readImage);
+
+function createImageFromImageSrcList(imageSrcList) {
+  profilePictureArray = [];
+  while (preview.firstChild) {
+    preview.removeChild(preview.firstChild);
+  }
+
+  if (imageSrcList.length === 0) {
+    const para = document.createElement("p");
+    para.textContent = "No files currently selected for upload";
+    preview.appendChild(para);
+  } else {
+    const list = document.createElement("ol");
+    preview.appendChild(list);
+
+    for (const file of imageSrcList) {
+      const listItem = document.createElement("li");
+      const para = document.createElement("p");
+
+      const image = document.createElement("img");
+      image.src = file;
+      profilePictureArray.push(image.src);
+      image.height = "100";
+      image.width = "100";
+
+      listItem.appendChild(image);
+      listItem.appendChild(para);
 
       list.appendChild(listItem);
     }
@@ -75,7 +107,7 @@ function returnFileSize(number) {
   }
 }
 
-//handling other house details
+//handling  house details
 /**
  * houseData : house object to store and validate house data.
  */
@@ -98,7 +130,6 @@ let houseData = {
     bedroom: "",
     hall: "",
     kitchen: "",
-    bathroom: "",
   },
   petFriendly: "",
   otherAmenities: "",
@@ -108,6 +139,7 @@ let houseData = {
 };
 
 //house Info validation
+
 let houseNumber = document.getElementById("houseNumber");
 let Street = document.getElementById("Street");
 let City = document.getElementById("City");
@@ -162,6 +194,66 @@ let displayErrorBar = document.getElementById("displayError");
 
 let errorArray = [];
 
+let houseId = ""; //needed to edit house
+
+window.onload = function () {
+  let houseDetails = document.getElementById("house");
+  if (houseDetails) {
+    this.editHouseInfoLoad(houseDetails);
+  }
+};
+
+function editHouseInfoLoad(houseDetails) {
+  let houseDetailsJson = JSON.parse(houseDetails.title);
+  houseId = houseDetailsJson["_id"];
+
+  let housePictures = houseDetailsJson["profilePicture"];
+  createImageFromImageSrcList(housePictures);
+
+  houseNumber.value = houseDetailsJson["houseNumber"];
+  Street.value = houseDetailsJson["street"];
+  long.value = houseDetailsJson["longitude"];
+  lat.value = houseDetailsJson["latitude"];
+  City.value = houseDetailsJson["city"];
+  State.value = houseDetailsJson["state"];
+  Pincode.value = houseDetailsJson["pincode"];
+  Rent.value = houseDetailsJson["rent"];
+  startDate.value = formatDate(houseDetailsJson["startDate"]);
+  endDate.value = formatDate(houseDetailsJson["endDate"]);
+  let housetypetemp = houseDetailsJson["houseType"];
+  houseType.value = housetypetemp["type"];
+  bedroom.value = housetypetemp["bedroom"];
+  hall.value = housetypetemp["hall"];
+  kitchen.value = housetypetemp["kitchen"];
+  otherAmenities.value = houseDetailsJson["otherAmenities"];
+  description.value = houseDetailsJson["description"];
+
+  let petFriendly = houseDetailsJson["petFriendly"];
+  if (petFriendly) {
+    petFriendlyYes.checked = true;
+  } else {
+    petFriendlyNo.checked = true;
+  }
+  let parkingAvailable = houseDetailsJson["parkingAvailable"];
+  if (parkingAvailable) {
+    parkingAvailableYes.checked = true;
+  } else {
+    parkingAvailableNo.checked = true;
+  }
+}
+
+function formatDate(date) {
+  var d = new Date(date),
+    month = "" + (d.getMonth() + 1),
+    day = "" + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
+
+  return [year, month, day].join("-");
+}
+
 function addHouse() {
   errorArray = [];
   setdefaultErrorStyle();
@@ -170,11 +262,16 @@ function addHouse() {
   if (errorArray.length > 0) {
     displayError(errorArray);
     console.log("Error in add house");
-    // throw `Errors : ${errorArray.toString()}`;
   } else {
     let xhttp = new XMLHttpRequest();
     let method = "POST";
     let url = "/house";
+
+    if (houseId) {
+      method = "PATCH";
+      url = url + "/" + houseId;
+    }
+
     xhttp.open(method, url, true);
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
@@ -184,7 +281,47 @@ function addHouse() {
       console.log(xhttp.responseText);
     }
     console.log("Succesfully added house");
+
+    let msg = "Succesfully added house";
+    if (houseId) {
+      msg = "Succesfully edited house";
+    }
+    window.alert(msg);
+
+    reloadHouseList();
   }
+}
+
+function deleteHouse() {
+  let buttonId = event.srcElement.value;
+  if (!buttonId) {
+    throw `Cannot delete house. Invalid comment Id`;
+  }
+
+  let xhttp = new XMLHttpRequest();
+  let method = "DELETE";
+  let url = "/house";
+  url = url + "/" + buttonId;
+
+  xhttp.open(method, url, true);
+  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+  xhttp.send(JSON.stringify({ id: buttonId }));
+
+  reloadHouseList();
+}
+
+function reloadHouseList() {
+  let xhttpget = new XMLHttpRequest();
+  method = "GET";
+  url = "/updateHouse";
+
+  xhttpget.open(method, url, true);
+  xhttpget.setRequestHeader("Content-type", "application/json");
+  xhttpget.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+  xhttpget.send();
+
+  location.reload();
 }
 
 function validateCompleteHouseInfo() {
@@ -194,12 +331,8 @@ function validateCompleteHouseInfo() {
 
 function validateHouseProfilePicture() {
   //profile picture
-  if (profilePictureArray) {
-    let array = isvalidProfilePicture(profilePictureArray);
-    if (!array) {
-      errorArray.push(pictureError);
-    }
-    houseData.profilePicture = array;
+  if (profilePictureArray && isvalidProfilePicture(profilePictureArray)) {
+    houseData.profilePicture = profilePictureArray;
   } else {
     errorArray.push(pictureError);
   }
@@ -402,29 +535,10 @@ function isvalidProfilePicture(profilePicArray) {
     !Array.isArray(profilePicArray) ||
     profilePicArray.length === 0
   ) {
-    throw `Upload atleast one House  pictures.`;
+    return false;
   }
 
-  //   let picArray = [];
-  //   for (const element of profilePicArray) {
-  //     checkImageExists(element, function (existsImage) {
-  //       if (existsImage === true) {
-  //         picArray.push(element);
-  //       }
-  //     });
-  //   }
-  return profilePicArray;
-}
-
-function checkImageExists(imageUrl, callBack) {
-  var imageData = new Image();
-  imageData.onload = function () {
-    callBack(true);
-  };
-  imageData.onerror = function () {
-    callBack(false);
-  };
-  imageData.src = imageUrl;
+  return true;
 }
 
 function isValidDate(inputText) {
