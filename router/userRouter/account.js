@@ -4,7 +4,7 @@
  * @Author: sueRimn
  * @Date: 2020-08-07 16:20:41
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-16 15:53:21
+ * @LastEditTime: 2020-08-16 16:52:33
  */
 const express = require("express");
 const router = express.Router();
@@ -14,6 +14,8 @@ const house = require("../../data/houseData");
 const houseData = house.houseData;
 const review = require("../../data/commentAndReviewData");
 const reviewData = review.reviewsDate;
+const comment = require("../../data/commentAndReviewData");
+const commentData = comment.commentsData;
 
 router.get("/", async (req, res) => {
   let userId = req.session.user;
@@ -38,6 +40,7 @@ router.get("/", async (req, res) => {
 
   let allUserReviews = user["reviewIds"];
   let reviewsList = [];
+  let commentList = [];
   try {
     for (let i of allUserReviews) {
       console.log(i);
@@ -47,13 +50,83 @@ router.get("/", async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+  try {
+    let comments = await commentData.getAllComments();
+    for (let c of comments) {
+      if(c.userId === userId)
+      commentList.push(c);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+
   res.render("pages/account", {
     title: "User Account",
     user: user,
     hasLogin: true,
     list: favHouseList,
-    reviews: reviewsList
+    reviews: reviewsList,
+    comments: commentList
   });
+});
+
+router.get("/:id", async (req, res) => {
+  if (!req.params.id) {
+    res.status(400).json({ error: "You must Supply and ID to delete" });
+    return;
+  }
+  let userId = req.params.id;
+  let user = {};
+  try {
+    user = await userData.getUserById(req.params.id);
+  } catch (e) {
+    res.status(404).json({ error: "User not found" });
+    return;
+  }
+  let allUserFavourites = user["favourites"];
+  let favHouseList = [];
+  try {
+    for (let i of allUserFavourites) {
+      let houseId = i["houseId"];
+      let favhouse = await houseData.getHouseById(houseId);
+      favHouseList.push(favhouse);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+
+  let allUserReviews = user["reviewIds"];
+  let reviewsList = [];
+  let commentList = [];
+  try {
+    for (let i of allUserReviews) {
+      console.log(i);
+      let review = await reviewData.getReviewById(i);
+      reviewsList.push(review);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  try {
+    let comments = await commentData.getAllComments();
+    for (let c of comments) {
+      if(c.userId === userId)
+      commentList.push(c);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+
+  res.render("pages/userHomePage", {
+    title: "User Home Page",
+    user: user,
+    hasLogin: true,
+    list: favHouseList,
+    reviews: reviewsList,
+    comments: commentList
+  });
+
+
 });
 
 router.post("/", async (req, res) => {
