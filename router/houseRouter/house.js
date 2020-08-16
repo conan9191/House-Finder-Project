@@ -42,11 +42,11 @@ router.get("/updateHouse", async (req, res) => {
     }
 
     let houseList = await houseData.getAllHouseforCurrentUser(req.session.user);
-
+    //to hide edit and delete button
+    houseList = showEditandDeleteButton(houseList, true);
     console.log("update house=" + JSON.stringify(houseList));
     res.render("pages/houseList", {
       title: "Main Page",
-      canUpdate: "inline-block",
       list: houseList,
     });
   } catch (error) {
@@ -54,6 +54,7 @@ router.get("/updateHouse", async (req, res) => {
   }
 });
 
+//to edit house
 router.get("/add/:id", async (req, res) => {
   console.log("most outside Edit house");
   try {
@@ -92,11 +93,12 @@ router.post("/search", async (req, res) => {
   try {
     let info = await req.body;
     let searchList = await houseData.filterList(info);
+    //to hide edit and delete button
+    searchList = showEditandDeleteButton(searchList, false);
     //console.log(searchList);
 
     res.render("pages/houseList", {
       title: "Matched Houses",
-      canUpdate: "none", //to hide edit and delete button
       list: searchList,
     });
   } catch (e) {
@@ -440,6 +442,13 @@ async function configureAllcommentList(currentUser, allComments) {
   } else {
     throw `Empty comment list`;
   }
+}
+
+function showEditandDeleteButton(list, value) {
+  list.forEach((element) => {
+    element["canUpdate"] = value;
+  });
+  return list;
 }
 
 module.exports = router;

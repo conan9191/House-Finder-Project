@@ -42,19 +42,18 @@
 
                 <br>
 
-                <button id="edit" + {{this._id}} class="editComment" onclick="editHouse()" value={{this._id}}
-                    style="display: {{canUpdate}}"><a href="/house/add/{{this._id}}">Edit</a></button>
+                {{#if this.canUpdate}}
+                <button id="edit" + {{this._id}} class="editComment" onclick="editHouse()" value={{this._id}}><a
+                        href="/house/add/{{this._id}}">Edit</a></button>
 
                 <button type=" button" id="delete" + {{this._id}} class="deleteComment" onClick="deleteHouse()"
-                    value={{this._id}} style="display: {{canUpdate}}">Delete</button>
-                <br>
-                <br>
+                    value={{this._id}}>Delete</button>
+                {{/if}}
 
 
 
             </div>
             {{/each}}
-
 
         </div>
     </div>
