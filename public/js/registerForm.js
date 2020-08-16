@@ -118,3 +118,74 @@ function validateEmail(elementValue) {
   let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
   return emailPattern.test(elementValue);
 }
+//Select and load image
+
+function readimage() {
+  let showpicture = document.getElementById("showpicture");
+  let profilepicture = document.getElementById("profilepicture");
+  if (!profilepicture.files || !profilepicture.files[0]) return;
+  while (showpicture.firstChild) {
+    showpicture.removeChild(showpicture.firstChild);
+  }
+  let curFiles = profilepicture.files;
+
+  if (curFiles.length === 0) {
+    let para = document.createElement("p");
+    para.textContent = "No files currently selected for upload";
+    showpicture.appendChild(para);
+  } else {
+    let list = document.createElement("ol");
+    showpicture.appendChild(list);
+
+    for (let file of curFiles) {
+      let listItem = document.createElement("li");
+      let para = document.createElement("p");
+
+      para.textContent = `File name ${file.name}, file size ${returnFileSize(
+        file.size
+      )}.`;
+
+      let FR = new FileReader();
+      let profilePictureArray2 = [];
+      FR.addEventListener("load", (evt) => {
+        let img = new Image();
+        img.height = "100";
+        img.width = "100";
+        img.src = evt.target.result;
+        console.log("image source =" + img.src);
+        profilePictureArray2.push(img.src);
+        listItem.appendChild(img);
+      });
+      FR.readAsDataURL(file);
+      listItem.appendChild(para);
+      list.appendChild(listItem);
+    }
+  }
+}
+
+const fileTypes2 = [
+  "image/apng",
+  "image/bmp",
+  "image/gif",
+  "image/jpeg",
+  "image/pjpeg",
+  "image/png",
+  "image/svg+xml",
+  "image/tiff",
+  "image/webp",
+  "image/x-icon",
+];
+
+function validFileType(file) {
+  return fileTypes2.includes(file.type);
+}
+
+function returnFileSize(number) {
+  if (number < 1024) {
+    return number + "bytes";
+  } else if (number >= 1024 && number < 1048576) {
+    return (number / 1024).toFixed(1) + "KB";
+  } else if (number >= 1048576) {
+    return (number / 1048576).toFixed(1) + "MB";
+  }
+}

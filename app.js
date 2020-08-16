@@ -15,11 +15,26 @@ const app = express();
 const static = express.static(__dirname + "/public");
 const exphbs = require("express-handlebars");
 const session = require("express-session");
+let bodyParser = require("body-parser");
 
 const configRoutes = require("./router/index");
 
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(
+  bodyParser.urlencoded({
+    limit: "50mb",
+    extended: true,
+    parameterLimit: 50000,
+  })
+);
+
 // view engine setup
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.engine(
+  "handlebars",
+  exphbs({
+    defaultLayout: "main",
+  })
+);
 app.set("view engine", "handlebars");
 
 app.use("/public", static);

@@ -12,7 +12,6 @@ const commentData = comment.commentsData;
 router.get("/", async (req, res) => {
   try {
     let houseList = await houseData.getAllHouse();
-    
     //console.log(houseList);
     res.render("pages/mainPage", {
       title: "Main Page",
@@ -33,6 +32,57 @@ router.get("/add", async (req, res) => {
   }
 });
 
+router.get("/updateHouse", async (req, res) => {
+  try {
+    if (!req.session || !req.session.user) {
+      res.status(404).json({
+        error: "To edit or delete house, must login with valid user.",
+      });
+      return;
+    }
+
+    let houseList = await houseData.getAllHouseforCurrentUser(req.session.user);
+    //to hide edit and delete button
+    houseList = showEditandDeleteButton(houseList, true);
+    console.log("update house=" + JSON.stringify(houseList));
+    res.render("pages/houseList", {
+      title: "Main Page",
+      list: houseList,
+    });
+  } catch (error) {
+    res.status(404).json({ error: "Houses not found" });
+  }
+});
+
+//to edit house
+router.get("/add/:id", async (req, res) => {
+  console.log("most outside Edit house");
+  try {
+    if (!req.session || !req.session.user) {
+      res.status(404).json({
+        error: "To edit or delete house, must login with valid user.",
+      });
+      return;
+    }
+
+    let houseId = "";
+    if (req.params.id) {
+      houseId = req.params.id;
+    }
+
+    let house = await houseData.getHouseById(houseId);
+
+    console.log("Edit house=" + JSON.stringify(house));
+    let houseType = house["houseType"];
+    res.render("pages/houseManage", {
+      title: "Edit house",
+      houseDetail: JSON.stringify(house),
+    });
+  } catch (error) {
+    res.status(404).json({ error: " edit Houses not found" });
+  }
+});
+
 router.get("/search", async (req, res) => {
   //the user shouldn't be able to manually enter this page
   res.redirect("/");
@@ -43,6 +93,8 @@ router.post("/search", async (req, res) => {
   try {
     let info = await req.body;
     let searchList = await houseData.filterList(info);
+    //to hide edit and delete button
+    searchList = showEditandDeleteButton(searchList, false);
     //console.log(searchList);
 
     res.render("pages/houseList", {
@@ -71,13 +123,10 @@ router.get("/:id", async (req, res) => {
       let filterHouse = userFavHouse.filter(function (houseObj) {
         return houseObj.houseId === req.params.id;
       });
-      // console.log("filterHouse = " + filterHouse);
-      // console.log("filterHouse = " + filterHouse.length);
 
       if (filterHouse.length > 0) {
         isFavHouse = true;
       }
-      // console.log("isFavHouse = " + isFavHouse);
     }
   }
 
@@ -86,45 +135,45 @@ router.get("/:id", async (req, res) => {
   let reviews = [];
   let totalRate = 0;
   let aveRate = 0;
-  try{
+  try {
     reviews = await reviewData.getReviewByHouseId(req.params.id);
-  }catch(error){
+  } catch (error) {
     console.log(error);
   }
 
-  for(r of reviews){
+  for (r of reviews) {
     let review = {
-      username: '',
+      username: "",
       reviewData: {},
-      currentUser: false
+      currentUser: false,
     };
     let currentUser = req.session.user ? req.session.user : "";
     let user = {};
-    try{
+    try {
       user = await userData.getUserById(r.userId);
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
-    try{
+
+    try {
       allcommentsList = await configureAllcommentList(currentUser, r.comments);
-    }catch(error){
+    } catch (error) {
       console.log(error);
-    } 
+    }
     r.comments = allcommentsList;
-    review['username'] = user.firstName + " " + user.lastName;
-    review['reviewData'] = r;
-    if(req.session.user === r.userId){
-      review['currentUser'] = true;
+    review["username"] = user.firstName + " " + user.lastName;
+    review["reviewData"] = r;
+    if (req.session.user === r.userId) {
+      review["currentUser"] = true;
     }
     reviewsList.push(review);
     totalRate = totalRate + r.rating;
   }
-  if(reviews && reviews.length!==0){
-    if(reviews.length===0) throw "The denominator can not be 0"
+  if (reviews && reviews.length !== 0) {
+    if (reviews.length === 0) throw "The denominator can not be 0";
     aveRate = (totalRate / reviews.length).toFixed(1);
-  } 
-  else aveRate = 0;
-  
+  } else aveRate = 0;
+
   try {
     let house = await houseData.getHouseById(req.params.id);
     console.log(house);
@@ -162,9 +211,16 @@ router.post("/", async (req, res) => {
     res.status(404).json({ error: "Must supply all fields." });
     return;
   }
+  if (!req.session || !req.session.user) {
+    res
+      .status(404)
+      .json({ error: "To add new house, must login with valid user." });
+    return;
+  }
 
   let houseParamBody = req.body;
   try {
+    houseParamBody["userId"] = req.session.user;
     let newHouse = await houseData.addHouse(houseParamBody);
     res.json(newHouse);
   } catch (error) {
@@ -332,7 +388,7 @@ function checkAndUpdate(newHouse, oldHouse) {
   return oldHouse;
 }
 
-async function configureAllcommentList(currentUser,allComments ) {
+async function configureAllcommentList(currentUser, allComments) {
   console.log("currentUser = " + currentUser);
   let allcommentsList = [];
   if (allComments) {
@@ -386,6 +442,13 @@ async function configureAllcommentList(currentUser,allComments ) {
   } else {
     throw `Empty comment list`;
   }
+}
+
+function showEditandDeleteButton(list, value) {
+  list.forEach((element) => {
+    element["canUpdate"] = value;
+  });
+  return list;
 }
 
 module.exports = router;

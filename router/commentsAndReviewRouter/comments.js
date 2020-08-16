@@ -255,7 +255,7 @@ async function configureAllcommentList(currentUser) {
           //to hide edit and delete button. If current user is same as added comment user
           //then show edit and delete button, else hide
           if (userId === currentUser) {
-            commentSchema.canUpdate = "block";
+            commentSchema.canUpdate = "inline-block";
           } else {
             commentSchema.canUpdate = "none";
           }

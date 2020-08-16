@@ -4,7 +4,7 @@
  * @Author: sueRimn
  * @Date: 2020-08-07 16:20:41
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-13 06:07:26
+ * @LastEditTime: 2020-08-16 15:53:21
  */
 const express = require("express");
 const router = express.Router();
@@ -54,6 +54,34 @@ router.get("/", async (req, res) => {
     list: favHouseList,
     reviews: reviewsList
   });
+});
+
+router.post("/", async (req, res) => {
+  let postBody = req.body;
+  let profilePicture = postBody.profilePicture
+  console.log(profilePicture);
+  if (!profilePicture) {
+      res.status(400).json({ error: "You must provide data to create a profilePicture" });
+      return;
+  }
+  let userId = req.session.user;
+  if (!userId) {
+      res.status(400).json({ error: "You must be a login User" });
+      return;
+  }
+  
+  let loginUser = {};
+  try {
+      try {
+          loginUser = await userData.getUserById(userId);
+      } catch (error) {
+          console.log(error);
+      }
+      loginUser.profilePicture = profilePicture;
+      await userData.updateUser(userId, loginUser);
+  } catch (error) {
+      console.log(error);
+  }
 });
 
 module.exports = router;
