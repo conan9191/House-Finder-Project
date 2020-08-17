@@ -123,3 +123,8 @@
   width: 100%;
   height: 100%;
 }
+
+#deleteButton{
+  margin-left: 20px;
+  margin-bottom: 20px;
+}

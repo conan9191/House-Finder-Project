@@ -4,7 +4,7 @@
  * @Author: sueRimn
  * @Date: 2020-08-07 16:20:41
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-16 16:52:33
+ * @LastEditTime: 2020-08-16 20:09:53
  */
 const express = require("express");
 const router = express.Router();
@@ -12,6 +12,7 @@ const data = require("../../data/userData");
 const userData = data.users;
 const house = require("../../data/houseData");
 const houseData = house.houseData;
+const favHouseData = house.favHouseData;
 const review = require("../../data/commentAndReviewData");
 const reviewData = review.reviewsDate;
 const comment = require("../../data/commentAndReviewData");
@@ -19,6 +20,10 @@ const commentData = comment.commentsData;
 
 router.get("/", async (req, res) => {
   let userId = req.session.user;
+  if(!userId){
+
+  }
+
   let user = {};
   try {
     user = await userData.getUserById(userId);
@@ -155,6 +160,65 @@ router.post("/", async (req, res) => {
   } catch (error) {
       console.log(error);
   }
+});
+
+router.delete("/", async (req, res) => {
+  let userId = req.session.user;
+  if (!userId) {
+    res.status(400).json({ error: "You must Supply and ID to delete" });
+    return;
+  }
+  let user = {};
+  try {
+    user = await userData.getUserById(userId);
+  } catch (e) {
+    res.status(404).json({ error: "user not found" });
+    return;
+  }
+  try {
+    user = await userData.getUserById(userId);
+  } catch (e) {
+    res.status(404).json({ error: "user not found" });
+    return;
+  }
+  let reviewIds = user.reviewIds;
+  for(let i of reviewIds){
+    let review = {};
+    try {
+      review = await reviewData.getReviewById(i);
+    } catch (e) {
+      console.log(e);
+    }
+    let comments = review.comments;
+    for(let c of comments){
+      try{
+          await commentData.deleteComment(c._id);
+      }catch (e) {
+          console.log(e);
+      }
+    }
+    try {
+      await reviewData.removeReview(i);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  let favourites = user.favourites;
+  for(let f of favourites){
+    let favHouseId = f._id;
+    try {
+      await favHouseData.deleteFavouriteHouse(favHouseId);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  try {
+    await userData.removeUser(userId);
+  } catch (e) {
+    console.log(error);
+  }
+  req.session.cookie.expires = new Date(new Date().getTime - 60).getTime();
+  req.session.destroy();
 });
 
 module.exports = router;
