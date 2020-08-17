@@ -12,10 +12,42 @@ const commentData = comment.commentsData;
 router.get("/", async (req, res) => {
   try {
     let houseList = await houseData.getAllHouse();
-    //console.log(houseList);
+    
+    let houseInfo = [];
+    for (let i=0; i<houseList.length; i++) {
+      let reviews = await reviewData.getReviewByHouseId(houseList[i]._id);
+      let sum = 0;
+      for (let j=0; j<reviews.length; j++)
+        sum += await reviews[j].rating;
+
+      let avg = 0;
+      avg = (sum/reviews.length).toFixed(1);
+      houseInfo.push([i, reviews.length, avg]);
+    }
+
+    let ratingSort = houseInfo;
+    let reviewSort = houseInfo;
+
+    ratingSort = ratingSort.sort(function(a, b) {
+      return b[2] - a[2];
+    });
+
+    let ratingList = [];
+    for (let i=0; i<ratingSort.length; i++) 
+      ratingList.push(houseList[ratingSort[i][0]]); 
+      
+    reviewSort = reviewSort.sort(function(a, b) {
+      return b[1] - a[1];
+    });
+
+    let reviewList = [];
+    for (let i=0; i<reviewSort.length; i++) 
+      reviewList.push(houseList[reviewSort[i][0]]);
+    
     res.render("pages/mainPage", {
       title: "Main Page",
-      list: houseList,
+      rateList: ratingList,
+      reviewList: reviewList
     });
   } catch (error) {
     res.status(404).json({ error: "Houses not found" });
@@ -97,9 +129,31 @@ router.post("/search", async (req, res) => {
     searchList = showEditandDeleteButton(searchList, false);
     //console.log(searchList);
 
+    let houseInfo = [];
+    for (let i=0; i<searchList.length; i++) {
+      let reviews = await reviewData.getReviewByHouseId(searchList[i]._id);
+      let sum = 0;
+      for (let j=0; j<reviews.length; j++)
+        sum += await reviews[j].rating;
+
+      let avg = 0;
+      avg = (sum/reviews.length).toFixed(1);
+      houseInfo.push([i, reviews.length, avg]);
+    }
+
+    let ratingSort = houseInfo;
+
+    ratingSort = ratingSort.sort(function(a, b) {
+      return b[2] - a[2];
+    });
+
+    let ratingList = [];
+    for (let i=0; i<ratingSort.length; i++) 
+      ratingList.push(searchList[ratingSort[i][0]]); 
+
     res.render("pages/houseList", {
       title: "Matched Houses",
-      list: searchList,
+      list: ratingList,
     });
   } catch (e) {
     res.status(500);
@@ -200,6 +254,10 @@ router.get("/:id", async (req, res) => {
       park: house.parkingAvailable,
       reviewsList: reviewsList,
       aveRate: aveRate,
+      variant: house.houseType.type,
+      bedroom: house.houseType.bedroom,
+      hall: house.houseType.hall,
+      kitchen: house.houseType.kitchen
     });
   } catch (error) {
     res.status(404).json({ error: "Could not find house" });
