@@ -1,4 +1,3 @@
-
 .fav {
   background-color: green;
   color: aliceblue;
@@ -46,27 +45,27 @@
   font-weight: bolder;
 }
 
-.profilePic{
-  position:relative;
+.profilePic {
+  position: relative;
   margin-top: 10px;
   height: 120px;
   width: 120px;
   border-radius: 50%;
   background: grey;
   border-color: black;
-  border-style:solid; 
-  border-width:1px; 
-  border-color:#000;
-  text-align:center;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #000;
+  text-align: center;
   overflow: hidden;
 }
-.profilePic img{
+.profilePic img {
   width: 100%;
   height: 100%;
   cursor: pointer;
 }
 
-.reviewPic{
+.reviewPic {
   position: relative;
   left: 0px;
   top: 0px;
@@ -77,25 +76,25 @@
   border-radius: 50%;
   background: grey;
   border-color: black;
-  border-style:solid; 
-  border-width:1px; 
-  border-color:#000;
-  text-align:center;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #000;
+  text-align: center;
   overflow: hidden;
 }
-.reviewUser{
+.reviewUser {
   float: left;
   position: relative;
-  margin-top: -23px;  
+  margin-top: -23px;
   left: 40px;
   top: 0px;
 }
-.reviewPic img{
+.reviewPic img {
   width: 100%;
   height: 100%;
 }
 
-.commentPic{
+.commentPic {
   position: relative;
   left: 0px;
   top: 0px;
@@ -106,25 +105,30 @@
   border-radius: 50%;
   background: grey;
   border-color: black;
-  border-style:solid; 
-  border-width:1px; 
-  border-color:#000;
-  text-align:center;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #000;
+  text-align: center;
   overflow: hidden;
 }
-.commentUser{
+.commentUser {
   float: left;
   position: relative;
-  margin-top: -23px;  
+  margin-top: -23px;
   left: 35px;
   top: 0px;
 }
-.commentPic img{
+.commentPic img {
   width: 100%;
   height: 100%;
 }
 
-#deleteButton{
+#deleteButton {
   margin-left: 20px;
   margin-bottom: 20px;
+}
+
+#houseType {
+  background-color: white;
+  color: #000;
 }
