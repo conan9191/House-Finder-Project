@@ -97,9 +97,12 @@
     <h2>{{aveRate}} out of 5</h2>
     {{#each reviewsList}}
     <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">
-                {{this.username}}
+        <div class="panel-heading" >
+            <div class="reviewPic">
+			    <img src="/public/image/{{this.profileImg}}" alt="user">
+		    </div>
+            <h3 class="panel-title reviewUser">
+                <a href="http://localhost:3000/account/{{this.reviewData.userId}}">{{this.username}}</a>
             </h3>
         </div>
         <div class="panel-body">
@@ -110,16 +113,25 @@
                 {{#each this.reviewData.comments}}
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <label class="commentUsername">{{this.userName}}</label>
+                        <div class="commentPic">
+			                <img src="/public/image/{{this.profilePicture}}" alt="user">
+		                </div>
+                        <h4 class="panel-title commentUser">
+                            
+                            <label class="commentUsername"><a href="http://localhost:3000/account/{{this.userId}}">{{this.userName}}</a></label>
                         </h4>
                     </div>
                     <div class="panel-body">
                         <label class="commentField" id="{{this._id}}" value={{this._id}}>{{this.text}}</label>
                         <button id="edit{{this._id}}" class="editComment" onclick="editcomment()" value={{this._id}}
                             style="display: {{this.canUpdate}}">Edit</button>
-                        <button type="button" id="delete{{this._id}}" class="deleteComment" onclick="deletecomment()"
-                            value={{this._id}} style="display: {{this.canUpdate}}">Delete</button>
+                        <button type="button" id="delete{{this._id}}" class="deleteComment" onclick="deletecomment()" value={{this._id}}
+                            style="display: {{this.canUpdate}}">Delete</button>
+
+                        <div class="error" id="error{{this._id}}" hidden=true>Please enter valid comment.</div>
+                        <textarea class="commentTextarea" id="commentTextarea{{this._id}}" rows="4" cols="50" value="" hidden=true></textarea>
+                        <button id="commentDoneButton{{this._id}}" class="commentDone" onclick="submitComment()" value={{this._id}} hidden=true>Done</button>
+
                     </div>
                 </div>
                 {{/each}}

@@ -198,6 +198,7 @@ router.get("/:id", async (req, res) => {
   for (r of reviews) {
     let review = {
       username: "",
+      profileImg: "",
       reviewData: {},
       currentUser: false,
     };
@@ -216,6 +217,7 @@ router.get("/:id", async (req, res) => {
     }
     r.comments = allcommentsList;
     review["username"] = user.firstName + " " + user.lastName;
+    review["profileImg"] = user.profilePicture;
     review["reviewData"] = r;
     if (req.session.user === r.userId) {
       review["currentUser"] = true;
@@ -457,6 +459,7 @@ async function configureAllcommentList(currentUser, allComments) {
           _id: "",
           text: "",
           userId: "",
+          profilePicture:"",
           userName: "",
           canUpdate: "",
         };
@@ -484,6 +487,10 @@ async function configureAllcommentList(currentUser, allComments) {
           name += user["firstName"] ? user["firstName"] : "";
           name += user["lastName"] ? user["lastName"] : "";
           commentSchema.userName = name;
+        }
+        //profile image
+        if (user && user["profilePicture"]){
+          commentSchema.profilePicture = user["profilePicture"];
         }
 
         //comment text

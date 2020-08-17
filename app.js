@@ -4,7 +4,7 @@
  * @Author: sueRimn
  * @Date: 2020-08-08 14:15:11
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-11 08:50:40
+ * @LastEditTime: 2020-08-16 19:51:51
  */
 let createError = require("http-errors");
 const express = require("express");
@@ -86,6 +86,14 @@ app.use("/logout", async (req, res, next) => {
 
 app.use("/registration", async (req, res, next) => {
   if (req.session.user) {
+    return res.redirect("/");
+  } else {
+    next();
+  }
+});
+
+app.use("/account", async (req, res, next) => {
+  if (!req.session.user) {
     return res.redirect("/");
   } else {
     next();

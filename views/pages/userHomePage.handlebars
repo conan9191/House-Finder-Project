@@ -1,13 +1,11 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h3 class="panel-title">
-			Account:
+			{{user.firstName}}{{user.lastName}}'s Home Page:
 		</h3>
 		<div class="profilePic">
-			<img src="/public/image/{{user.profilePicture}}" onclick="imageOnClick()" alt="user">
+			<img src="/public/image/{{user.profilePicture}}" alt="user" style="cursor:default;">
 		</div>
-		<label for="profilepicture" style="font-size:1px; color: grey;">Click on change Avatar</label>
-		<input type="file" style="display:none" id="updatepicture" name="updatepicture" onchange="updateimage()" accept=".jpg, .jpeg, .png">
 	</div>
 	<div class="panel-body">
 		<ul id="myTab" class="nav nav-tabs">
@@ -114,8 +112,5 @@
 		</div>
 	</div>
 </div>
-<button type="button" id="deleteButton" onclick="deleteAccount()"
-		class="btn btn-default"> Delete Your Account</button>
 
 <script type="text/javascript" src="/public/js/profilePicture.js"></script>
-<script type="text/javascript" src="/public/js/account.js"></script>
