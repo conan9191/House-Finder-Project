@@ -1,0 +1,139 @@
+{{#if hasEmail}}
+    <div class="container text-center">
+        <div class="row justify-content-center">
+            <div class="col-4">
+                <div class="alert alert-danger text-left" role="alert">
+                    <div class="alert-heading errorHeading">Error</div>
+                    <div class="foundemail">{{found}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+{{/if}}
+
+{{#if hasErrors}}
+    <div class="container text-center">
+        <div class="row justify-content-center">
+            <div class="col-4">
+                <div class="alert alert-danger text-left" role="alert">
+                    <div class="alert-heading errorHeading">Error</div>
+                    <ul>
+                        {{#each error_messages}}
+                            <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{{/if}}
+
+<div id="errorContainerReg" style="display: none;">
+    <div class="container text-center">
+        <div class="row justify-content-center">
+            <div class="col-4">
+                <div class="alert alert-danger text-left" role="alert">
+                    <div class="alert-heading errorHeading">Error</div>
+                    <div id="FirstNameError">You must enter your First Name</div>
+                    <div id="LastNameError">You must enter your Last Name</div>
+                    <div id="EmailError">You must enter an email address</div>
+                    <div id="passwordError">You must enter a password</div>
+                    <div id="pictureError">You must enter a profile picture</div>
+                    <div id="streetError">You must enter a street</div>
+                    <!--                    <div id="housenumberError">You must enter a house number</div>-->
+                    <!--                    <div id="cityError">You must enter a city</div>-->
+                    <!--                    <div id="stateError">You must enter a state</div>-->
+                    <!--                    <div id="pincodeError">You must enter a pincode</div>-->
+                    <!--                    <div id="ageError">You must enter a age</div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-6 text-left">
+            <h1 class="display-4">Register</h1>
+            <br>
+            <br>
+            <form id="regForm" action="/registration" method="post">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="firstName">First Name</label>
+                        <input maxlength="50" type="text" name="firstName" class="form-control" id="firstName"
+                               placeholder="First Name">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" maxlength="50" name="lastName" class="form-control" id="lastName"
+                               placeholder="Last Name">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="email">Email</label>
+                        <input type="email" maxlength="50" name="email" class="form-control" id="email" placeholder="Email">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="password">Password</label>
+                        <input type="password" maxlength="50" name="password" class="form-control" id="password"
+                               placeholder="Password">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="street">street</label>
+                        <input type="text" maxlength="50" name="street" class="form-control" id="street" placeholder="street">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="profilepicture">profilepicture</label>
+                        <input type="file" id="profilepicture" name="profilepicture" onchange="readimage()" accept=".jpg, .jpeg, .png">
+                        <div id="showpicture">
+                            <p>No files currently selected for upload</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="house_number">house_number</label>
+                        <input type="text" maxlength="50" name="house_number" class="form-control" id="house_number" placeholder="housenumber">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="city">city</label>
+                        <input type="text" maxlength="50" name="city" class="form-control" id="city"
+                               placeholder="city">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="state">state</label>
+                        <input type="text" maxlength="50" name="state" class="form-control" id="state" placeholder="state">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="pincode">pincode</label>
+                        <input type="text" maxlength="50" name="pincode" class="form-control" id="pincode"
+                               placeholder="pincode">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="age">age</label>
+                        <input type="text" maxlength="50" name="age" class="form-control" id="age" placeholder="age">
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+
+ <script type="text/javascript" src="/public/js/registerForm.js"></script>

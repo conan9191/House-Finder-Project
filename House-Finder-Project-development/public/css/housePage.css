@@ -1,0 +1,45 @@
+.cover-container {
+  height: 200px;
+  width: 100%;
+  white-space: nowrap;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+.cover-item {
+  position: relative;
+  display: inline-block;
+  margin: 8px 8px;
+  box-shadow: 2px 2px 4px #bbb;
+  border-top-right-radius: 4px;
+
+  width: 200px;
+  height: 158px;
+  vertical-align: bottom;
+  background-position: top left;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#map {
+  padding-left: 50px;
+}
+
+.header {
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  color: cadetblue;
+}
+
+.paraClass {
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  color: gray;
+}
+
+.commentClass {
+  color: blue;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: large;
+  font-weight: normal;
+}
