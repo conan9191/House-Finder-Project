@@ -17,170 +17,176 @@
 
     <!-- CSS in housePage.css -->
 
-
-    <div class="cover-container">
-        {{#each houseImage}}
-        <img class="cover-item" src="{{this}}" alt="house">
-        {{/each}}
-    </div>
-
-
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <iframe id="map" width="600" height="450" frameborder="0" style="border:0"
-                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyC5Y2OeJZ_gqoeUxehJ6BaKdONCF0g1JRU&q={{latitude}},{{longitude}}&zoom=10"
-                allowfullscreen>
-            </iframe>
-        </div>
-        <div class="form-group col-md-6" style=" height: 100%;">
-            <h3 class="header">Address</h3>
-            <p class="paraClass" id="address"> {{houseNumber}} {{street}} <br> {{city}}, {{state}}, {{zip}} </p>
-        </div>
-    </div>
-
-
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <h3 class="header">Rent and Lease Information</h3>
-            <p class="paraClass" id="priceInfo"> Rent: ${{rent}} <br> Lease duration: {{startDate}} - {{endDate}} </p>
+    <div>
+        <div class="cover-container">
+            {{#each houseImage}}
+            <img class="cover-item" src="{{this}}" alt="house">
+            {{/each}}
         </div>
 
-        
-        <div class="form-group col-md-6">
-            <h3 class="header"> House Type </h3>
-            <p class="paraClass" id="priceInfo"> 
-                Variant: {{variant}} <br>
-                {{bedroom}} Bedroom(s) <br>
-                {{hall}} Hall(s) <br>
-                {{kitchen}} Kitchen(s)
-            </p> 
-        </div>
-        
-        <div class="form-group col-md-6">
-            <h3 class="header">Pet Friendly </h3>
-            <p class="paraClass"> {{pet}} </p>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <iframe id="map" width="600" height="450" frameborder="0" style="border:0"
+                    src="https://www.google.com/maps/embed/v1/place?key=AIzaSyC5Y2OeJZ_gqoeUxehJ6BaKdONCF0g1JRU&q={{latitude}},{{longitude}}&zoom=10"
+                    allowfullscreen>
+                </iframe>
+            </div>
+            <div class="form-group col-md-6" style=" height: 100%;">
+                <h3 class="header">Address</h3>
+                <p class="paraClass" id="address"> {{houseNumber}} {{street}} <br> {{city}}, {{state}}, {{zip}} </p>
+            </div>
         </div>
 
-        <div class="form-group col-md-6">
-            <h3 class="header">Parking Available </h3>
-            <p class="paraClass"> {{park}} </p>
-        </div>
 
-        <div class="form-group col-md-6">
-            {{#if isFavHouse}}
-            <button id="favButton" value="{{houseId}}" class="fav">Favourite</button>
-            {{else}}
-            <button id="favButton" value="{{houseId}}" class="fav"> Add Favourite</button>
-            {{/if}}
-        </div>
-    </div>
-
-
-    <div class="form-row">
-        <div class="form-group col-md-6" style=" width: 100%;">
-            <h3 class="header">Other Amenities </h3>
-            <p class="paraClass" id="houseMisc"> {{amenities}}
-        </div>
-        <div class="form-group col-md-6" style=" width: 100%;">
-            <h3 class="header">House Description </h3>
-            <p class="paraClass" id="houseDescription"> {{description}} </p>
-        </div>
-
-    </div>
-</div>
-
-
-
-
-<!--Reviews-->
-<div class="reviews">
-    <h2>{{aveRate}} out of 5</h2>
-    {{#each reviewsList}}
-    <div class="panel panel-default">
-        <div class="panel-heading" >
-            <div class="reviewPic">
-			    <img src="/public/image/{{this.profileImg}}" alt="user">
-		    </div>
-            <h3 class="panel-title reviewUser">
-                <a href="http://localhost:3000/account/{{this.reviewData.userId}}">{{this.username}}</a>
-            </h3>
-        </div>
-        <div class="panel-body">
-            <h3>{{this.reviewData.rating}} points</h3>
-            <h2>{{this.reviewData.reviewText}}</h2>
-            <div class="commentInRevievs">
-                <input type="hidden" name="reviewId" value="{{this.reviewData._id}}">
-                {{#each this.reviewData.comments}}
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <div class="commentPic">
-			                <img src="/public/image/{{this.profilePicture}}" alt="user">
-		                </div>
-                        <h4 class="panel-title commentUser">
-                            
-                            <label class="commentUsername"><a href="http://localhost:3000/account/{{this.userId}}">{{this.userName}}</a></label>
-                        </h4>
-                    </div>
-                    <div class="panel-body">
-                        <label class="commentField" id="{{this._id}}" value={{this._id}}>{{this.text}}</label>
-                        <button id="edit{{this._id}}" class="editComment" onclick="editcomment()" value={{this._id}}
-                            style="display: {{this.canUpdate}}">Edit</button>
-                        <button type="button" id="delete{{this._id}}" class="deleteComment" onclick="deletecomment()" value={{this._id}}
-                            style="display: {{this.canUpdate}}">Delete</button>
-
-                        <div class="error" id="error{{this._id}}" hidden=true>Please enter valid comment.</div>
-                        <textarea class="commentTextarea" id="commentTextarea{{this._id}}" rows="4" cols="50" value="" hidden=true></textarea>
-                        <button id="commentDoneButton{{this._id}}" class="commentDone" onclick="submitComment()" value={{this._id}} hidden=true>Done</button>
-
-                    </div>
-                </div>
-                {{/each}}
-                <div class="error" id="error{{this.reviewData._id}}" hidden=true>Please enter valid comment.</div>
-                <textarea class="commentTextarea" id="commentTextarea{{this.reviewData._id}}" rows="4" cols="50"
-                    value="" hidden=true></textarea>
-                <button id="commentDoneButton{{this.reviewData._id}}" class="commentDone" onclick="submitComment()"
-                    value={{this.reviewData._id}} hidden=true>Done</button>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <h3 class="header">Rent and Lease Information</h3>
+                <p class="paraClass" id="priceInfo"> Rent: ${{rent}} <br> Lease duration: {{startDate}} - {{endDate}}
+                </p>
             </div>
 
-            <div class="optReview">
-                <button id="commentButton{{this.reviewData._id}}" value="{{this.reviewData._id}}" onclick="addComment()"
-                    class="btn btn-default"> Leave a comment</button>
-                {{#if this.currentUser}}
-                <button type="button" id="deleteButton{{this.reviewData._id}}" onclick="deletereview()"
-                    class="btn btn-default" value={{this.reviewData._id}}> Delete</button>
+
+            <div class="form-group col-md-6">
+                <h3 class="header"> House Type </h3>
+                <p class="paraClass" id="priceInfo">
+                    Variant: {{variant}} <br>
+                    {{bedroom}} Bedroom(s) <br>
+                    {{hall}} Hall(s) <br>
+                    {{kitchen}} Kitchen(s)
+                </p>
+            </div>
+
+            <div class="form-group col-md-6" style="width: 50%;">
+                <h3 class=" header" style="width: 50%; marginwidth=50%">Pet Friendly </h3>
+                <p class="paraClass"> {{pet}} </p>
+                <h3 class="header" style="width: 50%;">Parking Available </h3>
+                <p class="paraClass"> {{park}} </p>
+            </div>
+
+
+            <div class="form-group col-md-6" style=" width: 100%;">
+                {{#if isFavHouse}}
+                <button id="favButton" value="{{houseId}}" class="fav">Favourite</button>
+                {{else}}
+                <button id="favButton" value="{{houseId}}" class="fav"> Add Favourite</button>
                 {{/if}}
             </div>
         </div>
-    </div>
-    <br />
-    {{/each}}
-    <br />
-    <div class="panel panel-info">
-        <div class="panel-heading">
-            <h3 class="panel-title">Leave Your Review</h3>
-        </div>
-        <div class="panel-body">
-            <form id="reviewForm" role="form" action="/review" method="POST">
-                <div class="form-group">
-                    <label for="rating">Rating this house：</label>
-                    <select class="form-control" name="rating">
-                        <option>5</option>
-                        <option>4</option>
-                        <option>3</option>
-                        <option>2</option>
-                        <option>1</option>
-                    </select>
-                    <label for="review">Review:</label>
-                    <textarea class="form-control" rows="5" name="reviewText"></textarea>
-                    <input type="hidden" name="houseId" value="{{houseId}}"> 　
-                    <button type="submit" class="btn btn-default">Submit</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
-<script type="text/javascript" src="/public/js/favouriteHouse.js"></script>
-<script type="text/javascript" src="/public/js/house.js"></script>
-<script type="text/javascript" src="/public/js/review.js"></script>
-<script type="text/javascript" src="/public/js/comment.js"></script>
+
+        <div class="form-row">
+            <div class="form-group col-md-6" style=" width: 100%;">
+                <h3 class="header">Other Amenities </h3>
+                <p class="paraClass" id="houseMisc"> {{amenities}}
+            </div>
+            <div class="form-group col-md-6" style=" width: 100%;">
+                <h3 class="header">House Description </h3>
+                <p class="paraClass" id="houseDescription"> {{description}} </p>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+    <!--Reviews-->
+    <div class="reviews">
+        <div class="panel-heading">
+            <h2>{{aveRate}} out of 5</h2>
+        </div>
+
+        {{#each reviewsList}}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="reviewPic">
+                    <img src="/public/image/{{this.profileImg}}" alt="user">
+                </div>
+                <h3 class="panel-title reviewUser">
+                    <a href="http://localhost:3000/account/{{this.reviewData.userId}}">{{this.username}}</a>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <h3>{{this.reviewData.rating}} points</h3>
+                <h2>{{this.reviewData.reviewText}}</h2>
+                <div class="commentInRevievs">
+                    <input type="hidden" name="reviewId" value="{{this.reviewData._id}}">
+                    {{#each this.reviewData.comments}}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="commentPic">
+                                <img src="/public/image/{{this.profilePicture}}" alt="user">
+                            </div>
+                            <h4 class="panel-title commentUser">
+
+                                <label class="commentUsername"><a
+                                        href="http://localhost:3000/account/{{this.userId}}">{{this.userName}}</a></label>
+                            </h4>
+                        </div>
+                        <div class="panel-body">
+                            <label class="commentField" id="{{this._id}}" value={{this._id}}>{{this.text}}</label>
+                            <button id="edit{{this._id}}" class="editComment" onclick="editcomment()" value={{this._id}}
+                                style="display: {{this.canUpdate}}">Edit</button>
+                            <button type="button" id="delete{{this._id}}" class="deleteComment"
+                                onclick="deletecomment()" value={{this._id}}
+                                style="display: {{this.canUpdate}}">Delete</button>
+
+                            <div class="error" id="error{{this._id}}" hidden=true>Please enter valid comment.</div>
+                            <textarea class="commentTextarea" id="commentTextarea{{this._id}}" rows="4" cols="50"
+                                value="" hidden=true></textarea>
+                            <button id="commentDoneButton{{this._id}}" class="commentDone" onclick="submitComment()"
+                                value={{this._id}} hidden=true>Done</button>
+
+                        </div>
+                    </div>
+                    {{/each}}
+                    <div class="error" id="error{{this.reviewData._id}}" hidden=true>Please enter valid comment.</div>
+                    <textarea class="commentTextarea" id="commentTextarea{{this.reviewData._id}}" rows="4" cols="50"
+                        value="" hidden=true></textarea>
+                    <button id="commentDoneButton{{this.reviewData._id}}" class="commentDone" onclick="submitComment()"
+                        value={{this.reviewData._id}} hidden=true>Done</button>
+                </div>
+
+                <div class="optReview">
+                    <button id="commentButton{{this.reviewData._id}}" value="{{this.reviewData._id}}"
+                        onclick="addComment()" class="btn btn-default"> Leave a comment</button>
+                    {{#if this.currentUser}}
+                    <button type="button" id="deleteButton{{this.reviewData._id}}" onclick="deletereview()"
+                        class="btn btn-default" value={{this.reviewData._id}}> Delete</button>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+        <br />
+        {{/each}}
+        <br />
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Leave Your Review</h3>
+            </div>
+            <div class="panel-body">
+                <form id="reviewForm" role="form" action="/review" method="POST">
+                    <div class="form-group">
+                        <label for="rating">Rating this house：</label>
+                        <select class="form-control" name="rating">
+                            <option>5</option>
+                            <option>4</option>
+                            <option>3</option>
+                            <option>2</option>
+                            <option>1</option>
+                        </select>
+                        <label for="review">Review:</label>
+                        <textarea class="form-control" rows="5" name="reviewText"></textarea>
+                        <input type="hidden" name="houseId" value="{{houseId}}"> 　
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/public/js/favouriteHouse.js"></script>
+    <script type="text/javascript" src="/public/js/house.js"></script>
+    <script type="text/javascript" src="/public/js/review.js"></script>
+    <script type="text/javascript" src="/public/js/comment.js"></script>
