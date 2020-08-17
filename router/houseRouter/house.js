@@ -12,42 +12,41 @@ const commentData = comment.commentsData;
 router.get("/", async (req, res) => {
   try {
     let houseList = await houseData.getAllHouse();
-    
+
     let houseInfo = [];
-    for (let i=0; i<houseList.length; i++) {
+    for (let i = 0; i < houseList.length; i++) {
       let reviews = await reviewData.getReviewByHouseId(houseList[i]._id);
       let sum = 0;
-      for (let j=0; j<reviews.length; j++)
-        sum += await reviews[j].rating;
+      for (let j = 0; j < reviews.length; j++) sum += await reviews[j].rating;
 
       let avg = 0;
-      avg = (sum/reviews.length).toFixed(1);
+      avg = (sum / reviews.length).toFixed(1);
       houseInfo.push([i, reviews.length, avg]);
     }
 
     let ratingSort = houseInfo;
     let reviewSort = houseInfo;
 
-    ratingSort = ratingSort.sort(function(a, b) {
+    ratingSort = ratingSort.sort(function (a, b) {
       return b[2] - a[2];
     });
 
     let ratingList = [];
-    for (let i=0; i<ratingSort.length; i++) 
-      ratingList.push(houseList[ratingSort[i][0]]); 
-      
-    reviewSort = reviewSort.sort(function(a, b) {
+    for (let i = 0; i < ratingSort.length; i++)
+      ratingList.push(houseList[ratingSort[i][0]]);
+
+    reviewSort = reviewSort.sort(function (a, b) {
       return b[1] - a[1];
     });
 
     let reviewList = [];
-    for (let i=0; i<reviewSort.length; i++) 
+    for (let i = 0; i < reviewSort.length; i++)
       reviewList.push(houseList[reviewSort[i][0]]);
-    
+
     res.render("pages/mainPage", {
       title: "Main Page",
       rateList: ratingList,
-      reviewList: reviewList
+      reviewList: reviewList,
     });
   } catch (error) {
     res.status(404).json({ error: "Houses not found" });
@@ -130,26 +129,25 @@ router.post("/search", async (req, res) => {
     //console.log(searchList);
 
     let houseInfo = [];
-    for (let i=0; i<searchList.length; i++) {
+    for (let i = 0; i < searchList.length; i++) {
       let reviews = await reviewData.getReviewByHouseId(searchList[i]._id);
       let sum = 0;
-      for (let j=0; j<reviews.length; j++)
-        sum += await reviews[j].rating;
+      for (let j = 0; j < reviews.length; j++) sum += await reviews[j].rating;
 
       let avg = 0;
-      avg = (sum/reviews.length).toFixed(1);
+      avg = (sum / reviews.length).toFixed(1);
       houseInfo.push([i, reviews.length, avg]);
     }
 
     let ratingSort = houseInfo;
 
-    ratingSort = ratingSort.sort(function(a, b) {
+    ratingSort = ratingSort.sort(function (a, b) {
       return b[2] - a[2];
     });
 
     let ratingList = [];
-    for (let i=0; i<ratingSort.length; i++) 
-      ratingList.push(searchList[ratingSort[i][0]]); 
+    for (let i = 0; i < ratingSort.length; i++)
+      ratingList.push(searchList[ratingSort[i][0]]);
 
     res.render("pages/houseList", {
       title: "Matched Houses",
@@ -259,7 +257,7 @@ router.get("/:id", async (req, res) => {
       variant: house.houseType.type,
       bedroom: house.houseType.bedroom,
       hall: house.houseType.hall,
-      kitchen: house.houseType.kitchen
+      kitchen: house.houseType.kitchen,
     });
   } catch (error) {
     res.status(404).json({ error: "Could not find house" });
@@ -459,7 +457,7 @@ async function configureAllcommentList(currentUser, allComments) {
           _id: "",
           text: "",
           userId: "",
-          profilePicture:"",
+          profilePicture: "",
           userName: "",
           canUpdate: "",
         };
@@ -474,7 +472,7 @@ async function configureAllcommentList(currentUser, allComments) {
           //to hide edit and delete button. If current user is same as added comment user
           //then show edit and delete button, else hide
           if (userId === currentUser) {
-            commentSchema.canUpdate = "block";
+            commentSchema.canUpdate = "inline-block";
           } else {
             commentSchema.canUpdate = "none";
           }
@@ -489,7 +487,7 @@ async function configureAllcommentList(currentUser, allComments) {
           commentSchema.userName = name;
         }
         //profile image
-        if (user && user["profilePicture"]){
+        if (user && user["profilePicture"]) {
           commentSchema.profilePicture = user["profilePicture"];
         }
 
