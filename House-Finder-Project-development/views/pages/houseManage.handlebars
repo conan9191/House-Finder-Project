@@ -1,0 +1,252 @@
+{{#if hasEmail}}
+<div class="container text-center">
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <div class="alert alert-danger text-left" role="alert">
+                <div class="alert-heading errorHeading">Error</div>
+                <div class="foundemail">{{found}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+{{/if}}
+
+{{#if hasErrors}}
+<div class="container text-center">
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <div class="alert alert-danger text-left" role="alert">
+                <div class="alert-heading errorHeading">Error</div>
+                <ul>
+                    {{#each error_messages}}
+                    <li>{{this}}</li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{{/if}}
+
+<div id="errorContainerReg">
+    <div class="container text-center">
+        <div class="row justify-content-center">
+
+            <div id="displayError" class="alert alert-danger text-left" role="alert" style="display: none;">
+
+                <div id="pictureError" style="display: none;">Upload atleast 1 house picture</div>
+                <div id="streetError" style="display: none;">You must enter a street</div>
+                <div id="housenumberError" style="display: none;">You must enter a house number</div>
+                <div id="cityError" style="display: none;">You must enter a city</div>
+                <div id="stateError" style="display: none;">You must enter a state</div>
+                <div id="pincodeError" style="display: none;">You must enter a pincode</div>
+
+                <div id="latitudeError" style="display: none;">You must enter a latitude for map location</div>
+                <div id="longitudeError" style="display: none;">You must enter a longitude for map location</div>
+
+                <div id="rentError" style="display: none;">You must enter a House rent</div>
+
+                <div id="leasestartError" style="display: none;">You must enter a lease start date</div>
+                <div id="leaseendError" style="display: none;">You must enter a lease end date</div>
+                <div id="leaseendlessthanstartdateError" style="display: none;">"Lease end date should be greater
+                    than start end. Select
+                    valid lease end date"</div>
+
+                <div id="bedroomError" style="display: none;">You must enter a number of bedroom</div>
+                <div id="hallError" style="display: none;">You must enter a number of hall</div>
+                <div id="kitchenError" style="display: none;">You must enter a number of kitchen</div>
+
+                <div id="petError" style="display: none;">You must select a pet friendly option</div>
+                <div id="parkingError" style="display: none;">You must select a parking available option</div>
+
+                <div id="amenitiesError" style="display: none;">You must enter atleast 10 character aminities
+                    details or enter "No
+                    Amenities information".</div>
+                <div id="descriptionError" style="display: none;">You must enter atleast 10 character other
+                    description or enter "No
+                    description".</div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <h1 class="display-4">{{title}}</h1>
+    </div>
+
+    <div class="form-group col-md-6">
+        <button type="submit" class="btn btn-primary" id="addhouse" onclick="addHouse()">Done</button>
+    </div>
+
+</div>
+
+
+
+<br>
+<br>
+<form id="regForm" action="add" method="post">
+    <div id="house" title="{{houseDetail}}" hidden=true></div>
+
+    <div class="form-row">
+        <h3> House Images</h3>
+        <div>
+            <input type='file' id="image_uploads" name="image_uploads" accept=".jpg, .jpeg, .png" multiple />
+            {{!-- <canvas id="canvas" width="300" height="200"></canvas> --}}
+        </div>
+        <div class="preview">
+            <p>No files currently selected for upload</p>
+        </div>
+
+    </div>
+
+    <div class="form-row">
+        <h3> Address</h3>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="houseNumber">House Number </label>
+                <input maxlength="50" type="text" name="houseNumber" class="form-control" id="houseNumber"
+                    placeholder="Enter house number">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="Street">Street </label>
+                <input maxlength="50" type="text" name="Street" class="form-control" id="Street"
+                    placeholder="Enter Street">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="City">City </label>
+                <input maxlength="50" type="text" name="City" class="form-control" id="City" placeholder="Enter City">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="State">State </label>
+                <input maxlength="50" type="text" name="State" class="form-control" id="State"
+                    placeholder="Enter State">
+            </div>
+            <div class="form-group col-md-6" style=" width: 100%;">
+                <label for="Pincode">Pincode </label>
+                <input maxlength="50" type="text" name="Pincode" class="form-control" id="Pincode"
+                    placeholder="Enter Pincode" style=" width: 40%;">
+            </div>
+        </div>
+
+    </div>
+
+
+    <div>
+        <h3> Map Location</h3>
+        <div class="form-group col-md-6">
+            <label for="latitude">Latitude </label>
+            <input maxlength="50" type="text" name="latitude" class="form-control" id="latitude"
+                placeholder="Enter latitude">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="longitude">Longitude </label>
+            <input maxlength="50" type="text" name="longitude" class="form-control" id="longitude"
+                placeholder="Enter longitude">
+        </div>
+    </div>
+
+    <div>
+        <h3> Rent and Lease Information</h3>
+
+        <div class="form-row">
+
+            <div class="form-group col-md-6">
+                <label for="Rent">Rent </label>
+                <input maxlength="50" type="text" name="Rent" class="form-control" id="Rent" placeholder="Enter Rent">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="startDate">Lease Start Date </label>
+                <input type="date" id="startDate" name="startDate">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="endDate">Lease End Date </label>
+                <input type="date" id="endDate" name="endDate">
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h3> House Type Information</h3>
+
+        <div class="form-row">
+
+            <div class="form-group col-md-6">
+                <label for="houseType">House Type </label>
+                <select name="houseType" id="houseType">
+                    <option value="Apartment">Apartment</option>
+                    <option value="Condo">Condo</option>
+                    <option value="Basement">Basement</option>
+                    <option value="Bunglow">Bunglow</option>
+                    <option value="Cottage">Cottage</option>
+                    <option value="Single Storey">Single Storey</option>
+                    <option value="Double Storey">Double Storey</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="bedroom">Numbers of Bedroom </label>
+                <input type="number" id="bedroom" name="bedroom" min="0" max="100">
+            </div>
+        </div>
+
+        <div class="form-row">
+
+            <div class="form-group col-md-6">
+                <label for="hall">Numbers of Hall </label>
+                <input type="number" id="hall" name="hall" min="0" max="100">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="kitchen">Numbers of Kitchen </label>
+                <input type="number" id="kitchen" name="kitchen" min="0" max="100">
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h3> Other informations</h3>
+        <div>
+            <label for="petFriendly">Is house Pet Friendly? : </label>
+            <input type="radio" id="petFriendlyYes" name="petFriendly" value="YES">
+            <label for="petFriendlyYes">YES</label>
+            <input type="radio" id="petFriendlyNo" name="petFriendly" value="NO">
+            <label for="petFriendlyNo">NO</label>
+        </div>
+
+        <div>
+            <label for="parkingAvailable">Is Parking Available? : </label>
+            <input type="radio" id="parkingAvailableYes" name="parkingAvailable" value="YES">
+            <label for="parkingAvailableYes">YES</label>
+            <input type="radio" id="parkingAvailableNo" name="parkingAvailable" value="NO">
+            <label for="parkingAvailableNo">NO</label>
+        </div>
+    </div>
+
+    <br>
+
+    <div>
+        <div>
+            <label for="otherAmenities">Other Amenities(please enter atleast 10 character information.) </label>
+            <br>
+            <textarea id="otherAmenities" name="otherAmenities" rows="4" cols="50"
+                placeholder="Enter detail information of house amenites"></textarea>
+        </div>
+
+        <br>
+        <div>
+            <label for="description">Description (please enter atleast 10 character house descriptive info.)
+            </label>
+            <br>
+            <textarea id="description" name="description" rows="4" cols="50"
+                placeholder="Enter detail information of nearby transportation, facilities and any miscellaneous information"></textarea>
+        </div>
+    </div>
+</form>
+
+<br>
+<br>
