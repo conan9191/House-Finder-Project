@@ -262,7 +262,7 @@ router.get("/:id", async (req, res) => {
       kitchen: house.houseType.kitchen
     });
   } catch (error) {
-    res.status(404).json({ error: "Could not find house" });
+    console.log(error);
   }
 });
 

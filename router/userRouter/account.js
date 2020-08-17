@@ -4,7 +4,7 @@
  * @Author: sueRimn
  * @Date: 2020-08-07 16:20:41
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-16 20:09:53
+ * @LastEditTime: 2020-08-16 23:30:39
  */
 const express = require("express");
 const router = express.Router();
@@ -134,7 +134,7 @@ router.get("/:id", async (req, res) => {
 
 });
 
-router.post("/", async (req, res) => {
+router.patch("/", async (req, res) => {
   let postBody = req.body;
   let profilePicture = postBody.profilePicture
   console.log(profilePicture);
@@ -160,6 +160,7 @@ router.post("/", async (req, res) => {
   } catch (error) {
       console.log(error);
   }
+   res.json({ success: true});
 });
 
 router.delete("/", async (req, res) => {
@@ -219,6 +220,7 @@ router.delete("/", async (req, res) => {
   }
   req.session.cookie.expires = new Date(new Date().getTime - 60).getTime();
   req.session.destroy();
+  res.json({ success: true});
 });
 
 module.exports = router;

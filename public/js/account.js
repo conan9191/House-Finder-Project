@@ -4,20 +4,20 @@
  * @Author: sueRimn
  * @Date: 2020-08-16 19:07:15
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-16 20:10:59
+ * @LastEditTime: 2020-08-16 23:32:24
  */
 function deleteAccount(){
-    
-    let xhttp = new XMLHttpRequest();
-    let method = "DELETE";
-    let url = "/account";
-  
-    xhttp.open(method, url, true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-    xhttp.send(JSON.stringify({ }));
-  
-    reloadAccount();
+    let requestConfig = {
+    method: 'DELETE',
+    url: '/account',
+    contentType: 'application/json',
+    data: JSON.stringify({
+    })
+    }
+    $.ajax(requestConfig).then(function (responseMessage) {
+        console.log(responseMessage);
+        reloadAccount();
+    });
 }
 
 function reloadAccount() {
