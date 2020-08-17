@@ -4,7 +4,7 @@
  * @Author: sueRimn
  * @Date: 2020-08-14 06:21:43
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-14 06:23:22
+ * @LastEditTime: 2020-08-16 23:28:51
  */
 function deletereview(){
     let buttonId = event.srcElement.value;
@@ -20,6 +20,22 @@ function deletereview(){
     })
     }
     $.ajax(requestConfig).then(function (responseMessage) {
-        window.location.replace("http://localhost:3000/house/"+houseId);
+        console.log(responseMessage);
+        reloadHouse();
     });
 }
+
+function reloadHouse() {
+   
+    let houseId = $('input[name="houseId"]').val();
+    let xhttpget = new XMLHttpRequest();
+    method = "GET";
+    url = "/house/"+houseId;
+  
+    xhttpget.open(method, url, true);
+    xhttpget.setRequestHeader("Content-type", "application/json");
+    xhttpget.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xhttpget.send();
+  
+    location.reload();
+  }

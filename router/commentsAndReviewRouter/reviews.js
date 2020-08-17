@@ -4,7 +4,7 @@
  * @Author: sueRimn
  * @Date: 2020-08-12 22:59:36
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-13 09:07:55
+ * @LastEditTime: 2020-08-16 23:26:50
  */
 const express = require("express");
 const router = express.Router();
@@ -92,15 +92,12 @@ router.delete("/:id", async (req, res) => {
     try {
       review = await reviewData.getReviewById(req.params.id);
     } catch (e) {
-      res.status(404).json({ error: "review not found" });
-      return;
+     console.log(e);
     }
     try {
       await reviewData.removeReview(req.params.id);
-      res.sendStatus(200);
     } catch (e) {
-      res.status(500).json({ error: e });
-      return;
+      console.log(e);
     }
     let comments = review.comments;
     for(let c of comments){
@@ -111,8 +108,31 @@ router.delete("/:id", async (req, res) => {
            console.log(e);
         }
     }
-    res.redirect('http://localhost:3000/house/'+ houseId);
 
+    let loginUser = {};
+    try {
+        try {
+            loginUser = await userData.getUserById(req.session.user);
+        } catch (error) {
+            console.log(error);
+        }
+        let userReviewsId = [];
+        if (loginUser["reviewIds"]) {
+            userReviewsId = loginUser["reviewIds"];
+        }
+        for(r of userReviewsId){
+            let index = userReviewsId.indexOf(r);
+            if(r === req.params.id){
+                let rr =loginUser["reviewIds"].splice(index, 1); 
+                console.log(index+":"+rr);
+                break;
+            }
+        }
+        await userData.updateUser(req.session.user, loginUser);
+    } catch (error) {
+        console.log(error);
+    }
+    res.json({success: true});
   });
 
 module.exports = router;
