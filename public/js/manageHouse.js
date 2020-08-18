@@ -340,59 +340,55 @@ function validateHouseProfilePicture() {
 
 function validateOtherHouseInfo() {
   //longitude and latitude
-  if (lat && isValidLatitude(lat.value)) {
+  if (lat && isValidNumeric(lat) && isValidLatitude(lat.value)) {
     houseData.latitude = lat.value;
   } else {
     errorArray.push(latitudeError);
   }
 
-  if (lat && isValidLongitude(long.value)) {
+  if (lat && isValidNumeric(long) && isValidLongitude(long.value)) {
     houseData.longitude = long.value;
   } else {
     errorArray.push(longitudeError);
   }
 
   //street
-  if (Street && Street.value && typeof Street.value === "string") {
+  if (isValidString(Street)) {
     houseData.street = Street.value;
   } else {
     errorArray.push(streetError);
   }
 
   //house number
-  if (
-    houseNumber &&
-    houseNumber.value &&
-    typeof houseNumber.value === "string"
-  ) {
+  if (isValidString(houseNumber)) {
     houseData.houseNumber = houseNumber.value;
   } else {
     errorArray.push(housenumberError);
   }
 
   //city
-  if (City && City.value && typeof City.value === "string") {
+  if (isValidString(City) && isValidStringOnlyLetters(City.value)) {
     houseData.city = City.value;
   } else {
     errorArray.push(cityError);
   }
 
   //state
-  if (State && State.value && typeof State.value === "string") {
+  if (isValidString(State) && isValidStringOnlyLetters(State.value)) {
     houseData.state = State.value;
   } else {
     errorArray.push(stateError);
   }
 
   //pincode
-  if (Pincode && Pincode.value && !isNaN(Pincode.value)) {
+  if (isValidNumeric(Pincode)) {
     houseData.pincode = Pincode.value;
   } else {
     errorArray.push(pincodeError);
   }
 
   //rent
-  if (Rent && Rent.value && !isNaN(Rent.value)) {
+  if (isValidNumeric(Rent)) {
     houseData.rent = Rent.value;
   } else {
     errorArray.push(rentError);
@@ -434,7 +430,7 @@ function validateOtherHouseInfo() {
     otherAmenities &&
     otherAmenities.value &&
     typeof otherAmenities.value === "string" &&
-    otherAmenities.value.length >= 10
+    otherAmenities.value.trim().length >= 10
   ) {
     houseData.otherAmenities = otherAmenities.value;
   } else {
@@ -446,7 +442,7 @@ function validateOtherHouseInfo() {
     description &&
     description.value &&
     typeof description.value === "string" &&
-    description.value.length >= 10
+    description.value.trim().length >= 10
   ) {
     houseData.description = description.value;
   } else {
@@ -473,25 +469,25 @@ function validateOtherHouseInfo() {
 
   //house type
 
-  if (houseType && houseType.value && typeof houseType.value === "string") {
+  if (isValidString(houseType)) {
     houseData.houseType.type = houseType.value;
   }
 
   //number of bedroom
-  if (bedroom && bedroom.value && !isNaN(bedroom.value)) {
+  if (isValidNumeric(bedroom)) {
     houseData.houseType.bedroom = bedroom.value;
   } else {
     errorArray.push(bedroomError);
   }
   //number of hall
-  if (hall && hall.value && !isNaN(hall.value)) {
+  if (isValidNumeric(hall)) {
     houseData.houseType.hall = hall.value;
   } else {
     errorArray.push(hallError);
   }
 
   //number of kitchen
-  if (kitchen && kitchen.value && !isNaN(kitchen.value)) {
+  if (isValidNumeric(kitchen)) {
     houseData.houseType.kitchen = kitchen.value;
   } else {
     errorArray.push(kitchenError);
@@ -578,16 +574,49 @@ function isValidDate(inputText) {
 }
 
 function isValidLatitude(lat) {
-  if (!lat || isNaN(lat) || lat < -90 || lat > 90) {
+  if (lat < -90 || lat > 90) {
     return false;
   }
   return true;
 }
 
 function isValidLongitude(long) {
-  if (!long || isNaN(long) || long < -180 || long > 180) {
+  if (long < -180 || long > 180) {
     return false;
   }
 
   return true;
+}
+
+function isValidStringOnlyLetters(inputtxt) {
+  let value = inputtxt.replace(/\s+/g, "");
+  let letters = /^[A-Za-z]+$/;
+  if (value.match(letters)) {
+    return true;
+  }
+  return false;
+}
+
+function isValidString(input) {
+  if (
+    input &&
+    input.value &&
+    typeof input.value === "string" &&
+    input.value.trim().length > 0
+  ) {
+    return true;
+  }
+  return false;
+}
+
+function isValidNumeric(input) {
+  if (
+    input &&
+    input.value &&
+    !isNaN(input.value) &&
+    input.value.trim().length > 0
+  ) {
+    return true;
+  }
+  return false;
 }
