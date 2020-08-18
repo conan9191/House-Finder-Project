@@ -4,7 +4,7 @@
  * @Author: sueRimn
  * @Date: 2020-08-07 16:20:41
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-16 23:30:39
+ * @LastEditTime: 2020-08-18 13:09:33
  */
 const express = require("express");
 const router = express.Router();
@@ -20,17 +20,14 @@ const commentData = comment.commentsData;
 
 router.get("/", async (req, res) => {
   let userId = req.session.user;
-  if(!userId){
-
-  }
-
   let user = {};
+  if(userId){
   try {
     user = await userData.getUserById(userId);
   } catch (error) {
     console.log(error);
   }
-
+  }
   let allUserFavourites = user["favourites"];
   let favHouseList = [];
   try {

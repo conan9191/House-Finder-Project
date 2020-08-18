@@ -4,7 +4,7 @@
  * @Author: sueRimn
  * @Date: 2020-08-11 19:54:39
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-12 23:41:44
+ * @LastEditTime: 2020-08-18 13:10:53
  */
 // const houseconstructorMethod = require("./userRouter/index");
 // const userconstructorMethod = require("./houseRouter/index");
@@ -18,6 +18,7 @@
 
 const loginRoutes = require("./userRouter/login");
 const registrationRoutes = require("./userRouter/registration");
+const updateRoutes = require("./userRouter/update");
 const userRoutes = require("./userRouter/users");
 const logoutRoutes = require("./userRouter/logout");
 const accountRoutes = require("./userRouter/account");
@@ -37,6 +38,7 @@ const constructorMethod = (app) => {
   app.use("/login", loginRoutes);
   app.use("/logout", logoutRoutes);
   app.use("/registration", registrationRoutes);
+  app.use("/update", updateRoutes);
 
   //house
   app.use("/favourite", favRoutes);

@@ -6,7 +6,7 @@
 		<div class="profilePic">
 			<img src="{{user.profilePicture}}" onclick="imageOnClick()" alt="user">
 		</div>
-		<label for="profilepicture" style="font-size:1px; color: grey;">Click on change Avatar</label>
+		<label for="profilepicture" style="font-size:10px; color: grey;">Click on change Avatar</label>
 		<input type="file" style="display:none" id="updatepicture" name="updatepicture" onchange="updateimage()"
 			accept=".jpg, .jpeg, .png">
 	</div>
@@ -23,48 +23,74 @@
 		</ul>
 		<div id="myTabContent" class="tab-content">
 			<div class="tab-pane fade in active" id="info">
-				<div style="padding: 10px 100px 10px;">
-					<form class="bs-example bs-example-form" role="form">
-						<div class="input-group">
-							<span class="input-group-addon">First Name:</span>
-							<input type="text" class="form-control" disabled="true" value="{{user.firstName}}">
+				<div>
+					<form id="updateForm">
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="firstName">First Name</label>
+								<input maxlength="50" type="text" name="firstName" class="form-control" id="firstName"
+									placeholder="First Name" value="{{user.firstName}}" disabled="disabled">
+							</div>
+							<div class="form-group col-md-6">
+								<label for="lastName">Last Name</label>
+								<input type="text" maxlength="50" name="lastName" class="form-control" id="lastName"
+									placeholder="Last Name" value="{{user.lastName}}" disabled="disabled">
+							</div>
 						</div>
-						<div class="input-group">
-							<span class="input-group-addon">Last Name:</span>
-							<input type="text" class="form-control" disabled="true" value="{{user.lastName}}">
+
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="email">Email</label>
+								<input type="email" maxlength="50" name="email" class="form-control" id="email" placeholder="Email" value="{{user.email}}" disabled="disabled">
+							</div>
+							<div class="form-group col-md-6">
+								<label for="password">Password</label>
+								<input type="password" maxlength="50" name="password" class="form-control" id="password"
+									placeholder="******" disabled="disabled"> 
+							</div>
 						</div>
-						<div class="input-group">
-							<span class="input-group-addon">Age:</span>
-							<input type="text" class="form-control" disabled="true" value="{{user.age}}">
+
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="street">street</label>
+								<input type="text" maxlength="50" name="street" class="form-control" id="street" placeholder="street" value="{{user.street}}" disabled="disabled">
+							</div>
+							<div class="form-group col-md-6">
+								<label for="house_number">house_number</label>
+								<input type="text" maxlength="50" name="house_number" class="form-control" id="house_number" placeholder="housenumber" value="{{user.house_number}}" disabled="disabled">
+							</div>
 						</div>
-						<div class="input-group">
-							<span class="input-group-addon">Email:</span>
-							<input type="text" class="form-control" disabled="true" value="{{user.email}}">
+
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="city">city</label>
+								<input type="text" maxlength="50" name="city" class="form-control" id="city"
+									placeholder="city" value="{{user.city}}" disabled="disabled">
+							</div>
+							<div class="form-group col-md-6">
+								<label for="state">state</label>
+								<input type="text" maxlength="50" name="state" class="form-control" id="state" placeholder="state" value="{{user.state}}" disabled="disabled">
+							</div>
 						</div>
-						<div class="input-group">
-							<span class="input-group-addon">Street:</span>
-							<input type="text" class="form-control" disabled="true" value="{{user.street}}">
+
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="pincode">pincode</label>
+								<input type="text" maxlength="50" name="pincode" class="form-control" id="pincode"
+									placeholder="pincode" value="{{user.pincode}}" disabled="disabled">
+							</div>
+							<div class="form-group col-md-6">
+								<label for="age">age</label>
+								<input type="text" maxlength="50" name="age" class="form-control" id="age" placeholder="age" value="{{user.age}}" disabled="disabled">
+							</div>
 						</div>
-						<div class="input-group">
-							<span class="input-group-addon">House Number:</span>
-							<input type="text" class="form-control" disabled="true" value="{{user.house_number}}">
-						</div>
-						<div class="input-group">
-							<span class="input-group-addon">City:</span>
-							<input type="text" class="form-control" disabled="true" value="{{user.city}}">
-						</div>
-						<div class="input-group">
-							<span class="input-group-addon">State:</span>
-							<input type="text" class="form-control" disabled="true" value="{{user.state}}">
-						</div>
-						<div class="input-group">
-							<span class="input-group-addon">Pin Code:</span>
-							<input type="text" class="form-control" disabled="true" value="{{user.pincode}}">
+						<div class="text-center">
+							<button id="toUpdateButton" type="button" class="btn btn-primary" style="width: 200px;" onclick = "updateInfo()">Click to update</button>
 						</div>
 					</form>
 				</div>
-
-				<button type="button" id="deleteButton" onclick="deleteAccount()" class="btn btn-default"> Delete Your
+				<br/>
+				<button type="button" id="deleteButton" onclick="deleteAccount()" class="btn btn-danger"> Delete Your
 					Account</button>
 
 			</div>
