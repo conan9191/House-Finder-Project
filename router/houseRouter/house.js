@@ -11,6 +11,8 @@ const commentData = comment.commentsData;
 const favHouseData = house.favHouseData;
 const xss = require('xss');
 
+const xss = require("xss");
+
 router.get("/", async (req, res) => {
   try {
     let houseList = await houseData.getAllHouse();
@@ -124,7 +126,7 @@ router.get("/add/:id", async (req, res) => {
     res.render("pages/houseManage", {
       title: "Edit house",
       houseDetail: JSON.stringify(house),
-      hasLogin: true
+      hasLogin: true,
     });
   } catch (error) {
     res.status(404).json({ error: " edit Houses not found" });
@@ -326,7 +328,19 @@ router.post("/", async (req, res) => {
   let houseParamBody = req.body;
   try {
     houseParamBody["userId"] = req.session.user;
+
+    //XSS attack check for add house
+    let errorArray = checkXSSattack(houseParamBody);
+    if (errorArray.length > 0) {
+      res.render("pages/houseManage", {
+        error_messages: errorArray,
+        hasErrors: true,
+        title: "Add new house",
+      });
+      return;
+    }
     let newHouse = await houseData.addHouse(houseParamBody);
+
     res.json(newHouse);
   } catch (error) {
     res.status(404).json({ error: "Cannot add new House" });
@@ -358,7 +372,7 @@ router.put("/:id", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   if (!req.params.id) {
-      ({ error: "Must supply House Id." });
+    ({ error: "Must supply House Id." });
     return;
   }
 
@@ -376,48 +390,48 @@ router.delete("/:id", async (req, res) => {
   } catch (e) {
     console.log(e);
   }
-  if(review){
-    for(let r of review){
-      if(r.houseId === req.params.id){
+  if (review) {
+    for (let r of review) {
+      if (r.houseId === req.params.id) {
         let comments = r.comments;
-        for(let c of comments){
-          try{
-              await commentData.deleteComment(c._id);
-          }catch (e) {
-              console.log(e);
-          }
-        }    
-        let user = {};
+        for (let c of comments) {
           try {
-              user = await userData.getUserById((r.userId).toString());
-          } catch (error) {
-              console.log(error);
-          }
-          console.log(user._id);
-          let userReviewsId = [];
-          if (user.reviewIds) {
-              userReviewsId = user.reviewIds;
-          }
-          for(let i of userReviewsId){
-              let index = userReviewsId.indexOf(i);
-              if(i === (r._id).toString()){
-                let ii =user.reviewIds.splice(index, 1); 
-                console.log(index+":"+ii);
-                break;
-              }
-          }
-          try {
-            await reviewData.removeReview((r._id).toString());
+            await commentData.deleteComment(c._id);
           } catch (e) {
             console.log(e);
           }
-          try {
-            await userData.updateUser((user._id).toString(), user);
-          } catch (error) {
-            console.log(error);
+        }
+        let user = {};
+        try {
+          user = await userData.getUserById(r.userId.toString());
+        } catch (error) {
+          console.log(error);
+        }
+        console.log(user._id);
+        let userReviewsId = [];
+        if (user.reviewIds) {
+          userReviewsId = user.reviewIds;
+        }
+        for (let i of userReviewsId) {
+          let index = userReviewsId.indexOf(i);
+          if (i === r._id.toString()) {
+            let ii = user.reviewIds.splice(index, 1);
+            console.log(index + ":" + ii);
+            break;
           }
+        }
+        try {
+          await reviewData.removeReview(r._id.toString());
+        } catch (e) {
+          console.log(e);
+        }
+        try {
+          await userData.updateUser(user._id.toString(), user);
+        } catch (error) {
+          console.log(error);
+        }
       }
-    } 
+    }
   }
   //delete favorites
   let favourites = [];
@@ -426,29 +440,29 @@ router.delete("/:id", async (req, res) => {
   } catch (e) {
     console.log(e);
   }
-  if(favourites){
-    for(let f of favourites){
-      if(f.houseId === req.params.id){
+  if (favourites) {
+    for (let f of favourites) {
+      if (f.houseId === req.params.id) {
         let userlist = [];
         try {
           userlist = await userData.getAllUsers();
         } catch (error) {
           console.log(error);
         }
-        console.log(userlist+222222);
-        for(let u of userlist){
-          for(let favourite of u.favourites){
+
+        for (let u of userlist) {
+          for (let favourite of u.favourites) {
             let index = u.favourites.indexOf(favourite);
-            console.log("user: "+favourite._id + "f: "+f._id)
-            if(favourite._id === f._id){
+            console.log("user: " + favourite._id + "f: " + f._id);
+            if (favourite._id === f._id) {
               console.log(22222);
-              let ff =u.favourites.splice(index, 1); 
-              console.log(index+":"+ff);
+              let ff = u.favourites.splice(index, 1);
+              console.log(index + ":" + ff);
               break;
             }
           }
           try {
-            await userData.updateUser((u._id).toString(), u);
+            await userData.updateUser(u._id.toString(), u);
           } catch (error) {
             console.log(error);
           }
@@ -467,7 +481,6 @@ router.delete("/:id", async (req, res) => {
   } catch (error) {
     res.status(404).json({ error: "Cannot delete House." });
   }
- 
 });
 
 router.patch("/:id", async (req, res) => {
@@ -488,6 +501,17 @@ router.patch("/:id", async (req, res) => {
   }
 
   try {
+    //XSS attack check for edit house
+    let errorArray = checkXSSattack(updateHouse);
+    if (errorArray.length > 0) {
+      res.render("pages/houseManage", {
+        error_messages: errorArray,
+        hasErrors: true,
+        title: "Edit house",
+      });
+      return;
+    }
+
     let updateHouse = await houseData.updateHouse(req.params.id, oldHouse);
     res.json(updateHouse);
   } catch (error) {
@@ -652,6 +676,134 @@ function showEditandDeleteButton(list, value) {
     element["canUpdate"] = value;
   });
   return list;
+}
+
+function checkXSSattack(data) {
+  let {
+    userId,
+    profilePicture,
+    longitude,
+    latitude,
+    street,
+    houseNumber,
+    city,
+    state,
+    pincode,
+    rent,
+    startDate,
+    endDate,
+    otherAmenities,
+    description,
+    petFriendly,
+    parkingAvailable,
+    houseType,
+  } = data;
+
+  let erroMessage = [];
+
+  userId = xss(userId);
+  profilePicture = xss(profilePicture);
+  longitude = xss(longitude);
+  latitude = xss(latitude);
+  street = xss(street);
+  houseNumber = xss(houseNumber);
+  city = xss(city);
+  state = xss(state);
+  pincode = xss(pincode);
+  rent = xss(rent);
+  startDate = xss(startDate);
+  endDate = xss(endDate);
+  otherAmenities = xss(otherAmenities);
+  description = xss(description);
+  petFriendly = xss(petFriendly);
+  parkingAvailable = xss(parkingAvailable);
+  houseType = xss(houseType);
+
+  if (!userId) {
+    erroMessage.push("Must login with valid user to add house");
+  }
+
+  if (!profilePicture) {
+    erroMessage.push("Upload atleast 1 house picture");
+  }
+
+  if (!longitude) {
+    erroMessage.push(
+      "You must enter a longitude(between -180 to 180) for map location"
+    );
+  }
+
+  if (!latitude) {
+    erroMessage.push(
+      "You must enter a latitude(between -90 to 90) for map location"
+    );
+  }
+
+  if (!street) {
+    erroMessage.push("You must enter a street");
+  }
+  if (!houseNumber) {
+    erroMessage.push("You must enter a house number");
+  }
+  if (!state) {
+    erroMessage.push("You must enter a state");
+  }
+  if (!city) {
+    erroMessage.push("You must enter a city");
+  }
+  if (!pincode) {
+    erroMessage.push("You must enter a pincode");
+  }
+  if (!rent) {
+    erroMessage.push("You must enter a House rent");
+  }
+  if (!startDate) {
+    erroMessage.push("You must enter a lease start date");
+  }
+  if (!endDate) {
+    erroMessage.push("You must enter a lease end date");
+  }
+
+  if (!otherAmenities) {
+    erroMessage.push("You must enter atleast 10 character aminities details");
+  }
+  if (!description) {
+    erroMessage.push("You must enter atleast 10 character other description");
+  }
+  if (!petFriendly) {
+    erroMessage.push("You must select a pet friendly option");
+  }
+
+  if (!parkingAvailable) {
+    erroMessage.push("You must select a parking available option");
+  }
+  if (!houseType) {
+    erroMessage.push(
+      "You must enter house type details like type of house, number of bedroom, hall , kitchen "
+    );
+  } else {
+    let houseTypeDetail = houseType;
+
+    let type = xss(houseTypeDetail.type);
+    let bedroom = xss(houseTypeDetail.bedroom);
+    let hall = xss(houseTypeDetail.hall);
+    let kitchen = xss(houseTypeDetail.kitchen);
+
+    if (!type) {
+      erroMessage.push("You must enter house type");
+    }
+    if (!bedroom) {
+      erroMessage.push("You must enter number of bedroom in house");
+    }
+    if (!hall) {
+      erroMessage.push("You must enter number of hall in house");
+    }
+    if (!kitchen) {
+      erroMessage.push("You must enter number of kitchen in house");
+    }
+  }
+
+  return erroMessage;
 }
 
 module.exports = router;
