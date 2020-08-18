@@ -578,14 +578,14 @@ function isValidDate(inputText) {
 }
 
 function isValidLatitude(lat) {
-  if (!lat || lat < -90 || lat > 90) {
+  if (!lat || isNaN(lat) || lat < -90 || lat > 90) {
     return false;
   }
   return true;
 }
 
 function isValidLongitude(long) {
-  if (!long || long < -180 || long > 180) {
+  if (!long || isNaN(long) || long < -180 || long > 180) {
     return false;
   }
 
