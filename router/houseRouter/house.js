@@ -9,6 +9,7 @@ const reviewData = review.reviewsDate;
 const comment = require("../../data/commentAndReviewData");
 const commentData = comment.commentsData;
 const favHouseData = house.favHouseData;
+const xss = require('xss');
 
 router.get("/", async (req, res) => {
   try {
@@ -139,7 +140,23 @@ router.post("/search", async (req, res) => {
   //this route will display the houses that match the search criteria
   try {
     let info = await req.body;
-    let searchList = await houseData.filterList(info);
+
+    let secureInfo = {};
+    secureInfo["rent-min"] = await xss(info["rent-min"]);
+    secureInfo["rent-max"] = await xss(info["rent-max"]);
+    secureInfo["date-start"] = await xss(info["date-start"]);
+    secureInfo["date-end"] = await xss(info["date-end"]);
+    secureInfo["house-number"] = await xss(info["house-number"]);
+    secureInfo["house-street"] = await xss(info["house-street"]);
+    secureInfo["house-city"] = await xss(info["house-city"]);
+    secureInfo["house-state"] = await xss(info["house-state"]);
+    secureInfo["house-zipcode"] = await xss(info["house-zipcode"]);
+    secureInfo["pet"] = await xss(info["pet"]);
+    secureInfo["park"] = await xss(info["park"]);
+    secureInfo["variant"] = await xss(info["variant"]);
+    secureInfo["house-bed"] = await xss(info["house-bed"]);
+
+    let searchList = await houseData.filterList(secureInfo);
     //to hide edit and delete button
     searchList = showEditandDeleteButton(searchList, false);
     //console.log(searchList);

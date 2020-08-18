@@ -67,8 +67,8 @@ async function infoValid(info) {
   let dEndValid = moment(dEnd, "MM/DD/YYYY", true).isValid();
   let after = moment(dEnd).isAfter(dStart);
 
-  if (dStart && !dStartValid) throw "Start date is invalid";
-  if (dEnd && !dEndValid) throw "End date is invalid";
+  //if (dStart && !dStartValid) throw "Start date is invalid";
+  //if (dEnd && !dEndValid) throw "End date is invalid";
   if (dStart && dEnd && !after) throw "End date does not come after start date";
 
   //Address checking
@@ -79,16 +79,51 @@ async function infoValid(info) {
   let hZip = await info["house-zipcode"];
 
   if (hNumber && isNaN(hNumber)) throw "House Number must be a number";
-  if (hStreet && !isNaN(hStreet)) throw "House street must be a string";
-  if (hCity && !isNaN(hCity)) throw "House city must be a string";
-  if (hState && !isNaN(hState)) throw "House State must be a string";
+  if (hNumber && hNumber < 1) throw "House Number must be a positive integer"
+  if (hStreet) {
+    if (!isNaN(hStreet))
+		throw "House street must be a string";
+	if (!hStreet.trim())
+		throw "House street must be an actual string";
+	let reg = RegExp(/^[a-zA-Z\s]*$/);
+	if (!reg.test(hStreet))
+		throw "House street must be letters and spaces only";
+  }
+
+  if (hCity) {
+	if (!isNaN(hCity))
+		throw "House city must be a string";
+	if (!hCity.trim())
+		  throw "House city must be an actual string";
+	let reg = RegExp(/^[a-zA-Z\s]*$/);
+	if (!reg.test(hStreet))
+		throw "House city must be letters and spaces only";
+  }
+
+  if (hState) {
+	if (!isNaN(hState))
+		throw "House state must be a string";
+	if (!hState.trim())
+		throw "House state must be an actual string";
+	let reg = RegExp(/^[a-zA-Z\s]*$/);
+	if (!reg.test(hState))
+		throw "House state must be letters and spaces only";
+  }
   if (hZip && isNaN(hZip)) throw "House zipcode must be a number";
 
   //House type checking
   let hType = await info["variant"];
   let hBed = await info["house-bed"];
 
-  if (hType && !isNaN(hType)) throw "House type must be a string";
+  if (hType) {
+	if (!isNaN(hType))
+		throw "House type must be a string";
+	if (!hType.trim())
+		throw "House type must be an actual string";
+	let reg = RegExp(/^[a-zA-Z\s]*$/);
+	if (!reg.test(hType))
+		throw "House type must be letters and spaces only";
+  }
   if (hBed && isNaN(hBed)) throw "Number of beds must be a number";
 
   return true;
@@ -116,33 +151,31 @@ async function houseMatch(info, house) {
   let hState = await info["house-state"];
   let hZip = await info["house-zipcode"];
 
-  let petY = await info["pet-yes"];
-  let petN = await info["pet-no"];
-  let parkY = await info["park-yes"];
-  let parkN = await info["park-no"];
+  let pet = await info["pet"];
+  let park = await info["park"];
 
   let hType = await info["variant"];
   let hBed = await info["house-bed"];
 
-  if (rMin && house.rent < rMin) return false;
-  if (rMax && house.rent > rMax) return false;
+  if (rMin && house.rent < parseInt(rMin)) return false;
+  if (rMax && house.rent > parseInt(rMax)) return false;
 
   if (dStart && !moment(house.startDate).isAfter(dStart)) return false;
   if (dEnd && !moment(house.endDate).isBefore(dEnd)) return false;
 
-  if (hNumber && hNumber != house.houseNumber) return false;
+  if (hNumber && parseInt(hNumber) != house.houseNumber) return false;
   if (hStreet && hStreet != house.street) return false;
   if (hCity && hCity != house.city) return false;
   if (hState && hState != house.state) return false;
-  if (hZip && hZip != house.pincode) return false;
+  if (hZip && parseInt(hZip) != house.pincode) return false;
 
-  if (parkY && !house.parkingAvailable) return false;
-  if (parkN && house.parkingAvailable) return false;
-  if (petY && !house.petFriendly) return false;
-  if (petN && house.petFriendly) return false;
+  if (park == "park-yes" && !house.parkingAvailable) return false;
+  if (park == "park-no" && house.parkingAvailable) return false;
+  if (pet == "pet-yes" && !house.petFriendly) return false;
+  if (pet == "pet-no" && house.petFriendly) return false;
 
   if (house.houseType && hType && hType != house.houseType.type) return false;
-  if (house.houseType && hBed && hBed != house.houseType.bedroom) return false;
+  if (house.houseType && hBed && parseInt(hBed) != house.houseType.bedroom) return false;
   
   return true;
 }
