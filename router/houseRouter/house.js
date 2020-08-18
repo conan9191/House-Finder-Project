@@ -8,6 +8,7 @@ const review = require("../../data/commentAndReviewData");
 const reviewData = review.reviewsDate;
 const comment = require("../../data/commentAndReviewData");
 const commentData = comment.commentsData;
+const favHouseData = house.favHouseData;
 
 router.get("/", async (req, res) => {
   try {
@@ -47,6 +48,7 @@ router.get("/", async (req, res) => {
       title: "Main Page",
       rateList: ratingList,
       reviewList: reviewList,
+      hasLogin: req.session.user,
     });
   } catch (error) {
     res.status(404).json({ error: "Houses not found" });
@@ -54,9 +56,16 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/add", async (req, res) => {
+  if (!req.session || !req.session.user) {
+    res.status(404).json({
+      error: "To add a house, must login with valid user.",
+    });
+    return;
+  }
   try {
     res.render("pages/houseManage", {
       title: "Add new house",
+      hasLogin: req.session.user,
     });
   } catch (error) {
     res.status(404).json({ error: "Houses not found" });
@@ -83,6 +92,7 @@ router.get("/updateHouse", async (req, res) => {
     res.render("pages/houseList", {
       title: "Main Page",
       list: houseList,
+      hasLogin: req.session.user,
       userAddedZeroHouse: userAddedZeroHouse,
     });
   } catch (error) {
@@ -113,6 +123,7 @@ router.get("/add/:id", async (req, res) => {
     res.render("pages/houseManage", {
       title: "Edit house",
       houseDetail: JSON.stringify(house),
+      hasLogin: true
     });
   } catch (error) {
     res.status(404).json({ error: " edit Houses not found" });
@@ -162,6 +173,7 @@ router.post("/search", async (req, res) => {
     res.render("pages/houseList", {
       title: "Matched Houses",
       list: ratingList,
+      hasLogin: req.session.user,
       emptySearch: emptySearch,
     });
   } catch (e) {
@@ -175,6 +187,12 @@ router.post("/search", async (req, res) => {
 router.get("/:id", async (req, res) => {
   if (!req.params.id) {
     res.status(404).json({ error: "House Id missing" });
+    return;
+  }
+  if (!req.session || !req.session.user) {
+    res.status(404).json({
+      error: "To visit this house, must login with valid user.",
+    });
     return;
   }
 
@@ -269,6 +287,7 @@ router.get("/:id", async (req, res) => {
       bedroom: house.houseType.bedroom,
       hall: house.houseType.hall,
       kitchen: house.houseType.kitchen,
+      hasLogin: req.session.user,
     });
   } catch (error) {
     console.log(error);
@@ -322,7 +341,7 @@ router.put("/:id", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   if (!req.params.id) {
-    res.status(404).json({ error: "Must supply House Id." });
+      ({ error: "Must supply House Id." });
     return;
   }
 
@@ -333,12 +352,105 @@ router.delete("/:id", async (req, res) => {
     return;
   }
 
+  //delete review
+  let review = [];
+  try {
+    review = await reviewData.getAllReviews();
+  } catch (e) {
+    console.log(e);
+  }
+  if(review){
+    for(let r of review){
+      if(r.houseId === req.params.id){
+        let comments = r.comments;
+        for(let c of comments){
+          try{
+              await commentData.deleteComment(c._id);
+          }catch (e) {
+              console.log(e);
+          }
+        }    
+        let user = {};
+          try {
+              user = await userData.getUserById((r.userId).toString());
+          } catch (error) {
+              console.log(error);
+          }
+          console.log(user._id);
+          let userReviewsId = [];
+          if (user.reviewIds) {
+              userReviewsId = user.reviewIds;
+          }
+          for(let i of userReviewsId){
+              let index = userReviewsId.indexOf(i);
+              if(i === (r._id).toString()){
+                let ii =user.reviewIds.splice(index, 1); 
+                console.log(index+":"+ii);
+                break;
+              }
+          }
+          try {
+            await reviewData.removeReview((r._id).toString());
+          } catch (e) {
+            console.log(e);
+          }
+          try {
+            await userData.updateUser((user._id).toString(), user);
+          } catch (error) {
+            console.log(error);
+          }
+      }
+    } 
+  }
+  //delete favorites
+  let favourites = [];
+  try {
+    favourites = await favHouseData.getAllFavouriteHouse();
+  } catch (e) {
+    console.log(e);
+  }
+  if(favourites){
+    for(let f of favourites){
+      if(f.houseId === req.params.id){
+        let userlist = [];
+        try {
+          userlist = await userData.getAllUsers();
+        } catch (error) {
+          console.log(error);
+        }
+        console.log(userlist+222222);
+        for(let u of userlist){
+          for(let favourite of u.favourites){
+            let index = u.favourites.indexOf(favourite);
+            console.log("user: "+favourite._id + "f: "+f._id)
+            if(favourite._id === f._id){
+              console.log(22222);
+              let ff =u.favourites.splice(index, 1); 
+              console.log(index+":"+ff);
+              break;
+            }
+          }
+          try {
+            await userData.updateUser((u._id).toString(), u);
+          } catch (error) {
+            console.log(error);
+          }
+        }
+        try {
+          await favHouseData.deleteFavouriteHouse(f._id);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+  }
   try {
     await houseData.deleteHouse(req.params.id);
     res.sendStatus(200);
   } catch (error) {
     res.status(404).json({ error: "Cannot delete House." });
   }
+ 
 });
 
 router.patch("/:id", async (req, res) => {
