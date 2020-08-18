@@ -82,6 +82,10 @@ router.get("/updateHouse", async (req, res) => {
     }
 
     let houseList = await houseData.getAllHouseforCurrentUser(req.session.user);
+    let userAddedZeroHouse = false;
+    if (houseList.length === 0) {
+      userAddedZeroHouse = true;
+    }
     //to hide edit and delete button
     houseList = showEditandDeleteButton(houseList, true);
     console.log("update house=" + JSON.stringify(houseList));
@@ -89,6 +93,7 @@ router.get("/updateHouse", async (req, res) => {
       title: "Main Page",
       list: houseList,
       hasLogin: req.session.user,
+      userAddedZeroHouse: userAddedZeroHouse,
     });
   } catch (error) {
     res.status(404).json({ error: "Houses not found" });
@@ -160,10 +165,16 @@ router.post("/search", async (req, res) => {
     for (let i = 0; i < ratingSort.length; i++)
       ratingList.push(searchList[ratingSort[i][0]]);
 
+    let emptySearch = false;
+    if (ratingList.length === 0) {
+      emptySearch = true;
+    }
+
     res.render("pages/houseList", {
       title: "Matched Houses",
       list: ratingList,
       hasLogin: req.session.user,
+      emptySearch: emptySearch,
     });
   } catch (e) {
     res.status(500);

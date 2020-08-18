@@ -55,5 +55,21 @@
             </div>
             {{/each}}
 
+            {{#if emptySearch}}
+            <div>
+                <p class="emptySearchList" id="emptySearchList">
+                    No result found for given search.
+                </p>
+            </div>
+            {{/if}}
+
+            {{#if userAddedZeroHouse}}
+            <div>
+                <p class="emptySearchList" id="addHouseList">
+                    No house(s) added by login user.A user can update only those house(s) that he/she added.
+                </p>
+            </div>
+            {{/if}}
+
         </div>
     </div>
