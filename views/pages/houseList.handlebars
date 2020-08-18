@@ -20,47 +20,49 @@
             </div>
 
             <div>
-                <p class="paraClass" id="address"> {{houseNumber}} {{street}} <br> {{city}}, {{state}}, {{pincode}} </p>
+                <p class="paraClass"> {{houseNumber}} {{street}} <br> {{city}}, {{state}}, {{pincode}} </p>
 
                 <div>
-                    <p class="paraClass" id="priceInfo">
+                    <p class="paraClass">
                         Rent: ${{rent}}/mo <br>
                         {{houseType.type}} | {{houseType.bedroom}} Bedroom(s)
                     </p>
                 </div>
 
                 <a href="{{this._id}}">View Details</a>
-        
+
                 <br>
 
                 {{#if this.canUpdate}}
-                <button id="edit" + {{this._id}} class="editComment" onclick="editHouse()" value={{this._id}}><a
-                        href="/house/add/{{this._id}}">Edit</a></button>
+                <input type="button" value="Edit" onClick="javascript:location.href = '/house/add/{{this._id}}'"
+                    class="editComment" />
 
-                <button type=" button" id="delete" + {{this._id}} class="deleteComment" onClick="deleteHouse()"
+
+                <button id="delete{{this._id}}" class="deleteComment" onClick="deleteHouse()"
                     value={{this._id}}>Delete</button>
                 {{/if}}
 
 
 
             </div>
-           </div>
-            {{/each}}
+        </div>
+        {{/each}}
 
-            {{#if emptySearch}}
-            <div>
-                <p class="emptySearchList" id="emptySearchList">
-                    No result found for given search.
-                </p>
-            </div>
-            {{/if}}
+        {{#if emptySearch}}
+        <div>
+            <p class="emptySearchList" id="emptySearchList">
+                No result found for given search.
+            </p>
+        </div>
+        {{/if}}
 
-            {{#if userAddedZeroHouse}}
-            <div>
-                <p class="emptySearchList" id="addHouseList">
-                    No house(s) added by login user.A user can update only those house(s) that he/she added.
-                </p>
-            </div>
-            {{/if}}
+        {{#if userAddedZeroHouse}}
+        <div>
+            <p class="emptySearchList" id="addHouseList">
+                No house(s) added by login user.A user can update only those house(s) that he/she added.
+            </p>
+        </div>
+        {{/if}}
 
     </div>
+</div>
