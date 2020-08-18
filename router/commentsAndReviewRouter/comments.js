@@ -8,6 +8,7 @@ const reviewData = review.reviewsDate;
 
 const user = require("../../data/userData");
 const userData = user.users;
+const xss = require("xss");
 
 let allComments = "";
 
@@ -49,21 +50,21 @@ router.post("/:id", async (req, res) => {
     res.status(404).json({ error: "Must supply all fields." });
     return;
   }
-  let rid = req.params.id;
+  let rid = xss(req.params.id);
   if (!req.session || !req.session.user) {
     res
       .status(404)
       .json({ error: "Must login with valid user to add comment" });
     return;
   }
-
+  let text = xss(req.body["text"]);
   //add comment in review
   let userID = req.session.user;
   let newComment = {};
   let updateComment = {}
   let updateReview = {};
   try {
-    newComment = await commentData.addNewComment(req.body["text"], userID);
+    newComment = await commentData.addNewComment(text, userID);
     //res.json(newComment);
     // res.render("pages/comments", {
     //   commentsList: allcommentsList,

@@ -4,7 +4,7 @@
  * @Author: sueRimn
  * @Date: 2020-08-17 10:22:47
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-18 14:09:58
+ * @LastEditTime: 2020-08-18 14:25:02
  */
 const express = require("express");
 const router = express.Router();
@@ -98,7 +98,8 @@ router.post('/', async (req, res) => {
             error_messages: error_msgs,
             hasErrors: true,
             title: "update an account",
-            user: user
+            user: user,
+            hasLogin: true
         })
         return;
     }
