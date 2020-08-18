@@ -17,7 +17,7 @@ let LastNameError = document.getElementById("LastNameError");
 let EmailError = document.getElementById("EmailError");
 let PasswordError = document.getElementById("passwordError");
 let AgeError = document.getElementById("ageError");
-let streetError = document.getElementById("stateError");
+let streetError = document.getElementById("streetError");
 let profilepicError = document.getElementById("pictureError");
 let housenumberError = document.getElementById("housenumberError");
 let cityError = document.getElementById("cityError");
@@ -122,12 +122,12 @@ function validateEmail(elementValue) {
 
 function readimage() {
   let showpicture = document.getElementById("showpicture");
-  let profilepicture = document.getElementById("profilepicture");
-  if (!profilepicture.files || !profilepicture.files[0]) return;
+  let profilepicturefile = document.getElementById("profilepicturefile");
+  if (!profilepicturefile.files || !profilepicturefile.files[0]) return;
   while (showpicture.firstChild) {
     showpicture.removeChild(showpicture.firstChild);
   }
-  let curFiles = profilepicture.files;
+  let curFiles = profilepicturefile.files;
 
   if (curFiles.length === 0) {
     let para = document.createElement("p");
@@ -153,6 +153,7 @@ function readimage() {
         img.width = "100";
         img.src = evt.target.result;
         console.log("image source =" + img.src);
+        profilepircture.value = img.src;
         profilePictureArray2.push(img.src);
         listItem.appendChild(img);
       });
