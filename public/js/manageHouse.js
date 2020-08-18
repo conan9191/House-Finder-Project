@@ -340,17 +340,16 @@ function validateHouseProfilePicture() {
 
 function validateOtherHouseInfo() {
   //longitude and latitude
-  if (lat && long && isValidLatitudeandLongitude(long.value, lat.value)) {
-    houseData.longitude = long.value;
+  if (lat && isValidLatitude(lat.value)) {
     houseData.latitude = lat.value;
   } else {
-    if (!lat) {
-      errorArray.push(latitudeError);
-    }
+    errorArray.push(latitudeError);
+  }
 
-    if (!long) {
-      errorArray.push(longitudeError);
-    }
+  if (lat && isValidLongitude(long.value)) {
+    houseData.longitude = long.value;
+  } else {
+    errorArray.push(longitudeError);
   }
 
   //street
@@ -578,10 +577,14 @@ function isValidDate(inputText) {
   return date;
 }
 
-function isValidLatitudeandLongitude(long, lat) {
+function isValidLatitude(lat) {
   if (!lat || lat < -90 || lat > 90) {
     return false;
   }
+  return true;
+}
+
+function isValidLongitude(long) {
   if (!long || long < -180 || long > 180) {
     return false;
   }
