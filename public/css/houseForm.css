@@ -34,7 +34,7 @@
 }
 
 .mainPage input::placeholder {
-    color: white;
+    color: gray;
 }
 
 .mainPage input:focus, option:focus{
