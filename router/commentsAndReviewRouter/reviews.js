@@ -4,7 +4,7 @@
  * @Author: sueRimn
  * @Date: 2020-08-12 22:59:36
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-16 23:26:50
+ * @LastEditTime: 2020-08-18 16:07:56
  */
 const express = require("express");
 const router = express.Router();
@@ -16,8 +16,13 @@ const userData = data.users;
 const comment = require("../../data/commentAndReviewData");
 const commentData = comment.commentsData;
 
+const xss = require("xss");
+
 router.post("/", async (req, res) => {
     let review = req.body;
+    let houseId = xss(review.houseId);
+    let rating = xss(review.rating);
+    let reviewText = xss(review.reviewText);
     console.log(review);
     if (!review) {
         res.status(400).json({ error: "You must provide data to create a review" });
@@ -32,25 +37,25 @@ router.post("/", async (req, res) => {
         res.status(400).json({ error: "You must be a login User" });
         return;
     }
-    if (!review.houseId) {
+    if (!houseId) {
         res.status(400).json({ error: "You must provide a houseId" });
         return;
     }
-    if (!review.rating) {
+    if (!rating) {
         res.status(400).json({ error: "You must provide a rating" });
         return;
     }
-    if (!review.reviewText) {
+    if (!reviewText) {
         res.status(400).json({ error: "You must provide a reviewText" });
         return;
     }
     let newReviewId = {};
     try {
         const newReview = await reviewData.addReview(
-            review.houseId,
+            houseId,
             userId,
-            Number(review.rating),
-            review.reviewText
+            Number(rating),
+            reviewText
         );
         newReviewId = newReview._id;
       } catch (e) {
@@ -74,7 +79,7 @@ router.post("/", async (req, res) => {
     } catch (error) {
         console.log(error);
     }
-    res.redirect('http://localhost:3000/house/'+ review.houseId);
+    res.redirect('http://localhost:3000/house/'+ houseId);
 
 });
 
