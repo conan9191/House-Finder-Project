@@ -4,7 +4,7 @@
  * @Author: sueRimn
  * @Date: 2020-08-08 14:15:11
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-16 20:25:00
+ * @LastEditTime: 2020-08-17 16:22:16
  */
 let createError = require("http-errors");
 const express = require("express");
@@ -77,7 +77,7 @@ app.use("/login", async (req, res, next) => {
 
 app.use("/logout", async (req, res, next) => {
   if (!req.session.user) {
-    req.session.fromOtherPage = true;
+    // req.session.fromOtherPage = true;
     return res.redirect("/login");
   } else {
     next();
