@@ -9,8 +9,6 @@ const reviewData = review.reviewsDate;
 const comment = require("../../data/commentAndReviewData");
 const commentData = comment.commentsData;
 const favHouseData = house.favHouseData;
-const xss = require('xss');
-
 const xss = require("xss");
 
 router.get("/", async (req, res) => {

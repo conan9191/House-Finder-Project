@@ -27,7 +27,7 @@
 
         <div class="form-row">
             <div class="form-group col-md-6">
-                <iframe id="map" width="600" height="450" frameborder="0" style="border:0"
+                <iframe id="map" width="600" height="450" style="border:0"
                     src="https://www.google.com/maps/embed/v1/place?key=AIzaSyC5Y2OeJZ_gqoeUxehJ6BaKdONCF0g1JRU&q={{latitude}},{{longitude}}&zoom=10"
                     allowfullscreen>
                 </iframe>
@@ -49,7 +49,7 @@
 
             <div class="form-group col-md-6">
                 <h3 class="header"> House Type </h3>
-                <p class="paraClass" id="priceInfo">
+                <p class="paraClass" id="houseType">
                     Variant: {{variant}} <br>
                     {{bedroom}} Bedroom(s) <br>
                     {{hall}} Hall(s) <br>
@@ -58,9 +58,9 @@
             </div>
 
             <div class="form-group col-md-6" style="width: 50%;">
-                <h3 class=" header" style="width: 50%; marginwidth=50%">Pet Friendly </h3>
+                <h3 class=" header">Pet Friendly </h3>
                 <p class="paraClass"> {{pet}} </p>
-                <h3 class="header" style="width: 50%;">Parking Available </h3>
+                <h3 class="header">Parking Available </h3>
                 <p class="paraClass"> {{park}} </p>
             </div>
 
@@ -125,27 +125,27 @@
                             </h4>
                         </div>
                         <div class="panel-body">
-                            <label class="commentField" id="{{this._id}}" value={{this._id}}>{{this.text}}</label>
+                            <label class="commentField" id="{{this._id}}">{{this.text}}</label>
                             <button id="edit{{this._id}}" class="editComment" onclick="editcomment()" value={{this._id}}
                                 style="display: {{this.canUpdate}}">Edit</button>
                             <button type="button" id="delete{{this._id}}" class="deleteComment"
                                 onclick="deletecomment()" value={{this._id}}
                                 style="display: {{this.canUpdate}}">Delete</button>
 
-                            <div class="error" id="error{{this._id}}" hidden=true>Please enter valid comment.</div>
+                            <div class="error" id="error{{this._id}}" hidden>Please enter valid comment.</div>
                             <textarea class="commentTextarea" id="commentTextarea{{this._id}}" rows="4" cols="50"
-                                value="" hidden=true></textarea>
+                                hidden></textarea>
                             <button id="commentDoneButton{{this._id}}" class="commentDone" onclick="submitComment()"
-                                value={{this._id}} hidden=true>Done</button>
+                                value={{this._id}} hidden>Done</button>
 
                         </div>
                     </div>
                     {{/each}}
-                    <div class="error" id="error{{this.reviewData._id}}" hidden=true>Please enter valid comment.</div>
+                    <div class="error" id="error{{this.reviewData._id}}" hidden>Please enter valid comment.</div>
                     <textarea class="commentTextarea" id="commentTextarea{{this.reviewData._id}}" rows="4" cols="50"
-                        value="" hidden=true></textarea>
+                        hidden></textarea>
                     <button id="commentDoneButton{{this.reviewData._id}}" class="commentDone" onclick="submitComment()"
-                        value={{this.reviewData._id}} hidden=true>Done</button>
+                        value={{this.reviewData._id}} hidden>Done</button>
                 </div>
 
                 <div class="optReview">
@@ -169,7 +169,7 @@
                 <form id="reviewForm" role="form" action="/review" method="POST">
                     <div class="form-group">
                         <label for="rating">Rating this house：</label>
-                        <select class="form-control" name="rating">
+                        <select class="form-control" name="rating" id="rating">
                             <option>5</option>
                             <option>4</option>
                             <option>3</option>
@@ -177,7 +177,7 @@
                             <option>1</option>
                         </select>
                         <label for="review">Review:</label>
-                        <textarea class="form-control" rows="5" name="reviewText"></textarea>
+                        <textarea class="form-control" rows="5" name="reviewText" id="review"></textarea>
                         <input type="hidden" name="houseId" value="{{houseId}}"> 　
                         <button type="submit" class="btn btn-default">Submit</button>
                     </div>
@@ -185,8 +185,9 @@
             </div>
         </div>
     </div>
+</div>
 
-    <script type="text/javascript" src="/public/js/favouriteHouse.js"></script>
-    <script type="text/javascript" src="/public/js/house.js"></script>
-    <script type="text/javascript" src="/public/js/review.js"></script>
-    <script type="text/javascript" src="/public/js/comment.js"></script>
+<script type="text/javascript" src="/public/js/favouriteHouse.js"></script>
+<script type="text/javascript" src="/public/js/house.js"></script>
+<script type="text/javascript" src="/public/js/review.js"></script>
+<script type="text/javascript" src="/public/js/comment.js"></script>
