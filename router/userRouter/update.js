@@ -1,3 +1,11 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: sueRimn
+ * @Date: 2020-08-17 10:22:47
+ * @LastEditors: Yiqun Peng
+ * @LastEditTime: 2020-08-18 14:09:58
+ */
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
@@ -7,20 +15,48 @@ const userData = data.users;
 const xss = require("xss");
 
 router.get("/", async (req, res) => {
-
+    let userId = req.session.user;
+    if(!userId){
+        res.status(400).json({ error: "You must provide login user to update" });
+        return;
+    }
+    let user = {};
+    if(userId){
+        try {
+            user = await userData.getUserById(userId);
+        } catch (error) {
+            console.log(error);
+        }
+    }
     res.render("pages/update", {
+        hasLogin: true,
+        user: user,
         title: "update an account",
     });
 });
 
 router.post('/', async (req, res) => {
-    let { firstName, lastName, email,password,street, profilepicture,house_number,city,state,pincode,age} = req.body;
+    if (!req.body) {
+        res.status(400).json({ error: "You must provide data to update" });
+        return;
+    }
+    let user = {}
+    let userId = req.session.user;
+    if(!userId){
+        res.status(400).json({ error: "You must provide login user to update" });
+        return;
+    }
+    try {
+        user = await userData.getUserById(userId);
+    } catch (error) {
+        res.status(404).json({ error: error });
+    }
+    let { firstName, lastName, email,password,street,house_number,city,state,pincode,age} = req.body;
     firstName = xss(firstName);
     lastName = xss(lastName);
     email = xss(email);
     password = xss(password);
     street = xss(street);
-    profilepicture = xss(profilepicture);
     house_number = xss(house_number);
     city = xss(city);
     state = xss(state);
@@ -42,9 +78,6 @@ router.post('/', async (req, res) => {
     if (!street) {
         error_msgs.push("Must provide street.");
     }
-    if (!profilepicture) {
-        error_msgs.push("Must provide profilepicture.");
-    }
     if (!house_number) {
         error_msgs.push("Must provide a number.");
     }
@@ -64,35 +97,31 @@ router.post('/', async (req, res) => {
         res.render('pages/update', {
             error_messages: error_msgs,
             hasErrors: true,
-            title: "update an account"
+            title: "update an account",
+            user: user
         })
+        return;
     }
     try {
-        let user = {}
-
-        user = await userData.getUserByEmail(email);
         const hashPassword = await bcrypt.hash(password, 5);
-        let updateOnes = await userData.updateUser(
-            user._id.toString(),
+        let updateOnes = await userData.updateLoginUser(
+            (user._id).toString(),
             firstName,
             lastName,
             email,
             hashPassword,
             street,
-            profilepicture,
+            user.profilePicture,
             house_number,
             city,
             state,
             pincode,
             age
         );
-        console.log(updateOnes);
-
     } catch (e) {
-
-        console.log(e);
+        res.status(404).json({ error: e });
     }
-
+    res.redirect("/account");
 
 });
 

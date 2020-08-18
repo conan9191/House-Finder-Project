@@ -4,7 +4,7 @@
  * @Author: Yiqun Peng
  * @Date: 2020-08-05 14:20:09
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-13 01:04:32
+ * @LastEditTime: 2020-08-17 22:38:27
  */
 
 const dbCollections = require("../../settings/collections");
@@ -150,6 +150,32 @@ let exportedMethods = {
         }
         updatedUserData.favourites = updatedUser.favourites;
     }
+    const objId = ObjectId.createFromHexString(id);
+    const updateInfo = await userCollection.updateOne({ _id: objId }, { $set: updatedUserData});
+    if (!updateInfo.matchedCount && !updateInfo.modifiedCount)throw 'Update failed';
+
+    return await this.getUserById(id);
+  },
+
+  async updateLoginUser(id, firstName, lastName, email, hashedPassword,street,profilepicture,house_number,city,state,pincode,age) {
+    checkIsProperString(id,"id");
+    const userCollection = await users();
+
+    const updatedUserData = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      hashedPassword: hashedPassword,
+      street: street,
+      profilePicture: profilepicture,
+      house_number: house_number,
+      city: city,
+      state: state,
+      pincode: pincode,
+      age: age,
+    };
+    console.log(updatedUserData.hashedPassword);
+
     const objId = ObjectId.createFromHexString(id);
     const updateInfo = await userCollection.updateOne({ _id: objId }, { $set: updatedUserData});
     if (!updateInfo.matchedCount && !updateInfo.modifiedCount)throw 'Update failed';

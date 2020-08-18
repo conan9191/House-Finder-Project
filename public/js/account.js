@@ -4,7 +4,7 @@
  * @Author: sueRimn
  * @Date: 2020-08-16 19:07:15
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-16 23:32:24
+ * @LastEditTime: 2020-08-18 12:58:08
  */
 function deleteAccount(){
     let requestConfig = {
@@ -34,3 +34,7 @@ function reloadAccount() {
     location.reload();
   }
   
+  
+function updateInfo(){
+    window.location.replace("http://localhost:3000/update");
+}
