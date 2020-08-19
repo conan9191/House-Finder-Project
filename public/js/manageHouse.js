@@ -283,12 +283,14 @@ function addHouse() {
     console.log("Succesfully added house");
 
     let msg = "Succesfully added house";
+
     if (houseId) {
       msg = "Succesfully edited house";
+      reloadHousewithId(houseId);
     }
 
-    reloadHouseList();
     window.alert(msg);
+    location.reload();
   }
 }
 
@@ -309,6 +311,19 @@ function deleteHouse() {
   xhttp.send(JSON.stringify({ id: buttonId }));
 
   reloadHouseList();
+}
+
+function reloadHousewithId(houseid) {
+  let xhttpget = new XMLHttpRequest();
+  method = "GET";
+  url = "/house/" + houseid;
+
+  xhttpget.open(method, url, true);
+  xhttpget.setRequestHeader("Content-type", "application/json");
+  xhttpget.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+  xhttpget.send();
+
+  location.reload();
 }
 
 function reloadHouseList() {
