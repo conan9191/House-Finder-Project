@@ -4,7 +4,7 @@
  * @Author: sueRimn
  * @Date: 2020-08-17 10:22:47
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-18 14:25:02
+ * @LastEditTime: 2020-08-19 16:16:53
  */
 const express = require("express");
 const router = express.Router();
@@ -54,7 +54,7 @@ router.post('/', async (req, res) => {
     let { firstName, lastName, email,password,street,house_number,city,state,pincode,age} = req.body;
     firstName = xss(firstName);
     lastName = xss(lastName);
-    email = xss(email);
+    email = xss(email).toLowerCase();
     password = xss(password);
     street = xss(street);
     house_number = xss(house_number);
