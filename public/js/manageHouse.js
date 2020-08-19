@@ -278,7 +278,7 @@ function addHouse() {
     xhttp.send(JSON.stringify(houseData));
 
     if (xhttp.responseText) {
-      console.log(xhttp.responseText);
+      console.log("xhttp.responseText=" + xhttp.responseText);
     }
     console.log("Succesfully added house");
 

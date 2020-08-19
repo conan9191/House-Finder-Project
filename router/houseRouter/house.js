@@ -329,18 +329,22 @@ router.post("/", async (req, res) => {
 
     //XSS attack check for add house
     let errorArray = checkXSSattack(houseParamBody);
+
+    // console.log("Add house error check :" + errorArray.toString());
     if (errorArray.length > 0) {
+      // console.log("Render house manage page :");
       res.render("pages/houseManage", {
         error_messages: errorArray,
         hasErrors: true,
         title: "Add new house",
       });
-      return;
+    } else {
+      let newHouse = await houseData.addHouse(houseParamBody);
+      // console.log("Add house successfully :" + JSON.stringify(newHouse));
+      res.json(newHouse);
     }
-    let newHouse = await houseData.addHouse(houseParamBody);
-
-    res.json(newHouse);
   } catch (error) {
+    console.log("Add house failure :" + error);
     res.status(404).json({ error: "Cannot add new House" });
   }
 });
@@ -500,7 +504,7 @@ router.patch("/:id", async (req, res) => {
 
   try {
     //XSS attack check for edit house
-    let errorArray = checkXSSattack(updateHouse);
+    let errorArray = checkXSSattack(oldHouse);
     if (errorArray.length > 0) {
       res.render("pages/houseManage", {
         error_messages: errorArray,
@@ -779,27 +783,29 @@ function checkXSSattack(data) {
     erroMessage.push(
       "You must enter house type details like type of house, number of bedroom, hall , kitchen "
     );
-  } else {
-    let houseTypeDetail = houseType;
-
-    let type = xss(houseTypeDetail.type);
-    let bedroom = xss(houseTypeDetail.bedroom);
-    let hall = xss(houseTypeDetail.hall);
-    let kitchen = xss(houseTypeDetail.kitchen);
-
-    if (!type) {
-      erroMessage.push("You must enter house type");
-    }
-    if (!bedroom) {
-      erroMessage.push("You must enter number of bedroom in house");
-    }
-    if (!hall) {
-      erroMessage.push("You must enter number of hall in house");
-    }
-    if (!kitchen) {
-      erroMessage.push("You must enter number of kitchen in house");
-    }
   }
+
+  // else {
+  //   let houseTypeDetail = houseType;
+
+  //   let type = xss(houseTypeDetail.type);
+  //   let bedroom = xss(houseTypeDetail.bedroom);
+  //   let hall = xss(houseTypeDetail.hall);
+  //   let kitchen = xss(houseTypeDetail.kitchen);
+
+  //   if (!type) {
+  //     erroMessage.push("You must enter house type");
+  //   }
+  //   if (!bedroom) {
+  //     erroMessage.push("You must enter number of bedroom in house");
+  //   }
+  //   if (!hall) {
+  //     erroMessage.push("You must enter number of hall in house");
+  //   }
+  //   if (!kitchen) {
+  //     erroMessage.push("You must enter number of kitchen in house");
+  //   }
+  // }
 
   return erroMessage;
 }
