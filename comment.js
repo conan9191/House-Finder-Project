@@ -27,14 +27,23 @@ function addComment() {
   let commentTextarea = document.getElementById("commentTextarea"+buttonId.toString());
   let commentDoneButton = document.getElementById("commentDoneButton"+buttonId.toString());
   let errorMessage = document.getElementById("error"+buttonId.toString());
-  if(commentTextarea.hidden == true){
-    errorMessage.hidden = true;
-    commentTextarea.hidden = false;
-    commentDoneButton.hidden = false;
+  // if(commentTextarea.hidden == true){
+  //   errorMessage.hidden = true;
+  //   commentTextarea.hidden = false;
+  //   commentDoneButton.hidden = false;
+  // }else{
+  //   errorMessage.hidden = true;
+  //   commentTextarea.hidden = true;
+  //   commentDoneButton.hidden = true;
+  // }
+  if(commentTextarea.getAttribute("hidden") == "hidden"){
+    errorMessage.setAttribute("hidden","hidden");
+    commentTextarea.removeAttribute("hidden");
+    commentDoneButton.removeAttribute("hidden");
   }else{
-    errorMessage.hidden = true;
-    commentTextarea.hidden = true;
-    commentDoneButton.hidden = true;
+    errorMessage.setAttribute("hidden","hidden");
+    commentTextarea.setAttribute("hidden","hidden");
+    commentDoneButton.setAttribute("hidden","hidden");
   }
 }
 
@@ -47,7 +56,8 @@ function addComment() {
 function submitComment() {
   let id = event.srcElement.value;
   let errorMessage = document.getElementById("error"+id.toString());
-  errorMessage.hidden = true;
+  // errorMessage.hidden = true;
+  errorMessage.setAttribute("hidden","hidden");
   let commentText = "";
   let commentTextarea = document.getElementById("commentTextarea"+id.toString());
   commentText = validComment(commentTextarea.value, id);
@@ -98,8 +108,18 @@ function hideCommentTextArea(isHidden,id) {
   let commentTextarea = document.getElementById("commentTextarea"+id.toString());
   let commentDoneButton = document.getElementById("commentDoneButton"+id.toString());
   commentTextarea.value = "";
-  commentTextarea.hidden = isHidden;
-  commentDoneButton.hidden = isHidden;
+  if(isHidden){
+    commentTextarea.setAttribute("hidden","hidden");
+  }else{
+    commentTextarea.removeAttribute("hidden");
+  }
+  if(isHidden){
+    commentDoneButton.setAttribute("hidden","hidden");
+  }else{
+    commentDoneButton.removeAttribute("hidden");
+  }
+  //commentTextarea.hidden = isHidden;
+  //commentDoneButton.hidden = isHidden;
 }
 
 /**
@@ -120,14 +140,23 @@ function editcomment() {
   let errorMessage = document.getElementById("error"+id.toString());
   // commentTextarea.hidden = false;
   // commentDoneButton.hidden = false;
-  if(commentTextarea.hidden == true){
-    errorMessage.hidden = true;
-    commentTextarea.hidden = false;
-    commentDoneButton.hidden = false;
+  // if(commentTextarea.hidden == true){
+  //   errorMessage.hidden = true;
+  //   commentTextarea.hidden = false;
+  //   commentDoneButton.hidden = false;
+  // }else{
+  //   errorMessage.hidden = true;
+  //   commentTextarea.hidden = true;
+  //   commentDoneButton.hidden = true;
+  // }
+  if(commentTextarea.getAttribute("hidden") == "hidden"){
+    errorMessage.setAttribute("hidden","hidden");
+    commentTextarea.removeAttribute("hidden");
+    commentDoneButton.removeAttribute("hidden");
   }else{
-    errorMessage.hidden = true;
-    commentTextarea.hidden = true;
-    commentDoneButton.hidden = true;
+    errorMessage.setAttribute("hidden","hidden");
+    commentTextarea.setAttribute("hidden","hidden");
+    commentDoneButton.setAttribute("hidden","hidden");
   }
 
   commentTextarea.value = document.getElementById(id.toString()).innerHTML;

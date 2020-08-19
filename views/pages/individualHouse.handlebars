@@ -132,20 +132,20 @@
                                 onclick="deletecomment()" value={{this._id}}
                                 style="display: {{this.canUpdate}}">Delete</button>
 
-                            <div class="error" id="error{{this._id}}" hidden="hidden">Please enter valid comment.</div>
+                            <div class="error" id="error{{this._id}}" hidden>Please enter valid comment.</div>
                             <textarea class="commentTextarea" id="commentTextarea{{this._id}}" rows="4" cols="50"
-                                hidden="hidden"></textarea>
+                                hidden></textarea>
                             <button id="commentDoneButton{{this._id}}" class="commentDone" onclick="submitComment()"
-                                value={{this._id}} hidden="hidden">Done</button>
+                                value={{this._id}} hidden>Done</button>
 
                         </div>
                     </div>
                     {{/each}}
-                    <div class="error" id="error{{this.reviewData._id}}" hidden="hidden">Please enter valid comment.</div>
+                    <div class="error" id="error{{this.reviewData._id}}" hidden>Please enter valid comment.</div>
                     <textarea class="commentTextarea" id="commentTextarea{{this.reviewData._id}}" rows="4" cols="50"
-                        hidden="hidden"></textarea>
+                        hidden></textarea>
                     <button id="commentDoneButton{{this.reviewData._id}}" class="commentDone" onclick="submitComment()"
-                        value={{this.reviewData._id}} hidden="hidden">Done</button>
+                        value={{this.reviewData._id}} hidden>Done</button>
                 </div>
 
                 <div class="optReview">
