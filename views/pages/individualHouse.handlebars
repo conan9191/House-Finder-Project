@@ -125,27 +125,27 @@
                             </h4>
                         </div>
                         <div class="panel-body">
-                            <label class="commentField" id="{{this._id}}" value={{this._id}}>{{this.text}}</label>
+                            <label class="commentField" id="{{this._id}}">{{this.text}}</label>
                             <button id="edit{{this._id}}" class="editComment" onclick="editcomment()" value={{this._id}}
                                 style="display: {{this.canUpdate}}">Edit</button>
                             <button type="button" id="delete{{this._id}}" class="deleteComment"
                                 onclick="deletecomment()" value={{this._id}}
                                 style="display: {{this.canUpdate}}">Delete</button>
 
-                            <div class="error" id="error{{this._id}}" hidden=true>Please enter valid comment.</div>
+                            <div class="error" id="error{{this._id}}" hidden="hidden">Please enter valid comment.</div>
                             <textarea class="commentTextarea" id="commentTextarea{{this._id}}" rows="4" cols="50"
-                                value="" hidden=true></textarea>
+                                hidden="hidden"></textarea>
                             <button id="commentDoneButton{{this._id}}" class="commentDone" onclick="submitComment()"
-                                value={{this._id}} hidden=true>Done</button>
+                                value={{this._id}} hidden="hidden">Done</button>
 
                         </div>
                     </div>
                     {{/each}}
-                    <div class="error" id="error{{this.reviewData._id}}" hidden=true>Please enter valid comment.</div>
+                    <div class="error" id="error{{this.reviewData._id}}" hidden="hidden">Please enter valid comment.</div>
                     <textarea class="commentTextarea" id="commentTextarea{{this.reviewData._id}}" rows="4" cols="50"
-                        value="" hidden=true></textarea>
+                        hidden="hidden"></textarea>
                     <button id="commentDoneButton{{this.reviewData._id}}" class="commentDone" onclick="submitComment()"
-                        value={{this.reviewData._id}} hidden=true>Done</button>
+                        value={{this.reviewData._id}} hidden="hidden">Done</button>
                 </div>
 
                 <div class="optReview">
@@ -166,18 +166,18 @@
                 <h3 class="panel-title">Leave Your Review</h3>
             </div>
             <div class="panel-body">
-                <form id="reviewForm" role="form" action="/review" method="POST">
+                <form id="reviewForm" action="/review" method="POST">
                     <div class="form-group">
                         <label for="rating">Rating this house：</label>
-                        <select class="form-control" name="rating">
+                        <select id="rating" class="form-control" name="rating">
                             <option>5</option>
                             <option>4</option>
                             <option>3</option>
                             <option>2</option>
                             <option>1</option>
                         </select>
-                        <label for="review">Review:</label>
-                        <textarea class="form-control" rows="5" name="reviewText"></textarea>
+                        <label for="reviewText">Review:</label>
+                        <textarea id="reviewText" class="form-control" rows="5" name="reviewText"></textarea>
                         <input type="hidden" name="houseId" value="{{houseId}}"> 　
                         <button type="submit" class="btn btn-default">Submit</button>
                     </div>
@@ -185,7 +185,7 @@
             </div>
         </div>
     </div>
-
+</div>
     <script type="text/javascript" src="/public/js/favouriteHouse.js"></script>
     <script type="text/javascript" src="/public/js/house.js"></script>
     <script type="text/javascript" src="/public/js/review.js"></script>
