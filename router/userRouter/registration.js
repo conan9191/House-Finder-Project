@@ -13,18 +13,19 @@ router.get("/", async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  let { firstName, lastName, email,password,street, profilepicture,house_number,city,state,pincode,age} = req.body;
+  let { firstName, lastName, email,password,street,profilepicturefile,house_number,city,state,pincode,age,profilepicture} = req.body;
   firstName = xss(firstName);
   lastName = xss(lastName);
-  email = xss(email);
+  email = xss(email).toLowerCase();
   password = xss(password);
   street = xss(street);
-  profilepicture = xss(profilepicture);
+  profilepicturefile = xss(profilepicturefile);
   house_number = xss(house_number);
   city = xss(city);
   state = xss(state);
   pincode = xss(pincode);
   age = xss(age);
+  profilepicture = xss(profilepicture);
 
   let error_msgs = [];
   try {
@@ -51,7 +52,7 @@ router.post('/', async (req, res) => {
     if (!street) {
       error_msgs.push("Must provide street.");
     }
-    if (!profilepicture) {
+    if (!profilepicture ||!profilepicturefile) {
       error_msgs.push("Must provide profilepicture.");
     }
     if (!house_number) {
@@ -92,7 +93,14 @@ router.post('/', async (req, res) => {
             pincode,
             age
         );
-        res.render('pages/success', {title: "Account created"});
+        try {
+          userInfo = await userData.getUserByEmail(email);
+        } catch (e) {
+          return res.json({ error: "cannot find user info." });
+        }
+        console.log(userData._id);
+        req.session.user = userInfo._id;
+        res.render('pages/success', {title: "Account created", hasLogin: true});
       } catch (e) {
         console.log(e);
         error_msgs.push("There was an error registering your account. Please try again later.")
