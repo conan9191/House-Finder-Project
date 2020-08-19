@@ -286,9 +286,9 @@ function addHouse() {
     if (houseId) {
       msg = "Succesfully edited house";
     }
-    window.alert(msg);
 
     reloadHouseList();
+    window.alert(msg);
   }
 }
 
