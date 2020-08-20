@@ -19,10 +19,13 @@ router.get("/", async (req, res) => {
     for (let i = 0; i < houseList.length; i++) {
       let reviews = await reviewData.getReviewByHouseId(houseList[i]._id);
       let sum = 0;
-      for (let j = 0; j < reviews.length; j++) sum += await reviews[j].rating;
+      let avg = 0.0;
 
-      let avg = 0;
-      avg = (sum / reviews.length).toFixed(1);
+      if (reviews.length > 0) {
+        for (let j = 0; j < reviews.length; j++) sum += await reviews[j].rating;
+        avg = (sum / reviews.length).toFixed(1);
+      }
+
       houseInfo.push([i, reviews.length, avg]);
     }
 
