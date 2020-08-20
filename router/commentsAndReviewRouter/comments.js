@@ -25,6 +25,7 @@ router.get("/", async (req, res) => {
     });
   } catch (error) {
     res.status(404).json({ error: "Comments not found" });
+    
   }
 });
 
@@ -90,7 +91,11 @@ router.post("/:id", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   if (!req.params.id) {
-    res.status(404).json({ error: "Must supply fav comment Id." });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "Must supply fav comment Id." , 
+      hasLogin: req.session.user
+    });
     return;
   }
 
@@ -98,7 +103,11 @@ router.delete("/:id", async (req, res) => {
   try {
     await commentData.getCommentById(req.params.id);
   } catch (error) {
-    res.status(404).json({ error: "Cannot delete comment." });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "Must supply fav comment Id." , 
+      hasLogin: req.session.user
+    });
     return;
   }
   //delete comment
@@ -106,7 +115,11 @@ router.delete("/:id", async (req, res) => {
     await commentData.deleteComment(req.params.id);
     res.sendStatus(200);
   } catch (error) {
-    res.status(404).json({ error: "Cannot delete comment." });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "Must supply fav comment Id." , 
+      hasLogin: req.session.user
+    });
     return;
   }
   //delete comment in review
@@ -150,14 +163,22 @@ router.put("/:id", async (req, res) => {
   try {
     await commentData.getCommentById(commentId);
   } catch (error) {
-    res.status(404).json({ error: "Cannot update comment." });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "Cannot update comment." , 
+      hasLogin: req.session.user
+    });
   }
 
   try {
     let updatedComment = await commentData.updateComment(commentId, paramBody);
     res.json(updatedComment);
   } catch (error) {
-    res.status(404).json({ error: "Cannot update comment." });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "Cannot update comment." , 
+      hasLogin: req.session.user
+    });
   }
 });
 
@@ -182,7 +203,12 @@ router.patch("/:id", async (req, res) => {
     oldComment = await commentData.getCommentById(req.params.id);
     oldComment = checkAndUpdate(newComment, oldComment);
   } catch (error) {
-    res.status(404).json({ error: "Cannot update comment." });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "Cannot update comment." , 
+      hasLogin: req.session.user
+    });
+    
   }
   let updatedComment = {};
   try {
@@ -192,7 +218,11 @@ router.patch("/:id", async (req, res) => {
     );
     res.json(updatedComment);
   } catch (error) {
-    res.status(404).json({ error: "Cannot update comment." });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "Cannot update comment." , 
+      hasLogin: req.session.user
+    });
   }
   //update comment in review
   let updateReview = {};
