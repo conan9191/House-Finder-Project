@@ -368,14 +368,14 @@ function validateOtherHouseInfo() {
   }
 
   //street
-  if (isValidString(Street)) {
+  if (isValidString(Street) && isValidStreet(Street.value)) {
     houseData.street = Street.value;
   } else {
     errorArray.push(streetError);
   }
 
   //house number
-  if (isValidString(houseNumber)) {
+  if (isValidString(houseNumber) && isValidHouseNumber(houseNumber.value)) {
     houseData.houseNumber = houseNumber.value;
   } else {
     errorArray.push(housenumberError);
@@ -484,7 +484,7 @@ function validateOtherHouseInfo() {
 
   //house type
 
-  if (isValidString(houseType)) {
+  if (isValidString(houseType) && isValidStringOnlyLetters(houseType.value)) {
     houseData.houseType.type = houseType.value;
   }
 
@@ -612,6 +612,24 @@ function isValidStringOnlyLetters(inputtxt) {
   return false;
 }
 
+function isValidHouseNumber(inputtxt) {
+  let value = inputtxt.replace(/\s+/g, "");
+  let letters = /^(?=.*\d)[a-zA-Z\d]+$/;
+  if (value.match(letters)) {
+    return true;
+  }
+  return false;
+}
+
+function isValidStreet(inputtxt) {
+  let value = inputtxt.replace(/\s+/g, "");
+  let letters = /([a-zA-Z])+([ -~])*/;
+  if (value.match(letters)) {
+    return true;
+  }
+  return false;
+}
+
 function isValidString(input) {
   if (
     input &&
@@ -629,7 +647,8 @@ function isValidNumeric(input) {
     input &&
     input.value &&
     !isNaN(input.value) &&
-    input.value.trim().length > 0
+    input.value.trim().length > 0 &&
+    input.value > 0
   ) {
     return true;
   }
