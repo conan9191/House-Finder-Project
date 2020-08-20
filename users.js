@@ -4,7 +4,7 @@
  * @Author: Yiqun Peng
  * @Date: 2020-08-05 14:20:09
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-10 12:14:00
+ * @LastEditTime: 2020-08-17 22:38:27
  */
 
 const dbCollections = require("../../settings/collections");
@@ -62,9 +62,9 @@ let exportedMethods = {
       city: city,
       state: state,
       pincode: pincode,
-      age: age
-      //reviewIds: [],
-      //favourites: []
+      age: age,
+      reviewIds: [],
+      favourites: []
     };
     const newInsertInformation = await userCollection.insertOne(newUser);
     if (newInsertInformation.insertedCount === 0) throw 'Insert failed!';
@@ -81,7 +81,63 @@ let exportedMethods = {
     return userResult;
   },
 
-  async updateUser(id, firstName, lastName, email, hashedPassword,street,profilepicture,house_number,city,state,pincode,age) {
+  async updateUser(id, updatedUser) {
+    checkIsProperString(id,"id");
+    const userCollection = await users();
+    const updatedUserData = {};
+    if (updatedUser.firstName) {
+        checkIsProperString(updatedUser.firstName, "firstName")
+        updatedUserData.firstName = updatedUser.firstName;
+    }
+    if (updatedUser.lastName) {
+        checkIsProperString(updatedUser.lastName, "lastName")
+        updatedUserData.lastName = updatedUser.lastName;
+    }
+    if (updatedUser.profilePicture) {
+        checkIsProperString(updatedUser.profilePicture, "profilePicture")
+        updatedUserData.profilePicture = updatedUser.profilePicture;
+    }
+    if (updatedUser.street) {
+        checkIsProperString(updatedUser.street, "street")
+        updatedUserData.street = updatedUser.street;
+    }
+    if (updatedUser.house_number) {
+        checkIsProperString(updatedUser.house_number, "house_number")
+        updatedUserData.house_number = updatedUser.house_number;
+    }
+    if (updatedUser.city) {
+        checkIsProperString(updatedUser.city, "city")
+        updatedUserData.city = updatedUser.city;
+    }
+    if (updatedUser.state) {
+        checkIsProperString(updatedUser.state, "state")
+        updatedUserData.state = updatedUser.state;
+    }
+    if (updatedUser.pincode) {
+        checkIsProperString(updatedUser.pincode, "pincode")
+        updatedUserData.pincode = updatedUser.pincode;
+    }
+    if (updatedUser.age) {
+        checkIsProperString(updatedUser.age, "age")
+        updatedUserData.age = updatedUser.age;
+    }
+    if (updatedUser.hashedPassword) {
+        checkIsProperString(updatedUser.hashedPassword, "hashedPassword")
+        updatedUserData.hashedPassword = updatedUser.hashedPassword;
+    }
+    if (updatedUser.firstName) {
+        checkIsProperString(updatedUser.firstName, "firstName")
+        updatedUserData.firstName = updatedUser.firstName;
+    }
+    
+    const objId = ObjectId.createFromHexString(id);
+    const updateInfo = await userCollection.updateOne({ _id: objId }, { $set: updatedUserData});
+    if (!updateInfo.matchedCount && !updateInfo.modifiedCount)throw 'Update failed';
+
+    return await this.getUserById(id);
+  },
+
+  async updateLoginUser(id, firstName, lastName, email, hashedPassword,street,profilepicture,house_number,city,state,pincode,age) {
     checkIsProperString(id,"id");
     const userCollection = await users();
 
