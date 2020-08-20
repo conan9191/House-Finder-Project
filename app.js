@@ -4,7 +4,7 @@
  * @Author: sueRimn
  * @Date: 2020-08-08 14:15:11
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-08 14:17:36
+ * @LastEditTime: 2020-08-17 16:22:16
  */
 let createError = require("http-errors");
 const express = require("express");
@@ -15,11 +15,26 @@ const app = express();
 const static = express.static(__dirname + "/public");
 const exphbs = require("express-handlebars");
 const session = require("express-session");
+let bodyParser = require("body-parser");
 
 const configRoutes = require("./router/index");
 
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(
+  bodyParser.urlencoded({
+    limit: "50mb",
+    extended: true,
+    parameterLimit: 50000,
+  })
+);
+
 // view engine setup
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.engine(
+  "handlebars",
+  exphbs({
+    defaultLayout: "main",
+  })
+);
 app.set("view engine", "handlebars");
 
 app.use("/public", static);
@@ -62,7 +77,7 @@ app.use("/login", async (req, res, next) => {
 
 app.use("/logout", async (req, res, next) => {
   if (!req.session.user) {
-    req.session.fromOtherPage = true;
+    // req.session.fromOtherPage = true;
     return res.redirect("/login");
   } else {
     next();
@@ -71,6 +86,14 @@ app.use("/logout", async (req, res, next) => {
 
 app.use("/registration", async (req, res, next) => {
   if (req.session.user) {
+    return res.redirect("/");
+  } else {
+    next();
+  }
+});
+
+app.use("/account", async (req, res, next) => {
+  if (!req.session.user) {
     return res.redirect("/");
   } else {
     next();

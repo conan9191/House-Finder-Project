@@ -14,7 +14,7 @@
 
 <div>
 
-    <button id="commentButton" class="comment"> Add Comment</button>
+    <button id="commentButton" class="comment" onclick="addComment()"> Add Comment</button>
     <br>
     <br>
 
@@ -35,6 +35,8 @@
     <br>
     <div id="error" hidden=true>Please enter valid comment.</div>
     <textarea id="commentTextarea" rows="4" cols="50" value="" hidden=true></textarea>
-    <button id="commentDoneButton" class="commentDone" hidden=true>Done</button>
+    <button id="commentDoneButton" class="commentDone" hidden=true onclick="submitComment()">Done</button>
 
 </div>
+
+<script type="text/javascript" src="/public/js/comment.js"></script>

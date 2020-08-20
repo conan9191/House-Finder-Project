@@ -2,12 +2,21 @@
     <div class="row justify-content-center">
         <div class="alert alert-success" role="alert">
             <div class="alert-heading errorHeading">Success</div>
+            {{#if hasLogin}}
+            <p>
+                Log in successfully!
+            </p>
+            <p class="mb-0"><a href="/account" class="alert-link"
+                               aria-label="Click to go to account page">Click here</a> to
+                login to your account.</p>
+            {{else}}
             <p>
                 Your account has been created!
             </p>
-            <p class="mb-0"><a href="/account" class="alert-link"
+            <p class="mb-0"><a href="/login" class="alert-link"
                                aria-label="Click to go to login page">Click here</a> to
                 login to your account.</p>
+            {{/if}}
         </div>
     </div>
 </div>

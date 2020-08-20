@@ -1,14 +1,11 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h3 class="panel-title">
-			Account:
+			{{user.firstName}}{{user.lastName}}'s Home Page:
 		</h3>
 		<div class="profilePic">
-			<img src="{{user.profilePicture}}" onclick="imageOnClick()" alt="user">
+			<img src="{{user.profilePicture}}" alt="user" style="cursor:default;">
 		</div>
-		<label for="updatepicture" style="font-size:10px; color: grey;">Click on change Avatar</label>
-		<input type="file" style="display:none" id="updatepicture" name="updatepicture" onchange="updateimage()"
-			accept=".jpg, .jpeg, .png">
 	</div>
 	<div class="panel-body">
 		<ul id="myTab" class="nav nav-tabs">
@@ -23,7 +20,7 @@
 		</ul>
 		<div id="myTabContent" class="tab-content">
 			<div class="tab-pane fade in active" id="info">
-				<div>
+				<div style="padding: 10px 100px 10px;">
 					<form id="updateForm">
 						<div class="form-row">
 							<div class="form-group col-md-6">
@@ -84,15 +81,8 @@
 								<input type="text" maxlength="50" name="age" class="form-control" id="age" placeholder="age" value="{{user.age}}" disabled="disabled">
 							</div>
 						</div>
-						<div class="text-center">
-							<button id="toUpdateButton" type="button" class="btn btn-primary" style="width: 200px;" onclick = "updateInfo()">Click to update</button>
-						</div>
 					</form>
 				</div>
-				<br/>
-				<button type="button" id="deleteButton" onclick="deleteAccount()" class="btn btn-danger"> Delete Your
-					Account</button>
-
 			</div>
 			<div class="tab-pane fade" id="review">
 				{{#each reviews}}
@@ -146,6 +136,4 @@
 	</div>
 </div>
 
-
-<script src="/public/js/profilePicture.js"></script>
-<script	src="/public/js/account.js"></script>
+<script type="text/javascript" src="/public/js/profilePicture.js"></script>

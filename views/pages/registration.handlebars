@@ -38,13 +38,13 @@
                     <div id="LastNameError">You must enter your Last Name</div>
                     <div id="EmailError">You must enter an email address</div>
                     <div id="passwordError">You must enter a password</div>
-                    <div id="pictureError">You must enter a profile picture</div>
+                    <div id="pictureError">You must upload a profile picture</div>
                     <div id="streetError">You must enter a street</div>
-                    <!--                    <div id="housenumberError">You must enter a house number</div>-->
-                    <!--                    <div id="cityError">You must enter a city</div>-->
-                    <!--                    <div id="stateError">You must enter a state</div>-->
-                    <!--                    <div id="pincodeError">You must enter a pincode</div>-->
-                    <!--                    <div id="ageError">You must enter a age</div>-->
+                    <div id="housenumberError">You must enter a house number</div>
+                    <div id="cityError">You must enter a city</div>
+                   <div id="stateError">You must enter a state</div>
+                   <div id="pincodeError">You must enter a pincode</div>
+                   <div id="ageError">You must enter a age</div>
                 </div>
             </div>
         </div>
@@ -88,9 +88,11 @@
                         <input type="text" maxlength="50" name="street" class="form-control" id="street" placeholder="street">
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="profilepicture">profilepicture</label>
-                        <input type="text" maxlength="50" name="profilepicture" class="form-control" id="profilepicture"
-                               placeholder="profilepicture">
+                        <label for="profilepicturefile">profilepicture</label>
+                        <input type="file" id="profilepicturefile" name="profilepicturefile" onchange="readimage()" accept=".jpg, .jpeg, .png">
+                        <div id="showpicture">
+                            <p>No files currently selected for upload</p>
+                        </div>
                     </div>
                 </div>
 
@@ -124,6 +126,7 @@
                         <input type="text" maxlength="50" name="age" class="form-control" id="age" placeholder="age">
                     </div>
                 </div>
+                <input type="hidden"  name="profilepicture" class="form-control" id="profilepicture">
                 <div class="text-center">
                     <button type="submit" class="btn btn-primary">Register</button>
                 </div>

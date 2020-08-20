@@ -8,27 +8,61 @@
                 Links to individual house pages
                 Photo of the house
                 Brief description
-
-        So without CSS the image size won't be regulated and it will all
-        look like a long list of course
-
-        As of right now, this code will display all the houses in the collection
-        We will change this to houses that match the user criteria only of course
       -->
 
     <!-- CSS in houseList.css -->
+
     <div class="form-inline houseList col-md-12">
         {{#each list}}
-            <div class="col-md-4 house">
-                <div class="cover-container">
-                <a href="{{this._id}}">
-                    <img class="cover-item" src="{{this.houseImage}}" alt="house">
-                    <div class="overlay"> More Information </div> 
-                </a>
+        <div class="col-md-4 house">
+            <div class="cover-container">
+                <img class="cover-item" src="{{this.profilePicture.[0]}}" alt="house">
+            </div>
+
+            <div>
+                <p class="paraClass"> {{houseNumber}} {{street}} <br> {{city}}, {{state}}, {{pincode}} </p>
+
+                <div>
+                    <p class="paraClass">
+                        Rent: ${{rent}}/mo <br>
+                        {{houseType.type}} | {{houseType.bedroom}} Bedroom(s)
+                    </p>
                 </div>
 
-                <p id="houseDescription"> {{this.description}} </p>
+                <a href="{{this._id}}">View Details</a>
+
+                <br>
+
+                {{#if this.canUpdate}}
+                <input type="button" value="Edit" onClick="javascript:location.href = '/house/add/{{this._id}}'"
+                    class="editComment" />
+
+
+                <button id="delete{{this._id}}" class="deleteComment" onClick="deleteHouse()"
+                    value={{this._id}}>Delete</button>
+                {{/if}}
+
+
+
             </div>
+        </div>
         {{/each}}
+
+        {{#if emptySearch}}
+        <div>
+            <p class="emptySearchList" id="emptySearchList">
+                No result found for given search.
+            </p>
+        </div>
+        {{/if}}
+
+        {{#if userAddedZeroHouse}}
+        <div>
+            <p class="emptySearchList" id="addHouseList">
+                No house(s) added by login user.A user can update only those house(s) that he/she added.
+            </p>
+        </div>
+        {{/if}}
+
     </div>
 </div>

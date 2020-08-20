@@ -14,6 +14,7 @@ const { GridFSBucketReadStream } = require("mongodb");
  */
 let houseData = {
   _id: "",
+  userId: "",
   profilePicture: [],
   street: "",
   houseNumber: "",
@@ -31,7 +32,6 @@ let houseData = {
     bedroom: "",
     hall: "",
     kitchen: "",
-    bathroom: "",
   },
   petFriendly: "",
   otherAmenities: "",
@@ -46,148 +46,168 @@ let houseData = {
  * Return: True if the info is valid and has no errors
  */
 async function infoValid(info) {
-	if (arguments.length != 1)
-		throw "Usage: info";
-	if (!info)
-		throw "The form information was expected";
+  if (arguments.length != 1) throw "Usage: info";
+  if (!info) throw "The form information was expected";
 
-	//rent checking
-	let rMin = await info["rent-min"];
-	let rMax = await info["rent-max"];
+  //rent checking
+  let rMin = await info["rent-min"];
+  let rMax = await info["rent-max"];
 
-	if (rMin && (isNaN(rMin) || rMin < 0)) 
-		throw "Rent minimum is not a positive number";
-	if (rMax && (isNaN(rMax) || rMax < 0))
-		throw "Rent maximum is not a positive number";
-	if (rMin && rMax && (rMin >= rMax))
-		throw "Rent maximum must be greater than rent minimum";
-	
-	//date checking
-	let dStart = await info["date-start"];
-	let dEnd = await info["date-end"];
-	let dStartValid = moment(dStart, "MM/DD/YYYY", true).isValid();
-	let dEndValid = moment(dEnd, "MM/DD/YYYY", true).isValid();
-	let after = moment(dEnd).isAfter(dStart);
+  if (rMin && (isNaN(rMin) || rMin < 0))
+    throw "Rent minimum is not a positive number";
+  if (rMax && (isNaN(rMax) || rMax < 0))
+    throw "Rent maximum is not a positive number";
+  if (rMin && rMax && rMin >= rMax)
+    throw "Rent maximum must be greater than rent minimum";
 
-	if (dStart && !dStartValid)
-		throw "Start date is invalid";
-	if (dEnd && !dEndValid)
-		throw "End date is invalid";
-	if (dStart && dEnd && !after)
-		throw "End date does not come after start date";
+  //date checking
+  let dStart = await info["date-start"];
+  let dEnd = await info["date-end"];
+  let dStartValid = moment(dStart, "MM/DD/YYYY", true).isValid();
+  let dEndValid = moment(dEnd, "MM/DD/YYYY", true).isValid();
+  let after = moment(dEnd).isAfter(dStart);
 
-	//Address checking 
-	let hNumber = await info["house-number"];
-	let hStreet = await info["house-street"];
-	let hCity = await info["house-city"];
-	let hState = await info["house-state"];
-	let hZip = await info["house-zipcode"];
+  //if (dStart && !dStartValid) throw "Start date is invalid";
+  //if (dEnd && !dEndValid) throw "End date is invalid";
+  if (dStart && dEnd && !after) throw "End date does not come after start date";
 
-	if (hNumber && isNaN(hNumber))
-		throw "House Number must be a number";
-	if (hStreet && (typeof hStreet != 'string'))
+  //Address checking
+  let hNumber = await info["house-number"];
+  let hStreet = await info["house-street"];
+  let hCity = await info["house-city"];
+  let hState = await info["house-state"];
+  let hZip = await info["house-zipcode"];
+
+  if (hNumber && isNaN(hNumber)) throw "House Number must be a number";
+  if (hNumber && hNumber < 1) throw "House Number must be a positive integer"
+  if (hStreet) {
+    if (!isNaN(hStreet))
 		throw "House street must be a string";
-	if (hCity && (typeof hCity != 'string'))
-		throw "House city must be a string";
-	if (hState && (typeof hState != 'string'))
-		throw "House State must be a string";
-	if (hZip && isNaN(hZip))
-		throw "House zipcode must be a number";
+	if (!hStreet.trim())
+		throw "House street must be an actual string";
+	let reg = RegExp(/^[a-zA-Z\s]*$/);
+	if (!reg.test(hStreet))
+		throw "House street must be letters and spaces only";
+  }
 
-	return true;
+  if (hCity) {
+	if (!isNaN(hCity))
+		throw "House city must be a string";
+	if (!hCity.trim())
+		  throw "House city must be an actual string";
+	let reg = RegExp(/^[a-zA-Z\s]*$/);
+	if (!reg.test(hStreet))
+		throw "House city must be letters and spaces only";
+  }
+
+  if (hState) {
+	if (!isNaN(hState))
+		throw "House state must be a string";
+	if (!hState.trim())
+		throw "House state must be an actual string";
+	let reg = RegExp(/^[a-zA-Z\s]*$/);
+	if (!reg.test(hState))
+		throw "House state must be letters and spaces only";
+  }
+  if (hZip && isNaN(hZip)) throw "House zipcode must be a number";
+
+  //House type checking
+  let hType = await info["variant"];
+  let hBed = await info["house-bed"];
+
+  if (hType) {
+	if (!isNaN(hType))
+		throw "House type must be a string";
+	if (!hType.trim())
+		throw "House type must be an actual string";
+	let reg = RegExp(/^[a-zA-Z\s]*$/);
+	if (!reg.test(hType))
+		throw "House type must be letters and spaces only";
+  }
+  if (hBed && isNaN(hBed)) throw "Number of beds must be a number";
+
+  return true;
 }
 
 /**
  * Checks if a house matches the user criteria, returns true it it does
  * @param {*} info : The form information
- * @param {*} house : A house 
+ * @param {*} house : A house
  */
 async function houseMatch(info, house) {
-	if (arguments.length != 2)
-		throw "Usage: info, house";
-	if (!info)
-		throw "The form information was expected";
-	if (!house)
-		throw "A house was expected";
+  if (arguments.length != 2) throw "Usage: info, house";
+  if (!info) throw "The form information was expected";
+  if (!house) throw "A house was expected";
 
-	let rMin = await info["rent-min"];
-	let rMax = await info["rent-max"];
+  let rMin = await info["rent-min"];
+  let rMax = await info["rent-max"];
 
-	let dStart = await info["date-start"];
-	let dEnd = await info["date-end"];
+  let dStart = await info["date-start"];
+  let dEnd = await info["date-end"];
 
-	let hNumber = await info["house-number"];
-	let hStreet = await info["house-street"];
-	let hCity = await info["house-city"];
-	let hState = await info["house-state"];
-	let hZip = await info["house-zipcode"];
+  let hNumber = await info["house-number"];
+  let hStreet = await info["house-street"];
+  let hCity = await info["house-city"];
+  let hState = await info["house-state"];
+  let hZip = await info["house-zipcode"];
 
-	let petY = await info["pet-yes"];
-	let petN = await info["pet-no"];
-	let parkY = await info["park-yes"];
-	let parkN = await info["park-no"];
+  let pet = await info["pet"];
+  let park = await info["park"];
 
-	if (rMin && (house.rent < rMin))
-		return false;
-	if (rMax && (house.rent > rMax))
-		return false;
-	
-	if (dStart && !moment(house.startDate).isAfter(dStart))
-		return false;
-	if (dEnd && !moment(house.endDate).isBefore(dEnd))
-		return false;
+  let hType = await info["variant"];
+  let hBed = await info["house-bed"];
 
-	if (hNumber && (hNumber !== house.houseNumber))
-		return false;
-	if (hStreet && (hStreet !== house.street))
-		return false;
-	if (hCity && (hCity !== house.city))
-		return false;
-	if (hState && (hState !== house.state))
-		return false;
-	if (hZip && (hZip !== house.pincode))
-		return false;
-	
-	if (parkY && !house.parkingAvailable)
-		return false;
-	if (parkN && house.parkingAvailable)
-		return false;
-	if (petY && !house.petFriendly)
-		return false;
-	if (petN && house.petFriendly)
-		return false;
-	
-	return true;
+  if (rMin && house.rent < parseInt(rMin)) return false;
+  if (rMax && house.rent > parseInt(rMax)) return false;
+
+  if (dStart && !moment(house.startDate).isAfter(dStart)) return false;
+  if (dEnd && !moment(house.endDate).isBefore(dEnd)) return false;
+
+  if (hNumber && parseInt(hNumber) != house.houseNumber) return false;
+  if (hStreet && hStreet != house.street) return false;
+  if (hCity && hCity != house.city) return false;
+  if (hState && hState != house.state) return false;
+  if (hZip && parseInt(hZip) != house.pincode) return false;
+
+  if (park == "park-yes" && !house.parkingAvailable) return false;
+  if (park == "park-no" && house.parkingAvailable) return false;
+  if (pet == "pet-yes" && !house.petFriendly) return false;
+  if (pet == "pet-no" && house.petFriendly) return false;
+
+  if (house.houseType && hType && hType != house.houseType.type) return false;
+  if (house.houseType && hBed && parseInt(hBed) != house.houseType.bedroom) return false;
+  
+  return true;
 }
 
 /**
  * Filters a list of houses based on the user criteria
- * @param {*} info : Contains the form information 
+ * @param {*} info : Contains the form information
  * Return: A filtered list of houses that match the user criteria
  * Note that an empty house list should not return an error
- */ 
+ */
 
 async function filterList(info) {
-	//the checker method could return an array of all the entered data
-	//maybe use another method to check if each house matches the criteria
-	try {
-		if (await infoValid(info)) {
-			let houseList = await getAllHouse();
-			let filtered = [];
+  //the checker method could return an array of all the entered data
+  //maybe use another method to check if each house matches the criteria
+  try {
+    if (await infoValid(info)) {
+      let houseList = await getAllHouse();
+      let filtered = [];
 
-			for (let i=0; i<houseList.length; i++) {
-				//if house matches the filters
-				//push it into filtered
-				if (await houseMatch(info, houseList[i])) {
-					filtered.push(houseList[i]);
-				}
-			}
+      for (let i = 0; i < houseList.length; i++) {
+        //if house matches the filters
+        //push it into filtered
+        if (await houseMatch(info, houseList[i])) {
+          filtered.push(houseList[i]);
+        }
+      }
 
-			return filtered;
-		}
-	} catch (e) {
-		throw e;
-	}
+      return filtered;
+    }
+  } catch (e) {
+    throw e;
+  }
 }
 
 /**
@@ -222,6 +242,18 @@ async function getAllHouse() {
 }
 
 /**
+ * Return all houses stored in database House.
+ */
+async function getAllHouseforCurrentUser(currentUserId) {
+  const houseObj = await houseCollectionObj();
+  const allHouseData = await houseObj.find({ userId: currentUserId }).toArray();
+
+  if (allHouseData === null) {
+    throw `No house found in database`;
+  }
+  return allHouseData;
+}
+/**
  * Add new house into database.
  * firstly, Validate house information pass from post router.
  * If invalid info is found an array of error is thrown.
@@ -231,7 +263,7 @@ async function getAllHouse() {
  * Return : New house data added in database.
  */
 async function addHouse(houseInfo) {
-  let data = validateCompleteHouseInfo(houseInfo);
+  let data = await validateCompleteHouseInfo(houseInfo);
   if (data != null) {
     let houseSchema = createHouseSchema(data, false);
     let houseObj = await houseCollectionObj();
@@ -308,9 +340,12 @@ function validateCompleteHouseInfo(houseInfo) {
   let errorArray = [];
 
   if (houseInfo) {
+    houseData.userId = houseInfo["userId"];
+
     //profile picture
     if (houseInfo["profilePicture"]) {
       let array = isvalidProfilePicture(houseInfo["profilePicture"]);
+      // let array = i
       if (!array) {
         errorArray.push("Invalid House profile picture url or array.");
       }
@@ -450,12 +485,6 @@ function validateCompleteHouseInfo(houseInfo) {
       errorArray.push("Invalid number of hall in house or missing value.");
     }
 
-    //number of bathroom
-    if (houseTypeInfo["bathroom"] && !isNaN(houseTypeInfo["bathroom"])) {
-      houseData.houseType.bathroom = houseTypeInfo["bathroom"];
-    } else {
-      errorArray.push("Invalid number of bathroom in house or missing value.");
-    }
     //number of kitchen
     if (houseTypeInfo["kitchen"] && !isNaN(houseTypeInfo["kitchen"])) {
       houseData.houseType.kitchen = houseTypeInfo["kitchen"];
@@ -481,6 +510,7 @@ function validateCompleteHouseInfo(houseInfo) {
  */
 function createHouseSchema(houseData, isUpdate, houseId) {
   let houseSchema = {
+    userId: houseData.userId,
     profilePicture: houseData.profilePicture,
     longitude: houseData.longitude,
     latitude: houseData.latitude,
@@ -514,20 +544,16 @@ function createHouseSchema(houseData, isUpdate, houseId) {
 
   return houseSchema;
 }
-
 function isvalidProfilePicture(profilePicArray) {
-  if (!Array.isArray(profilePicArray)) {
-    throw `house profile picture : not an Array`;
+  if (
+    !profilePicArray ||
+    !Array.isArray(profilePicArray) ||
+    profilePicArray.length === 0
+  ) {
+    throw `Upload atleast one House  pictures.`;
   }
 
-  let array = [];
-  profilePicArray.forEach((element) => {
-    if (is_image_url(element)) {
-      array.push(element);
-    }
-  });
-
-  return array;
+  return profilePicArray;
 }
 
 /**
@@ -543,7 +569,6 @@ function createHouseTypeSchema(houseTypeData, houseID) {
     bedroom: houseTypeData.bedroom,
     hall: houseTypeData.hall,
     kitchen: houseTypeData.kitchen,
-    bathroom: houseTypeData.bathroom,
     _id: houseID,
   };
 
@@ -595,7 +620,8 @@ module.exports = {
   addHouse,
   updateHouse,
   deleteHouse,
-  filterList
+  filterList,
+  getAllHouseforCurrentUser,
 };
 
 /**
