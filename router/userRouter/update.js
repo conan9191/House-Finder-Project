@@ -4,7 +4,7 @@
  * @Author: sueRimn
  * @Date: 2020-08-17 10:22:47
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-19 16:16:53
+ * @LastEditTime: 2020-08-21 01:45:29
  */
 const express = require("express");
 const router = express.Router();
@@ -17,7 +17,11 @@ const xss = require("xss");
 router.get("/", async (req, res) => {
     let userId = req.session.user;
     if(!userId){
-        res.status(400).json({ error: "You must provide login user to update" });
+        res.render('pages/error', {
+            error:"You must provide login user to update",
+            title: "error page",
+            hasLogin: req.session.user
+        })
         return;
     }
     let user = {};
@@ -43,7 +47,11 @@ router.post('/', async (req, res) => {
     let user = {}
     let userId = req.session.user;
     if(!userId){
-        res.status(400).json({ error: "You must provide login user to update" });
+        res.render('pages/error', {
+            error:"You must provide login user to update",
+            title: "error page",
+            hasLogin: req.session.user
+        });
         return;
     }
     try {
@@ -89,24 +97,17 @@ router.post('/', async (req, res) => {
         error_msgs.push("Must provide street.");
     }
 
-    if (!profilepicture ||!profilepicturefile) {
-        error_msgs.push("Must provide profilepicture.");
-    }
-
     if (!house_number) {
         error_msgs.push("Must provide a number.");
     }else{
-        let isnumber = /^[0-9]+$/.test(street);
+        let isnumber = /^[0-9]+$/.test(house_number);
         if(isnumber===false) error_msgs.push("house number must be number")
     }
 
     if(!city){
         error_msgs.push("city.");
-    }else{
-        let isletter = /^[a-zA-Z]+$/.test(city);
-        if(isletter===false) error_msgs.push("City name must be all english letters")
     }
-
+    
     if(!state){
         error_msgs.push("state");
     }else{
@@ -128,12 +129,6 @@ router.post('/', async (req, res) => {
         if(isnumber===false) error_msgs.push("age must be number")
     }
 
-    if (error_msgs.length !== 0) {
-        res.render('pages/registration', {
-            error_messages: error_msgs,
-            hasErrors: true,
-            title: "Register an account"
-        })};
     if (error_msgs.length !== 0) {
         res.render('pages/update', {
             error_messages: error_msgs,
