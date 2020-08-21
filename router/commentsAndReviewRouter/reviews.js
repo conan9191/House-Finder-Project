@@ -4,7 +4,7 @@
  * @Author: sueRimn
  * @Date: 2020-08-12 22:59:36
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-20 17:42:47
+ * @LastEditTime: 2020-08-18 16:07:56
  */
 const express = require("express");
 const router = express.Router();
@@ -25,52 +25,28 @@ router.post("/", async (req, res) => {
     let reviewText = xss(review.reviewText);
     console.log(review);
     if (!review) {
-        res.status(400).render("pages/error", {
-            title: "Error Page",
-            error: "You must provide data to create a review" , 
-            hasLogin: req.session.user
-          });
+        res.status(400).json({ error: "You must provide data to create a review" });
         return;
     }
     if (Object.keys(review).length === 0) {
-        res.status(400).render("pages/error", {
-            title: "Error Page",
-            error: "You must provide data without null body" , 
-            hasLogin: req.session.user
-          });
+        res.status(400).json({ error: "You must provide data without null body" });
         return;
     }
     let userId = req.session.user;
     if (!userId) {
-        res.status(400).render("pages/error", {
-            title: "Error Page",
-            error: "You must be a login User", 
-            hasLogin: req.session.user
-          });
+        res.status(400).json({ error: "You must be a login User" });
         return;
     }
     if (!houseId) {
-        res.status(400).render("pages/error", {
-            title: "Error Page",
-            error: "You must provide a houseId" , 
-            hasLogin: req.session.user
-          });
+        res.status(400).json({ error: "You must provide a houseId" });
         return;
     }
     if (!rating) {
-        res.status(400).render("pages/error", {
-            title: "Error Page",
-            error: "You must provide a rating" , 
-            hasLogin: req.session.user
-          });
+        res.status(400).json({ error: "You must provide a rating" });
         return;
     }
     if (!reviewText) {
-        res.status(400).render("pages/error", {
-            title: "Error Page",
-            error: "You must provide a reviewText" , 
-            hasLogin: req.session.user
-          });
+        res.status(400).json({ error: "You must provide a reviewText" });
         return;
     }
     let newReviewId = {};
@@ -109,19 +85,11 @@ router.post("/", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
     if (!req.params.id) {
-      res.status(400).render("pages/error", {
-        title: "Error Page",
-        error: "You must Supply and ID to delete" , 
-        hasLogin: req.session.user
-      });
+      res.status(400).json({ error: "You must Supply and ID to delete" });
       return;
     }
     if (!req.body) {
-        res.status(400).render("pages/error", {
-            title: "Error Page",
-            error: "You must provide data to delete a review" , 
-            hasLogin: req.session.user
-          });
+        res.status(400).json({ error: "You must provide data to delete a review" });
         return;
     }
     let houseId = req.body.houseId;
