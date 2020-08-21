@@ -4,7 +4,7 @@
  * @Author: sueRimn
  * @Date: 2020-08-07 16:20:41
  * @LastEditors: Yiqun Peng
- * @LastEditTime: 2020-08-18 13:09:33
+ * @LastEditTime: 2020-08-20 18:08:34
  */
 const express = require("express");
 const router = express.Router();
@@ -74,15 +74,27 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   if (!req.params.id) {
-    res.status(400).json({ error: "You must Supply and ID to delete" });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "You must Supply and ID to delete" , 
+      hasLogin: req.session.user
+    });
     return;
+  }
+  let hasLogin = false;
+  if(req.session.user){
+    hasLogin = true;
   }
   let userId = req.params.id;
   let user = {};
   try {
     user = await userData.getUserById(req.params.id);
   } catch (e) {
-    res.status(404).json({ error: "User not found" });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: e,
+      hasLogin: hasLogin
+    });
     return;
   }
   let allUserFavourites = user["favourites"];
@@ -136,12 +148,20 @@ router.patch("/", async (req, res) => {
   let profilePicture = postBody.profilePicture
   console.log(profilePicture);
   if (!profilePicture) {
-      res.status(400).json({ error: "You must provide data to create a profilePicture" });
+      res.status(404).render("pages/error", {
+        title: "Error Page",
+        error: "You must provide data to create a profilePicture" , 
+        hasLogin: req.session.user
+      });
       return;
   }
   let userId = req.session.user;
   if (!userId) {
-      res.status(400).json({ error: "You must be a login User" });
+      res.status(404).render("pages/error", {
+        title: "Error Page",
+        error: "You must be a login User" , 
+        hasLogin: req.session.user
+      });
       return;
   }
   
@@ -167,12 +187,6 @@ router.delete("/", async (req, res) => {
     return;
   }
   let user = {};
-  try {
-    user = await userData.getUserById(userId);
-  } catch (e) {
-    res.status(404).json({ error: "user not found" });
-    return;
-  }
   try {
     user = await userData.getUserById(userId);
   } catch (e) {

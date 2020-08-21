@@ -65,34 +65,75 @@ router.post('/', async (req, res) => {
     let error_msgs = [];
     if (!firstName) {
         error_msgs.push("Must provide first name.");
+    }else{
+        let isletter = /^[a-zA-Z]+$/.test(firstName);
+        if(isletter===false) error_msgs.push("Name must be all english letters")
     }
+
     if (!lastName) {
         error_msgs.push("Must provide last name.");
+    }else{
+        let isletter = /^[a-zA-Z]+$/.test(lastName);
+        if(isletter===false) error_msgs.push("Name must be all english letters")
     }
+
     if (!email) {
         error_msgs.push("Must provide valid email.");
     }
+
     if (!password) {
         error_msgs.push("Must provide valid password.")
     }
+
     if (!street) {
         error_msgs.push("Must provide street.");
     }
+
+    if (!profilepicture ||!profilepicturefile) {
+        error_msgs.push("Must provide profilepicture.");
+    }
+
     if (!house_number) {
         error_msgs.push("Must provide a number.");
+    }else{
+        let isnumber = /^[0-9]+$/.test(street);
+        if(isnumber===false) error_msgs.push("house number must be number")
     }
+
     if(!city){
         error_msgs.push("city.");
+    }else{
+        let isletter = /^[a-zA-Z]+$/.test(city);
+        if(isletter===false) error_msgs.push("City name must be all english letters")
     }
+
     if(!state){
         error_msgs.push("state");
+    }else{
+        let isletter = /^[a-zA-Z]+$/.test(state);
+        if(isletter===false) error_msgs.push("State name must be all english letters")
     }
+
     if(!pincode){
         error_msgs.push("pincode");
+    }else{
+        let isnumber = /^[0-9]+$/.test(pincode);
+        if(isnumber===false) error_msgs.push("pincode must be number")
     }
+
     if (!age) {
         error_msgs.push("age");
+    }else{
+        let isnumber = /^[0-9]+$/.test(age);
+        if(isnumber===false) error_msgs.push("age must be number")
     }
+
+    if (error_msgs.length !== 0) {
+        res.render('pages/registration', {
+            error_messages: error_msgs,
+            hasErrors: true,
+            title: "Register an account"
+        })};
     if (error_msgs.length !== 0) {
         res.render('pages/update', {
             error_messages: error_msgs,

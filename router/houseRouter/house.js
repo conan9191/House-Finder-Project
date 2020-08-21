@@ -19,10 +19,13 @@ router.get("/", async (req, res) => {
     for (let i = 0; i < houseList.length; i++) {
       let reviews = await reviewData.getReviewByHouseId(houseList[i]._id);
       let sum = 0;
-      for (let j = 0; j < reviews.length; j++) sum += await reviews[j].rating;
+      let avg = 0.0;
 
-      let avg = 0;
-      avg = (sum / reviews.length).toFixed(1);
+      if (reviews.length > 0) {
+        for (let j = 0; j < reviews.length; j++) sum += await reviews[j].rating;
+        avg = (sum / reviews.length).toFixed(1);
+      }
+
       houseInfo.push([i, reviews.length, avg]);
     }
 
@@ -52,14 +55,20 @@ router.get("/", async (req, res) => {
       hasLogin: req.session.user,
     });
   } catch (error) {
-    res.status(404).json({ error: "Houses not found" });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: error,
+      hasLogin: req.session.user,
+    });
   }
 });
 
 router.get("/add", async (req, res) => {
   if (!req.session || !req.session.user) {
-    res.status(404).json({
+    res.status(404).render("pages/error", {
+      title: "Error Page",
       error: "To add a house, must login with valid user.",
+      hasLogin: req.session.user,
     });
     return;
   }
@@ -69,15 +78,21 @@ router.get("/add", async (req, res) => {
       hasLogin: req.session.user,
     });
   } catch (error) {
-    res.status(404).json({ error: "Houses not found" });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "Houses not found.",
+      hasLogin: req.session.user,
+    });
   }
 });
 
 router.get("/updateHouse", async (req, res) => {
   try {
     if (!req.session || !req.session.user) {
-      res.status(404).json({
+      res.status(404).render("pages/error", {
+        title: "Error Page",
         error: "To edit or delete house, must login with valid user.",
+        hasLogin: req.session.user,
       });
       return;
     }
@@ -97,7 +112,11 @@ router.get("/updateHouse", async (req, res) => {
       userAddedZeroHouse: userAddedZeroHouse,
     });
   } catch (error) {
-    res.status(404).json({ error: "Houses not found" });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "Houses not found.",
+      hasLogin: req.session.user,
+    });
   }
 });
 
@@ -106,8 +125,10 @@ router.get("/add/:id", async (req, res) => {
   console.log("most outside Edit house");
   try {
     if (!req.session || !req.session.user) {
-      res.status(404).json({
+      res.status(404).render("pages/error", {
+        title: "Error Page",
         error: "To edit or delete house, must login with valid user.",
+        hasLogin: req.session.user,
       });
       return;
     }
@@ -127,7 +148,11 @@ router.get("/add/:id", async (req, res) => {
       hasLogin: true,
     });
   } catch (error) {
-    res.status(404).json({ error: " edit Houses not found" });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "edit Houses not found.",
+      hasLogin: req.session.user,
+    });
   }
 });
 
@@ -194,21 +219,28 @@ router.post("/search", async (req, res) => {
       emptySearch: emptySearch,
     });
   } catch (e) {
-    res.status(500);
-    res.render("pages/error", {
-      message: e,
+    res.status(500).render("pages/error", {
+      title: "Error Page",
+      error: e,
+      hasLogin: req.session.user,
     });
   }
 });
 
 router.get("/:id", async (req, res) => {
   if (!req.params.id) {
-    res.status(404).json({ error: "House Id missing" });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "House Id missing",
+      hasLogin: req.session.user,
+    });
     return;
   }
   if (!req.session || !req.session.user) {
-    res.status(404).json({
+    res.status(404).render("pages/error", {
+      title: "Error Page",
       error: "To visit this house, must login with valid user.",
+      hasLogin: req.session.user,
     });
     return;
   }
@@ -317,9 +349,11 @@ router.post("/", async (req, res) => {
     return;
   }
   if (!req.session || !req.session.user) {
-    res
-      .status(404)
-      .json({ error: "To add new house, must login with valid user." });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "To add new house, must login with valid user.",
+      hasLogin: req.session.user,
+    });
     return;
   }
 
@@ -345,13 +379,21 @@ router.post("/", async (req, res) => {
     }
   } catch (error) {
     console.log("Add house failure :" + error);
-    res.status(404).json({ error: "Cannot add new House" });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "Cannot add new House",
+      hasLogin: req.session.user,
+    });
   }
 });
 
 router.put("/:id", async (req, res) => {
   if (!req.params.id || !req.body) {
-    res.status(404).json({ error: "Must supply all fields." });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "Must supply all fields.",
+      hasLogin: req.session.user,
+    });
     return;
   }
 
@@ -361,27 +403,43 @@ router.put("/:id", async (req, res) => {
   try {
     await houseData.getHouseById(houseId);
   } catch (error) {
-    res.status(404).json({ error: "Cannot update House." });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "Cannot update House.",
+      hasLogin: req.session.user,
+    });
   }
 
   try {
     let updateHouse = await houseData.updateHouse(houseId, houseParamBody);
     res.json(updateHouse);
   } catch (error) {
-    res.status(404).json({ error: "Cannot update House." });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "Cannot update House.",
+      hasLogin: req.session.user,
+    });
   }
 });
 
 router.delete("/:id", async (req, res) => {
   if (!req.params.id) {
-    ({ error: "Must supply House Id." });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "Must supply House Id.",
+      hasLogin: req.session.user,
+    });
     return;
   }
 
   try {
     await houseData.getHouseById(req.params.id);
   } catch (error) {
-    res.status(404).json({ error: "Cannot delete House." });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "Cannot delete House.",
+      hasLogin: req.session.user,
+    });
     return;
   }
 
@@ -481,14 +539,20 @@ router.delete("/:id", async (req, res) => {
     await houseData.deleteHouse(req.params.id);
     res.sendStatus(200);
   } catch (error) {
-    res.status(404).json({ error: "Cannot delete House." });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "Cannot delete House.",
+      hasLogin: req.session.user,
+    });
   }
 });
 
 router.patch("/:id", async (req, res) => {
   if (!req.params.id || !req.body || Object.keys(req.body).length === 0) {
-    res.status(404).json({
+    res.status(404).render("pages/error", {
+      title: "Error Page",
       error: "Must provide atleast one field in request body.",
+      hasLogin: req.session.user,
     });
     return;
   }
@@ -499,7 +563,11 @@ router.patch("/:id", async (req, res) => {
     oldHouse = await houseData.getHouseById(req.params.id);
     oldHouse = checkAndUpdate(newHouse, oldHouse);
   } catch (error) {
-    res.status(404).json({ error: "Cannot update House." });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "Cannot update the house.",
+      hasLogin: req.session.user,
+    });
   }
 
   try {
@@ -517,7 +585,11 @@ router.patch("/:id", async (req, res) => {
     let updateHouse = await houseData.updateHouse(req.params.id, oldHouse);
     res.json(updateHouse);
   } catch (error) {
-    res.status(404).json({ error: "Cannot update House." });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "Cannot update the house.",
+      hasLogin: req.session.user,
+    });
   }
 });
 
@@ -772,13 +844,13 @@ function checkXSSattack(data) {
   if (!description) {
     erroMessage.push("You must enter atleast 10 character other description");
   }
-  if (!petFriendly) {
-    erroMessage.push("You must select a pet friendly option");
-  }
+  // if (!petFriendly) {
+  //   erroMessage.push("You must select a pet friendly option");
+  // }
 
-  if (!parkingAvailable) {
-    erroMessage.push("You must select a parking available option");
-  }
+  // if (!parkingAvailable) {
+  //   erroMessage.push("You must select a parking available option");
+  // }
   if (!houseType) {
     erroMessage.push(
       "You must enter house type details like type of house, number of bedroom, hall , kitchen "
