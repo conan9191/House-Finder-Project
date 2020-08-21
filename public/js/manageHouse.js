@@ -361,7 +361,7 @@ function validateOtherHouseInfo() {
     errorArray.push(latitudeError);
   }
 
-  if (lat && isValidNumeric(long) && isValidLongitude(long.value)) {
+  if (long && isValidNumeric(long) && isValidLongitude(long.value)) {
     houseData.longitude = long.value;
   } else {
     errorArray.push(longitudeError);
