@@ -501,20 +501,20 @@ function validateOtherHouseInfo() {
   }
 
   //number of bedroom
-  if (isValidNumeric(bedroom)) {
+  if (isValidNumericHouseType(bedroom)) {
     houseData.houseType.bedroom = bedroom.value;
   } else {
     errorArray.push(bedroomError);
   }
   //number of hall
-  if (isValidNumeric(hall)) {
+  if (isValidNumericHouseType(hall)) {
     houseData.houseType.hall = hall.value;
   } else {
     errorArray.push(hallError);
   }
 
   //number of kitchen
-  if (isValidNumeric(kitchen)) {
+  if (isValidNumericHouseType(kitchen)) {
     houseData.houseType.kitchen = kitchen.value;
   } else {
     errorArray.push(kitchenError);
@@ -661,6 +661,19 @@ function isValidNumeric(input) {
     !isNaN(input.value) &&
     input.value.trim().length > 0 &&
     input.value > 0
+  ) {
+    return true;
+  }
+  return false;
+}
+
+function isValidNumericHouseType(input) {
+  if (
+    input &&
+    input.value &&
+    !isNaN(input.value) &&
+    input.value.trim().length > 0 &&
+    input.value >= 0
   ) {
     return true;
   }
