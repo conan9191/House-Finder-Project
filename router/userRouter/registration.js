@@ -71,15 +71,12 @@ router.post('/', async (req, res) => {
     if (!house_number) {
       error_msgs.push("Must provide a number.");
     }else{
-      let isnumber = /^[0-9]+$/.test(street);
+      let isnumber = /^[0-9]+$/.test(house_number);
       if(isnumber===false) error_msgs.push("house number must be number")
     }
 
     if(!city){
       error_msgs.push("city.");
-    }else{
-      let isletter = /^[a-zA-Z]+$/.test(city);
-      if(isletter===false) error_msgs.push("City name must be all english letters")
     }
 
     if(!state){
