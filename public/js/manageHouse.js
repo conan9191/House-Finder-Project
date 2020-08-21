@@ -355,27 +355,39 @@ function validateHouseProfilePicture() {
 
 function validateOtherHouseInfo() {
   //longitude and latitude
-  if (lat && isValidNumeric(lat) && isValidLatitude(lat.value)) {
+  if (
+    lat &&
+    lat.value &&
+    !isNaN(lat.value) &&
+    lat.value.trim().length > 0 &&
+    isValidLatitude(lat.value)
+  ) {
     houseData.latitude = lat.value;
   } else {
     errorArray.push(latitudeError);
   }
 
-  if (lat && isValidNumeric(long) && isValidLongitude(long.value)) {
+  if (
+    long &&
+    long.value &&
+    !isNaN(long.value) &&
+    long.value.trim().length > 0 &&
+    isValidLongitude(long.value)
+  ) {
     houseData.longitude = long.value;
   } else {
     errorArray.push(longitudeError);
   }
 
   //street
-  if (isValidString(Street)) {
+  if (isValidString(Street) && isValidStreet(Street.value)) {
     houseData.street = Street.value;
   } else {
     errorArray.push(streetError);
   }
 
   //house number
-  if (isValidString(houseNumber)) {
+  if (isValidString(houseNumber) && isValidHouseNumber(houseNumber.value)) {
     houseData.houseNumber = houseNumber.value;
   } else {
     errorArray.push(housenumberError);
@@ -484,25 +496,25 @@ function validateOtherHouseInfo() {
 
   //house type
 
-  if (isValidString(houseType)) {
+  if (isValidString(houseType) && isValidStringOnlyLetters(houseType.value)) {
     houseData.houseType.type = houseType.value;
   }
 
   //number of bedroom
-  if (isValidNumeric(bedroom)) {
+  if (isValidNumericHouseType(bedroom)) {
     houseData.houseType.bedroom = bedroom.value;
   } else {
     errorArray.push(bedroomError);
   }
   //number of hall
-  if (isValidNumeric(hall)) {
+  if (isValidNumericHouseType(hall)) {
     houseData.houseType.hall = hall.value;
   } else {
     errorArray.push(hallError);
   }
 
   //number of kitchen
-  if (isValidNumeric(kitchen)) {
+  if (isValidNumericHouseType(kitchen)) {
     houseData.houseType.kitchen = kitchen.value;
   } else {
     errorArray.push(kitchenError);
@@ -612,6 +624,24 @@ function isValidStringOnlyLetters(inputtxt) {
   return false;
 }
 
+function isValidHouseNumber(inputtxt) {
+  let value = inputtxt.replace(/\s+/g, "");
+  let letters = /^(?=.*\d)[a-zA-Z\d]+$/;
+  if (value.match(letters)) {
+    return true;
+  }
+  return false;
+}
+
+function isValidStreet(inputtxt) {
+  let value = inputtxt.replace(/\s+/g, "");
+  let letters = /([a-zA-Z])+([ -~])*/;
+  if (value.match(letters)) {
+    return true;
+  }
+  return false;
+}
+
 function isValidString(input) {
   if (
     input &&
@@ -629,7 +659,21 @@ function isValidNumeric(input) {
     input &&
     input.value &&
     !isNaN(input.value) &&
-    input.value.trim().length > 0
+    input.value.trim().length > 0 &&
+    input.value > 0
+  ) {
+    return true;
+  }
+  return false;
+}
+
+function isValidNumericHouseType(input) {
+  if (
+    input &&
+    input.value &&
+    !isNaN(input.value) &&
+    input.value.trim().length > 0 &&
+    input.value >= 0
   ) {
     return true;
   }

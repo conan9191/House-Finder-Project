@@ -10,13 +10,21 @@ router.get("/", async (req, res) => {
     let allfavHouse = await favHouseData.getAllFavouriteHouse();
     res.json(allfavHouse);
   } catch (error) {
-    res.status(404).json({ error: "favourite Houses not found" });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "favourite Houses not found", 
+      hasLogin: req.session.user
+    });
   }
 });
 
 router.get("/:id", async (req, res) => {
   if (!req.params.id) {
-    res.status(404).json({ error: "fav House Id missing" });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "fav House Id missing", 
+      hasLogin: req.session.user
+    });
     return;
   }
 
@@ -24,18 +32,30 @@ router.get("/:id", async (req, res) => {
     let favhouse = await favHouseData.getFavouriteHouseById(req.params.id);
     res.json(favhouse);
   } catch (error) {
-    res.status(404).json({ error: "House not found" });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "House not found", 
+      hasLogin: req.session.user
+    });
   }
 });
 
 router.post("/", async (req, res) => {
   if (!req.body) {
-    res.status(404).json({ error: "Must supply all fields." });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "Must supply all fields.", 
+      hasLogin: req.session.user
+    });
     return;
   }
 
   if (!req.body["houseId"]) {
-    res.status(404).json({ error: "Must supply house id fields." });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "Must supply house id fields.", 
+      hasLogin: req.session.user
+    });
     return;
   }
 
@@ -44,7 +64,11 @@ router.post("/", async (req, res) => {
     newfavHouse = await favHouseData.addFavouriteHouse(req.body["houseId"]);
     res.json(newfavHouse);
   } catch (error) {
-    res.status(404).json({ error: "Cannot add new fav House" });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "Cannot add new fav House", 
+      hasLogin: req.session.user
+    });
   }
 
   // Add favouriteId in user
@@ -71,7 +95,11 @@ router.post("/", async (req, res) => {
 //pass house id to delete favourite house for given houseid from fav collection and user fav list
 router.delete("/:id", async (req, res) => {
   if (!req.params.id) {
-    res.status(404).json({ error: "Must supply fav House Id." });
+    res.status(404).render("pages/error", {
+      title: "Error Page",
+      error: "Must supply fav House Id." , 
+      hasLogin: req.session.user
+    });
     return;
   }
 
@@ -107,7 +135,11 @@ router.delete("/:id", async (req, res) => {
       try {
         await favHouseData.getFavouriteHouseById(favHouseId);
       } catch (error) {
-        res.status(404).json({ error: "Cannot delete fav House." });
+        res.status(404).render("pages/error", {
+          title: "Error Page",
+          error: "Cannot delete fav House." , 
+          hasLogin: req.session.user
+        });
         return;
       }
       //delete fav house
@@ -115,7 +147,11 @@ router.delete("/:id", async (req, res) => {
         await favHouseData.deleteFavouriteHouse(favHouseId);
         res.sendStatus(200);
       } catch (error) {
-        res.status(404).json({ error: "Cannot delete  fav House." });
+        res.status(404).render("pages/error", {
+          title: "Error Page",
+          error: "Cannot delete  fav House." , 
+          hasLogin: req.session.user
+        });
       }
     }
   } catch (error) {

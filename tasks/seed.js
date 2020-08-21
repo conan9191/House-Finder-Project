@@ -134,7 +134,7 @@ const house3 = {
     "longitude": "-74.047477",
     "latitude": "40.734812",
     "street": "Monmouth Street",
-    "houseNumber": "675 Monmouth Street",
+    "houseNumber": "675",
     "city": "Jersey City",
     "state": "NJ",
     "pincode": "07310",
