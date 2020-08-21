@@ -355,13 +355,25 @@ function validateHouseProfilePicture() {
 
 function validateOtherHouseInfo() {
   //longitude and latitude
-  if (lat && isValidNumeric(lat) && isValidLatitude(lat.value)) {
+  if (
+    lat &&
+    lat.value &&
+    !isNaN(lat.value) &&
+    lat.value.trim().length > 0 &&
+    isValidLatitude(lat.value)
+  ) {
     houseData.latitude = lat.value;
   } else {
     errorArray.push(latitudeError);
   }
 
-  if (long && isValidNumeric(long) && isValidLongitude(long.value)) {
+  if (
+    long &&
+    long.value &&
+    !isNaN(long.value) &&
+    long.value.trim().length > 0 &&
+    isValidLongitude(long.value)
+  ) {
     houseData.longitude = long.value;
   } else {
     errorArray.push(longitudeError);
